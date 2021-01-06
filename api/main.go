@@ -72,8 +72,8 @@ func createTable(w http.ResponseWriter, r *http.Request) {
 func insertUser(w http.ResponseWriter, r *http.Request) {
 	db := connectGorm()
 	defer db.Close()
-	var kahori := User{Name: "Kahori"}
-	var mitsuaki := User{Name: "Mitsuaki"}
+	var kahori = User{Name: "Kahori"}
+	var mitsuaki = User{Name: "Mitsuaki"}
 	db.Create(&kahori)
 	db.Create(&mitsuaki)
 }
