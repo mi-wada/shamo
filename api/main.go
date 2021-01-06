@@ -69,6 +69,15 @@ func createTable(w http.ResponseWriter, r *http.Request) {
 	db.AutoMigrate(&User{}, &Room{}, &Payment{})
 }
 
+func insertUser(w http.ResponseWriter, r *http.Request) {
+	db := connectGorm()
+	defer db.Close()
+	var kahori := User{Name: "Kahori"}
+	var mitsuaki := User{Name: "Mitsuaki"}
+	db.Create(&kahori)
+	db.Create(&mitsuaki)
+}
+
 func payment(w http.ResponseWriter, r *http.Request) {
 	db := connectGorm()
 	defer db.Close()
@@ -115,7 +124,8 @@ func main() {
 	http.HandleFunc("/users", users)
 
 	//http.HandleFunc("/selectUser", selectUser)
-	//http.HandleFunc("/createTable", createTable)
+	http.HandleFunc("/createTable", createTable)
+	http.HandleFunc("/insertUser", insertUser)
 	//http.HandleFunc("/dropTable", dropTable)
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Println(err)
