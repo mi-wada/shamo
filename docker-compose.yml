@@ -1,0 +1,30 @@
+version: "3"
+services:
+  api:
+    build: ./api/
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    command: /bin/sh -c "go run main.go"
+    volumes:
+      - ./api:/app
+  front:
+    build: ./front
+    volumes:
+      - ./front:/usr/src/app
+    command: sh -c "cd app && yarn start"
+    ports:
+      - 8000:3000
+  db:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_DATABASE: sample
