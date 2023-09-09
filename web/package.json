@@ -7,7 +7,11 @@
     "dev:mock": "ENABLE_MOCK=1 next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "prettier": "prettier . --check",
+    "prettier:fix": "prettier . --write",
+    "format": "npm run lint:fix && npm run prettier:fix"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -25,7 +29,9 @@
   },
   "devDependencies": {
     "eslint": "8.49.0",
-    "eslint-config-next": "13.4.19"
+    "eslint-config-next": "13.4.19",
+    "eslint-config-prettier": "9.0.0",
+    "prettier": "3.0.3"
   },
   "engines": {
     "node": "18.17.1",
