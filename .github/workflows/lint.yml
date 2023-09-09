@@ -1,0 +1,26 @@
+name: Lint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    env:
+      MARKDOWNLINT_CLI_VERSION: 0.36.0
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache markdown-lint-cli
+        id: cache-markdownlint-cli
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-markdonwlint-cli-${{ env.MARKDOWNLINT_CLI_VERSION }}
+      - if: steps.cache-markdownlint-cli.outputs.cache-hit != 'true'
+        name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli@${{ env.MARKDOWNLINT_CLI_VERSION }}
+      - run: markdownlint --config .markdownlint.yml '**/*.md'
