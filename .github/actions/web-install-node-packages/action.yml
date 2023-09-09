@@ -1,0 +1,19 @@
+name: Install node packages
+description: Install node packages
+runs:
+  using: composite
+  steps:
+    - name: Cache node_modules
+      id: cache-node-modules
+      uses: actions/cache@v3
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-
+          ${{ runner.os }}-
+    - if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      name: Install node packages
+      run: npm ci
+      working-directory: ./web
+      shell: bash
