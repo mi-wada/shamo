@@ -18,7 +18,9 @@ jobs:
         id: cache-markdownlint-cli
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: |
+            /usr/local/bin/markdownlint
+            /usr/local/lib/node_modules/markdownlint-cli
           key: ${{ runner.os }}-markdonwlint-cli-${{ env.MARKDOWNLINT_CLI_VERSION }}
       - if: steps.cache-markdownlint-cli.outputs.cache-hit != 'true'
         name: Install markdownlint-cli
