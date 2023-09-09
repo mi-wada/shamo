@@ -7,7 +7,7 @@ runs:
       id: cache-node-modules
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: "**/node_modules"
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-modules-
