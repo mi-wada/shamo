@@ -1,0 +1,22 @@
+name: Run tsc on ./web
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+defaults:
+  run:
+    working-directory: ./web
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  tsc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ./web/.node-version
+      - uses: ./.github/actions/web-install-node-packages
+      - run: npm run tsc
