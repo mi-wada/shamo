@@ -1,0 +1,23 @@
+name: Test on ./web
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+defaults:
+  run:
+    working-directory: ./web
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ./web/.node-version
+      - uses: ./.github/actions/web-install-node-packages
+      # TODO: Run in parallel
+      - run: npm run test:ci
