@@ -1,4 +1,4 @@
-name: Lint on ./web
+name: Lint on `web`
 on:
   push:
     branches:
