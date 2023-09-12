@@ -1,4 +1,4 @@
-name: Run tsc on `web`
+name: web / Run tsc
 on:
   push:
     branches:
