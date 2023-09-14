@@ -8,8 +8,8 @@ const createJestConfig = nextJest({
 /** @type {import('jest').Config} */
 const config = {
   preset: "ts-jest",
-  globalSetup: "<rootDir>/src/test/requireEnv.ts",
-  setupFilesAfterEnv: ["<rootDir>/src/test/jest.setup.ts"],
+  globalSetup: "<rootDir>/src/test/config/requireEnv.ts",
+  setupFilesAfterEnv: ["<rootDir>/src/test/config/jest.setup.ts"],
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
