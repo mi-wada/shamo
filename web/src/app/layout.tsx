@@ -6,7 +6,7 @@ import "@fontsource/roboto/700.css";
 import { CssBaseline } from "@mui/material";
 
 if (process.env.ENABLE_MOCK) {
-  require("../mocks");
+  require("../mock");
 }
 
 export const metadata: Metadata = {
