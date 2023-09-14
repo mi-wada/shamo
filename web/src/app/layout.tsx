@@ -3,7 +3,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { CssBaseline } from "@mui/material";
+import ThemeRegistry from "@/components/ThemeRegistry";
 
 if (process.env.ENABLE_MOCK) {
   require("../mock");
@@ -21,8 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
       <body>
-        <CssBaseline />
-        {children}
+        <ThemeRegistry>{children}</ThemeRegistry>
       </body>
     </html>
   );
