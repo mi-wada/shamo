@@ -4,6 +4,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import ThemeRegistry from "@/components/ThemeRegistry";
+import { AppBar } from "@/components/common/AppBar";
 
 if (process.env.ENABLE_MOCK) {
   require("../mock");
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeRegistry darkmode={prefersDarkMode}>
           <header>
-            <h1>Shamo 🐔</h1>
+            <AppBar />
           </header>
           {children}
         </ThemeRegistry>
