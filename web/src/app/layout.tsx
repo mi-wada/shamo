@@ -15,13 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const prefersDarkMode = false;
+
   return (
     <html lang="en">
-      <head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </head>
       <body>
-        <ThemeRegistry>{children}</ThemeRegistry>
+        <ThemeRegistry darkmode={prefersDarkMode}>{children}</ThemeRegistry>
       </body>
     </html>
   );
