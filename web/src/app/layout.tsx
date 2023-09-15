@@ -20,7 +20,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry darkmode={prefersDarkMode}>{children}</ThemeRegistry>
+        <ThemeRegistry darkmode={prefersDarkMode}>
+          <header>
+            <h1>Shamo 🐔</h1>
+          </header>
+          {children}
+        </ThemeRegistry>
       </body>
     </html>
   );
