@@ -43,18 +43,22 @@ const usePayments = (roomId: string) => {
   return { payments, loading, refetch };
 };
 
-const useDeletePayment = () => {
+const useDeletePayment = ({ refetch }: { refetch: () => Promise<void> }) => {
   const [loading, setLoading] = React.useState(false);
 
   const deletePayment = async (roomId: string, paymentId: string) => {
     setLoading(true);
     await fetch(`${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         id: paymentId,
       }),
     });
     setLoading(false);
+    await refetch();
   };
 
   return { loading, deletePayment };
@@ -67,12 +71,10 @@ type PaymentHistoryProps = {
 export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
   const { payments, loading, refetch } = usePayments(roomId);
 
-  const { loading: deleteLoading, deletePayment } = useDeletePayment();
+  const { loading: deleteLoading, deletePayment } = useDeletePayment({ refetch });
 
   const handleDelete = (id: string) => async () => {
     await deletePayment(roomId, id);
-
-    await refetch();
   };
 
   return loading ? (
