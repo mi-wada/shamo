@@ -37,13 +37,13 @@ export const AddingPaymentForm = ({
   afterSubmit: () => Promise<void>;
   defaultPaiedBy?: string;
 }) => {
-  const [price, setPrice] = useState<number | undefined>(undefined);
-  const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice(event.target.value === "" ? undefined : Number(event.target.value));
-  };
   const [paiedBy, setPaiedBy] = useState<string>(defaultPaiedBy || users[0]?.id);
   const onChangePaiedBy = (event: SelectChangeEvent) => {
     setPaiedBy(event.target.value);
+  };
+  const [price, setPrice] = useState<number | undefined>(undefined);
+  const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPrice(event.target.value === "" ? undefined : Number(event.target.value));
   };
   const [note, setNote] = useState<string>("");
   const onChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,20 +66,6 @@ export const AddingPaymentForm = ({
   return (
     <Box component="form" sx={{ margin: "8px" }} onSubmit={onSubmit}>
       <Box sx={{ margin: "8px", display: "block" }}>
-        <Typography variant="caption" component="label" htmlFor="price">
-          Price
-        </Typography>
-        <Input
-          type="number"
-          id="price"
-          value={price === undefined ? "" : price}
-          onChange={onChangePrice}
-          required
-          placeholder="500"
-          sx={{ width: "100%" }}
-        />
-      </Box>
-      <Box sx={{ margin: "8px", display: "block" }}>
         <Typography variant="caption" component="label" htmlFor="paied_by">
           Paied By
         </Typography>
@@ -96,6 +82,20 @@ export const AddingPaymentForm = ({
             </MenuItem>
           ))}
         </Select>
+      </Box>
+      <Box sx={{ margin: "8px", display: "block" }}>
+        <Typography variant="caption" component="label" htmlFor="price">
+          Price
+        </Typography>
+        <Input
+          type="number"
+          id="price"
+          value={price === undefined ? "" : price}
+          onChange={onChangePrice}
+          required
+          placeholder="500"
+          sx={{ width: "100%" }}
+        />
       </Box>
       <Box sx={{ margin: "8px", display: "block" }}>
         <Typography variant="caption" component="label" htmlFor="note">
