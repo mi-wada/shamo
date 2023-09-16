@@ -1,28 +1,29 @@
 import { render, screen } from "@testing-library/react";
 import { Button } from ".";
 
-test("when loading is true", () => {
-  render(
-    <Button onClick={() => {}} loading={true}>
-      Click me
-    </Button>,
-  );
-  const button = screen.getByRole("button");
+describe("`loading` arg", () => {
+  test("when true, button should be disabled", () => {
+    render(
+      <Button onClick={() => {}} loading={true}>
+        Click me
+      </Button>,
+    );
+    const button = screen.getByRole("button");
 
-  expect(button).toBeDisabled();
-  expect(button).toHaveTextContent("Loading...");
-});
+    expect(button).toBeDisabled();
+  });
 
-test("when loading is false", () => {
-  render(
-    <Button onClick={() => {}} loading={false}>
-      Click me
-    </Button>,
-  );
-  const button = screen.getByRole("button");
+  test("when false, button should be enabled", () => {
+    render(
+      <Button onClick={() => {}} loading={false}>
+        Click me
+      </Button>,
+    );
+    const button = screen.getByRole("button");
 
-  expect(button).not.toBeDisabled();
-  expect(button).toHaveTextContent("Click me");
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveTextContent("Click me");
+  });
 });
 
 test("when button clicked, onClick is called", () => {
