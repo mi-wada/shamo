@@ -48,12 +48,12 @@ const useDeletePayment = () => {
 
   const deletePayment = async (roomId: string, paymentId: string) => {
     setLoading(true);
-    await fetch(
-      `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments/${paymentId}`,
-      {
-        method: "DELETE",
-      },
-    );
+    await fetch(`${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        id: paymentId,
+      }),
+    });
     setLoading(false);
   };
 
