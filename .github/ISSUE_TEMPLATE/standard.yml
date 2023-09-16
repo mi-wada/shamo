@@ -1,0 +1,30 @@
+name: Issue on web
+description: File issue on web
+labels: ["Web"]
+body:
+  - type: dropdown
+    id: issue_type
+    validations:
+      required: true
+    attributes:
+      label: Issue type
+      multiple: false
+      options:
+        - "New Feature"
+        - "Bug"
+        - "Refactoring"
+  - type: textarea
+    id: background
+    attributes:
+      label: Background
+      description: Describe in what context this issue is needed.
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Requirements
+      description: Describe state after this issue closed.
+  - type: textarea
+    id: todo
+    attributes:
+      label: ToDo
+      description: Describe to do list to archive requirements.
