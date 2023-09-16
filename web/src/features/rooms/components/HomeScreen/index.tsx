@@ -1,9 +1,18 @@
 "use client";
-import { Box } from "@mui/material";
+import { Box, Fab } from "@mui/material";
 import { UserCards } from "../UserCards";
 import { usePayments } from "../../hooks/usePayments";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { useUsers } from "../../hooks/useUsers";
+import { Add } from "@mui/icons-material";
+
+const RegisterPaymentButton = () => {
+  return (
+    <Fab color="primary" sx={{ position: "fixed", bottom: "24px", right: "24px" }} size="large">
+      <Add />
+    </Fab>
+  );
+};
 
 type HomeScreenProps = {
   roomId: string;
@@ -22,6 +31,7 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
   ) : (
     <Box sx={{ margin: "8px" }}>
       <UserCards users={users} />
+      <RegisterPaymentButton />
     </Box>
   );
 };
