@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en">
-      <body>
+      <body style={{ margin: "8px" }}>
         {/* TODO: Workaround to avoid error before MSW starts. If there are better ways, Let's fix */}
         <MSWInitClientSide>
           <ThemeRegistry darkmode={prefersDarkMode}>
