@@ -1,3 +1,3 @@
-export default function Rooms() {
+export default function Page() {
   return <main></main>;
 }
