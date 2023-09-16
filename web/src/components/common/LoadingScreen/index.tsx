@@ -13,6 +13,6 @@ export const LoadingScreen = () => (
       height: "calc(100vh - 90.88px)",
     }}
   >
-    <LoadingComponent size={"large"} />
+    <LoadingComponent size={"medium"} />
   </Container>
 );
