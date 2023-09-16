@@ -79,7 +79,7 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
     <LoadingScreen />
   ) : (
     <TableContainer>
-      <Table sx={{ minWidth: 350 }}>
+      <Table stickyHeader sx={{ minWidth: 350 }}>
         <TableHead>
           <TableRow>
             <TableCell>Price</TableCell>
