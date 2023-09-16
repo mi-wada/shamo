@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import React, { useEffect } from "react";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { IconButton } from "@/components/common/IconButton";
+import { usePayments } from "../../hooks/usePayments";
 
 type Payment = {
   id: string;
@@ -16,31 +17,6 @@ type Payment = {
   user_id: string;
   what: string;
   created_at: string;
-};
-
-const usePayments = (roomId: string) => {
-  const [payments, setPayments] = React.useState<Payment[]>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  const fetchPayments = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`,
-    );
-    const data = await res.json();
-    setPayments(data);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchPayments();
-  }, [roomId]);
-
-  const refetch = async () => {
-    setLoading(true);
-    fetchPayments();
-  };
-
-  return { payments, loading, refetch };
 };
 
 const useDeletePayment = ({ refetch }: { refetch: () => Promise<void> }) => {
