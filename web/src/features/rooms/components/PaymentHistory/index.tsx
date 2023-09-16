@@ -35,12 +35,29 @@ const usePayments = (roomId: string) => {
     fetchPayments();
   }, [roomId]);
 
-  const refetch = () => {
+  const refetch = async () => {
     setLoading(true);
     fetchPayments();
   };
 
   return { payments, loading, refetch };
+};
+
+const useDeletePayment = () => {
+  const [loading, setLoading] = React.useState(false);
+
+  const deletePayment = async (roomId: string, paymentId: string) => {
+    setLoading(true);
+    await fetch(
+      `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments/${paymentId}`,
+      {
+        method: "DELETE",
+      },
+    );
+    setLoading(false);
+  };
+
+  return { loading, deletePayment };
 };
 
 type PaymentHistoryProps = {
@@ -49,6 +66,14 @@ type PaymentHistoryProps = {
 
 export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
   const { payments, loading, refetch } = usePayments(roomId);
+
+  const { loading: deleteLoading, deletePayment } = useDeletePayment();
+
+  const handleDelete = (id: string) => async () => {
+    await deletePayment(roomId, id);
+
+    await refetch();
+  };
 
   return loading ? (
     <LoadingScreen />
@@ -70,7 +95,12 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
               <TableCell>{payment.user_id}</TableCell>
               <TableCell>{payment.what}</TableCell>
               <TableCell>
-                <IconButton iconType="delete" size="medium" onClick={() => {}} />
+                <IconButton
+                  iconType="delete"
+                  size="medium"
+                  onClick={handleDelete(payment.id)}
+                  disabled={deleteLoading}
+                />
               </TableCell>
             </TableRow>
           ))}

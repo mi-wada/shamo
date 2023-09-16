@@ -74,7 +74,7 @@ const postPaymentsHandler = rest.post(
 );
 
 const deletePaymentsHandler = rest.delete(
-  "http://localhost:8080/rooms/:roomId/payments",
+  "http://localhost:8080/rooms/:roomId/payments/:paymentId",
   (_req, res, ctx) => {
     return res(ctx.status(204));
   },
