@@ -30,16 +30,18 @@ export const AddingPaymentForm = ({
   roomId,
   users,
   afterSubmit,
+  defaultPaiedBy,
 }: {
   roomId: string;
   users: User[];
   afterSubmit: () => Promise<void>;
+  defaultPaiedBy?: string;
 }) => {
   const [price, setPrice] = useState<number | undefined>(undefined);
   const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(event.target.value === "" ? undefined : Number(event.target.value));
   };
-  const [paiedBy, setPaiedBy] = useState<string>(users[0]?.id);
+  const [paiedBy, setPaiedBy] = useState<string>(defaultPaiedBy || users[0]?.id);
   const onChangePaiedBy = (event: SelectChangeEvent) => {
     setPaiedBy(event.target.value);
   };

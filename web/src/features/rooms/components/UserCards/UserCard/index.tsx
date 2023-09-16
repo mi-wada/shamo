@@ -1,4 +1,5 @@
-import { Card, CardContent, Typography } from "@mui/material";
+import { User } from "../../../types/user";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
 function formatCurrency(amount: number): string {
   const formatter = new Intl.NumberFormat("ja-JP", {
@@ -11,23 +12,26 @@ function formatCurrency(amount: number): string {
 }
 
 type UserCardProps = {
-  name: string;
+  user: User;
   totalPrice: number;
+  onClick: (user: User) => () => void;
 };
 
-export const UserCard = ({ name, totalPrice }: UserCardProps) => (
-  <Card sx={{ minWidth: "170px", minHeight: "110px" }}>
-    <CardContent sx={{ padding: 0 }}>
-      <Typography variant="body1" component="p" sx={{ textAlign: "center", margin: "8px" }}>
-        {name}
-      </Typography>
-      <Typography
-        variant="body1"
-        component="p"
-        sx={{ fontWeight: "bold", textAlign: "center", marginTop: "8px", fontSize: "2rem" }}
-      >
-        {formatCurrency(totalPrice)}
-      </Typography>
-    </CardContent>
+export const UserCard = ({ user, totalPrice, onClick }: UserCardProps) => (
+  <Card sx={{ minWidth: "170px" }}>
+    <CardActionArea onClick={onClick(user)}>
+      <CardContent sx={{ padding: 0 }}>
+        <Typography variant="body1" component="p" sx={{ textAlign: "center", margin: "8px" }}>
+          {user.name}
+        </Typography>
+        <Typography
+          variant="body1"
+          component="p"
+          sx={{ fontWeight: "bold", textAlign: "center", margin: "8px", fontSize: "2rem" }}
+        >
+          {formatCurrency(totalPrice)}
+        </Typography>
+      </CardContent>
+    </CardActionArea>
   </Card>
 );

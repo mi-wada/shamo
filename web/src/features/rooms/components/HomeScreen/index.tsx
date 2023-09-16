@@ -31,6 +31,8 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
 
   const [open, setOpen] = useState(false);
 
+  const [defaultPaiedBy, setDefaultPaiedBy] = useState<string | undefined>(undefined);
+
   const afterSubmit = async () => {
     setOpen(false);
     await paymentsRefetch();
@@ -44,7 +46,13 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
     <LoadingScreen />
   ) : (
     <Box sx={{ margin: "8px" }}>
-      <UserCards users={users} />
+      <UserCards
+        users={users}
+        cardOnClick={(user) => () => {
+          setDefaultPaiedBy(user.id);
+          setOpen(true);
+        }}
+      />
       <RegisterPaymentButton
         onClick={() => {
           setOpen(true);
@@ -57,7 +65,12 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
           setOpen(false);
         }}
       >
-        <AddingPaymentForm roomId={roomId} users={users} afterSubmit={afterSubmit} />
+        <AddingPaymentForm
+          roomId={roomId}
+          users={users}
+          afterSubmit={afterSubmit}
+          defaultPaiedBy={defaultPaiedBy}
+        />
       </Drawer>
     </Box>
   );
