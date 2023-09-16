@@ -1,34 +1,31 @@
 import { rest } from "msw";
 
-const getUsersHandler = rest.get(
-  `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/:roomId/users`,
-  (req, res, ctx) => {
-    const { roomId } = req.params;
+const getUsersHandler = rest.get("http://localhost:8080/rooms/:roomId/users", (req, res, ctx) => {
+  const { roomId } = req.params;
 
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          id: "550e8400-e29b-41d4-a716-446655440000",
-          room_id: roomId,
-          name: "John Doe",
-          email: "hoge@example.com",
-          picture_url: "https://example.com/hoge.png",
-        },
-        {
-          id: "550e1200-e29b-41d4-a716-446655440001",
-          room_id: roomId,
-          name: "Peater Smith",
-          email: "fuga@example.com",
-          picture_url: "https://example.com/fuga.png",
-        },
-      ]),
-    );
-  },
-);
+  return res(
+    ctx.status(200),
+    ctx.json([
+      {
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        room_id: roomId,
+        name: "John Doe",
+        email: "hoge@example.com",
+        picture_url: "https://example.com/hoge.png",
+      },
+      {
+        id: "550e1200-e29b-41d4-a716-446655440001",
+        room_id: roomId,
+        name: "Peater Smith",
+        email: "fuga@example.com",
+        picture_url: "https://example.com/fuga.png",
+      },
+    ]),
+  );
+});
 
 const getPaymentsHandler = rest.get(
-  `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/:roomId/payments`,
+  "http://localhost:8080/rooms/:roomId/payments",
   (req, res, ctx) => {
     const { roomId } = req.params;
 
@@ -57,7 +54,7 @@ const getPaymentsHandler = rest.get(
 );
 
 const postPaymentsHandler = rest.post(
-  `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/:roomId/payments`,
+  "http://localhost:8080/rooms/:roomId/payments",
   async (req, res, ctx) => {
     const { roomId } = req.params;
     const { userId, what } = await req.json();
@@ -77,7 +74,7 @@ const postPaymentsHandler = rest.post(
 );
 
 const deletePaymentsHandler = rest.delete(
-  `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/:roomId/payments`,
+  "http://localhost:8080/rooms/:roomId/payments",
   (_req, res, ctx) => {
     return res(ctx.status(204));
   },
