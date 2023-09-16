@@ -1,5 +1,5 @@
 "use client";
-import { Box, Drawer, Fab } from "@mui/material";
+import { Box, Fab, SwipeableDrawer } from "@mui/material";
 import { UserCards } from "../UserCards";
 import { usePayments } from "../../hooks/usePayments";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
@@ -58,9 +58,12 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
           setOpen(true);
         }}
       />
-      <Drawer
+      <SwipeableDrawer
         anchor="bottom"
         open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
         onClose={() => {
           setOpen(false);
         }}
@@ -71,7 +74,7 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
           afterSubmit={afterSubmit}
           defaultPaiedBy={defaultPaiedBy}
         />
-      </Drawer>
+      </SwipeableDrawer>
     </Box>
   );
 };
