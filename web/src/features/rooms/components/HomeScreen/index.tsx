@@ -1,11 +1,20 @@
 "use client";
-import { Box, Drawer, Fab, Input, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Drawer,
+  Fab,
+  Input,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { UserCards } from "../UserCards";
 import { usePayments } from "../../hooks/usePayments";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { useUsers } from "../../hooks/useUsers";
 import { Add, Note } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/common/Button";
 
 const RegisterPaymentButton = ({ onClick }: { onClick: () => void }) => {
@@ -26,10 +35,18 @@ type HomeScreenProps = {
 };
 
 export const HomeScreen = ({ roomId }: HomeScreenProps) => {
-  const [open, setOpen] = useState(false);
-
   const { payments, loading: paymentsLoading } = usePayments(roomId);
   const { users, loading: usersLoading } = useUsers(roomId);
+
+  const [open, setOpen] = useState(false);
+  const [paiedBy, setPaiedBy] = useState<string | undefined>(undefined);
+  const onChangePaiedBy = (event: SelectChangeEvent) => {
+    setPaiedBy(event.target.value);
+  };
+
+  useEffect(() => {
+    setPaiedBy(users[0]?.id);
+  }, [users]);
 
   users.forEach((user) => {
     user.payments = payments.filter((payment) => payment.user_id === user.id);
@@ -68,13 +85,17 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
             <Typography variant="caption" component="label" htmlFor="paied_by">
               Paied By
             </Typography>
-            <Select id="paied_by" sx={{ width: "100%", height: "40px" }}>
-              <MenuItem key="1" value="1">
-                Mitsuaki
-              </MenuItem>
-              <MenuItem key="2" value="2">
-                Kahori
-              </MenuItem>
+            <Select
+              id="paied_by"
+              sx={{ width: "100%", height: "40px" }}
+              value={paiedBy}
+              onChange={onChangePaiedBy}
+            >
+              {users.map((user) => (
+                <MenuItem key={user.id} value={user.id}>
+                  {user.name}
+                </MenuItem>
+              ))}
             </Select>
           </Box>
           <Box sx={{ margin: "8px", display: "block" }}>
