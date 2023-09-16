@@ -3,7 +3,7 @@ import { Payment } from "../types/payment";
 
 export const usePayments = (roomId: string) => {
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchPayments = async () => {
     const res = await fetch(

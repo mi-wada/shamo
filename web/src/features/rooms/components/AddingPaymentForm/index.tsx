@@ -3,28 +3,7 @@ import { Box, Input, MenuItem, Select, SelectChangeEvent, Typography } from "@mu
 import { User } from "../../types/user";
 import { Button } from "@/components/common/Button";
 import { useState } from "react";
-
-const usePostPayment = () => {
-  const [loading, setLoading] = useState(false);
-
-  const postPayment = async (roomId: string, price: number, PaiedBy: string, note: string) => {
-    setLoading(true);
-    await fetch(`${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        price: price,
-        user_id: PaiedBy,
-        what: note,
-      }),
-    });
-    setLoading(false);
-  };
-
-  return { loading, postPayment };
-};
+import { usePostPayment } from "../../hooks/usePostPayment";
 
 export const AddingPaymentForm = ({
   roomId,
@@ -50,16 +29,23 @@ export const AddingPaymentForm = ({
     setNote(event.target.value);
   };
 
-  const { loading, postPayment } = usePostPayment();
+  const { loading, postPayment } = usePostPayment({
+    callback: async () => {
+      const resetForm = () => {
+        setPrice(undefined);
+        setPaiedBy(users[0]?.id);
+        setNote("");
+      };
+      resetForm();
+
+      await afterSubmit();
+    },
+  });
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // TODO: validation by zod
     await postPayment(roomId, price as number, paiedBy, note);
-    setPrice(undefined);
-    setPaiedBy(users[0]?.id);
-    setNote("");
-    await afterSubmit();
     // TODO: show toast
   };
 
