@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import React, { useEffect } from "react";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
+import { IconButton } from "@/components/common/IconButton";
 
 type Payment = {
   id: string;
@@ -59,6 +60,7 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
             <TableCell>Price</TableCell>
             <TableCell>User</TableCell>
             <TableCell>Memo</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -67,6 +69,9 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
               <TableCell>{payment.price}</TableCell>
               <TableCell>{payment.user_id}</TableCell>
               <TableCell>{payment.what}</TableCell>
+              <TableCell>
+                <IconButton iconType="delete" size="medium" onClick={() => {}} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
