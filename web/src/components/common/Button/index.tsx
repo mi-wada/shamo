@@ -10,8 +10,10 @@ export type ButtonProps = {
    * @default false
    */
   disabled?: boolean;
+  sx?: MuiButtonProps["sx"];
   color?: MuiButtonProps["color"];
-  onClick: () => void;
+  onClick?: () => void;
+  type?: MuiButtonProps["type"];
   children: React.ReactNode;
 };
 
