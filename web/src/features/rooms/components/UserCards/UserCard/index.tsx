@@ -27,7 +27,7 @@ export const UserCard = ({ user, totalPrice, onClick }: UserCardProps) => (
         <Typography
           variant="body1"
           component="p"
-          sx={{ fontWeight: "bold", textAlign: "center", margin: "8px", fontSize: "2rem" }}
+          sx={{ fontWeight: "bold", textAlign: "center", margin: "8px", fontSize: "1.6rem" }}
         >
           {formatCurrency(totalPrice)}
         </Typography>
