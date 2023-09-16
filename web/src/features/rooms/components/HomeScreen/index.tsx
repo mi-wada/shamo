@@ -1,21 +1,11 @@
 "use client";
-import {
-  Box,
-  Drawer,
-  Fab,
-  Input,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Box, Drawer, Fab } from "@mui/material";
 import { UserCards } from "../UserCards";
 import { usePayments } from "../../hooks/usePayments";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { useUsers } from "../../hooks/useUsers";
-import { Add, Note } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/common/Button";
+import { Add } from "@mui/icons-material";
+import { useState } from "react";
 import { AddingPaymentForm } from "../AddingPaymentForm";
 
 const RegisterPaymentButton = ({ onClick }: { onClick: () => void }) => {
