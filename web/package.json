@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:mock": "ENABLE_MOCK=1 next dev",
+    "dev:mock": "NEXT_PUBLIC_ENABLE_MOCK=1 next dev",
     "build": "next build",
     "start": "next start",
     "test": "jest",
