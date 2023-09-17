@@ -10,7 +10,7 @@ export const LoadingScreen = () => (
       // NOTE: The height of AppBar is subtracted.
       // Therefore, if the height of AppBar is changed, it must be changed.
       // Also, if a Footer is added, it is necessary to subtract the height of Footer too.
-      height: "calc(100vh - 90.88px)",
+      height: "calc(100vh - 117.34px)",
     }}
   >
     <LoadingComponent size={"medium"} />
