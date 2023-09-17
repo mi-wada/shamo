@@ -4,6 +4,7 @@ import { User } from "../../types/user";
 import { Button } from "@/components/common/Button";
 import { useState } from "react";
 import { usePostPayment } from "../../hooks/usePostPayment";
+import { FormLabel } from "@/components/common/FormLabel";
 
 export const AddingPaymentForm = ({
   roomId,
@@ -52,9 +53,9 @@ export const AddingPaymentForm = ({
   return (
     <Box component="form" sx={{ margin: "8px" }} onSubmit={onSubmit}>
       <Box sx={{ margin: "8px", display: "block" }}>
-        <Typography variant="caption" component="label" htmlFor="paied_by">
+        <FormLabel htmlFor="paied_by" required>
           Paied By
-        </Typography>
+        </FormLabel>
         <Select
           id="paied_by"
           value={paiedBy}
@@ -70,9 +71,9 @@ export const AddingPaymentForm = ({
         </Select>
       </Box>
       <Box sx={{ margin: "8px", display: "block" }}>
-        <Typography variant="caption" component="label" htmlFor="price">
+        <FormLabel htmlFor="price" required>
           Price
-        </Typography>
+        </FormLabel>
         <Input
           type="number"
           id="price"
@@ -84,9 +85,7 @@ export const AddingPaymentForm = ({
         />
       </Box>
       <Box sx={{ margin: "8px", display: "block" }}>
-        <Typography variant="caption" component="label" htmlFor="note">
-          Note
-        </Typography>
+        <FormLabel htmlFor="note">Note</FormLabel>
         <Input
           type="text"
           id="note"
