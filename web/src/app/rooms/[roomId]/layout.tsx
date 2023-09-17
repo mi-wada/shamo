@@ -1,5 +1,6 @@
-import { TogglePageButton } from "@/features/rooms";
 import { Box } from "@mui/material";
+
+import { TogglePageButton } from "@/features/rooms";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

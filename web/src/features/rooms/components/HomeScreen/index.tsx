@@ -1,12 +1,14 @@
 "use client";
-import { Box, Drawer, Fab } from "@mui/material";
-import { UserCards } from "../UserCards";
-import { usePayments } from "../../hooks/usePayments";
-import { LoadingScreen } from "@/components/common/LoadingScreen";
-import { useUsers } from "../../hooks/useUsers";
 import { Add } from "@mui/icons-material";
+import { Box, Drawer, Fab } from "@mui/material";
 import { useState } from "react";
+
+import { LoadingScreen } from "@/components/common/LoadingScreen";
+
+import { usePayments } from "../../hooks/usePayments";
+import { useUsers } from "../../hooks/useUsers";
 import { AddingPaymentForm } from "../AddingPaymentForm";
+import { UserCards } from "../UserCards";
 
 const RegisterPaymentButton = ({ onClick }: { onClick: () => void }) => {
   return (

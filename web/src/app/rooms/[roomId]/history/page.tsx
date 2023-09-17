@@ -1,5 +1,6 @@
-import { HistoryScreen } from "@/features/rooms";
 import React from "react";
+
+import { HistoryScreen } from "@/features/rooms";
 
 type PageProps = {
   params: {

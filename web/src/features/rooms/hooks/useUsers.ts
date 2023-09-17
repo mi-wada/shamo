@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { User } from "../types/user";
 
 export const useUsers = (roomId: string) => {

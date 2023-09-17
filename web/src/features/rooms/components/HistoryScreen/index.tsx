@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import { PaymentHistory } from "../PaymentHistory";
 
 type HistoryScreenProps = {

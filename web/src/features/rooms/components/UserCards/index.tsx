@@ -1,5 +1,7 @@
 import { Box } from "@mui/material";
+
 import { User } from "../../types/user";
+
 import { UserCard } from "./UserCard";
 
 type UserCardsProps = {

@@ -1,5 +1,6 @@
-import { User } from "../../../types/user";
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+
+import { User } from "../../../types/user";
 
 function formatCurrency(amount: number): string {
   const formatter = new Intl.NumberFormat("ja-JP", {

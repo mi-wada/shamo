@@ -1,7 +1,7 @@
 "use client";
+import { History, Home } from "@mui/icons-material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { History, Home } from "@mui/icons-material";
 
 type Path = {
   icon: React.ReactNode;

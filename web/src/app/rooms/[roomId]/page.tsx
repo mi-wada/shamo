@@ -1,5 +1,6 @@
-import { HomeScreen } from "@/features/rooms";
 import React from "react";
+
+import { HomeScreen } from "@/features/rooms";
 
 type PageProps = {
   params: {

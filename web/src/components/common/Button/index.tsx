@@ -1,4 +1,5 @@
 import { Button as MuiButton, type ButtonProps as MuiButtonProps } from "@mui/material";
+
 import { Loading } from "../Loading";
 
 export type ButtonProps = {

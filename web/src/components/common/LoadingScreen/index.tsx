@@ -1,4 +1,5 @@
 import { Container } from "@mui/material";
+
 import { Loading as LoadingComponent } from "@/components/common/Loading";
 
 export const LoadingScreen = () => (

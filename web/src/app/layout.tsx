@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import ThemeRegistry from "@/components/ThemeRegistry";
 import { AppBar } from "@/components/common/AppBar";
+import ThemeRegistry from "@/components/ThemeRegistry";
 import { MSWInitClientSide } from "@/mock/MSWInitClientSide";
 
 if (process.env.NEXT_PUBLIC_ENABLE_MOCK) {
