@@ -1,4 +1,4 @@
-import { Box, Card, CardContent } from "@mui/material";
+import { Box } from "@mui/material";
 import { User } from "../../types/user";
 import { UserCard } from "./UserCard";
 

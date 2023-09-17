@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 
 async function prepare() {
   if (process.env.NEXT_PUBLIC_ENABLE_MOCK) {

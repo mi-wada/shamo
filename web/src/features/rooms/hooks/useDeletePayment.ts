@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Payment } from "../types/payment";
+import { useState } from "react";
 
 export const useDeletePayment = ({ callback }: { callback: () => Promise<void> }) => {
   const [loading, setLoading] = useState(false);
