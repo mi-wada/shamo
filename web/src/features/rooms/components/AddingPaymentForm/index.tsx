@@ -1,10 +1,10 @@
 "use client";
-import { Box, Input, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, MenuItem, SelectChangeEvent } from "@mui/material";
 import { User } from "../../types/user";
 import { Button } from "@/components/common/Button";
 import { useState } from "react";
 import { usePostPayment } from "../../hooks/usePostPayment";
-import { FormLabel } from "@/components/common/FormLabel";
+import { FormInputField, FormSelectField } from "@/components/common/FormField";
 
 export const AddingPaymentForm = ({
   roomId,
@@ -18,8 +18,8 @@ export const AddingPaymentForm = ({
   defaultPaiedBy?: string;
 }) => {
   const [paiedBy, setPaiedBy] = useState<string>(defaultPaiedBy || users[0]?.id);
-  const onChangePaiedBy = (event: SelectChangeEvent) => {
-    setPaiedBy(event.target.value);
+  const onChangePaiedBy = (event: SelectChangeEvent<unknown>) => {
+    setPaiedBy(event.target.value as string);
   };
   const [price, setPrice] = useState<number | undefined>(undefined);
   const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,49 +52,36 @@ export const AddingPaymentForm = ({
 
   return (
     <Box component="form" sx={{ margin: "8px" }} onSubmit={onSubmit}>
-      <Box sx={{ margin: "8px", display: "block" }}>
-        <FormLabel htmlFor="paied_by" required>
-          Paied By
-        </FormLabel>
-        <Select
-          id="paied_by"
-          value={paiedBy}
-          onChange={onChangePaiedBy}
-          required
-          sx={{ width: "100%", height: "40px" }}
-        >
-          {users.map((user) => (
-            <MenuItem key={user.id} value={user.id}>
-              {user.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </Box>
-      <Box sx={{ margin: "8px", display: "block" }}>
-        <FormLabel htmlFor="price" required>
-          Price
-        </FormLabel>
-        <Input
-          type="number"
-          id="price"
-          value={price === undefined ? "" : price}
-          onChange={onChangePrice}
-          required
-          placeholder="500"
-          sx={{ width: "100%" }}
-        />
-      </Box>
-      <Box sx={{ margin: "8px", display: "block" }}>
-        <FormLabel htmlFor="note">Note</FormLabel>
-        <Input
-          type="text"
-          id="note"
-          value={note}
-          onChange={onChangeNote}
-          placeholder="coffee☕"
-          sx={{ width: "100%" }}
-        />
-      </Box>
+      <FormSelectField
+        id="paied_by"
+        value={paiedBy}
+        onChange={onChangePaiedBy}
+        label="Paied By"
+        required
+      >
+        {users.map((user) => (
+          <MenuItem key={user.id} value={user.id}>
+            {user.name}
+          </MenuItem>
+        ))}
+      </FormSelectField>
+      <FormInputField
+        type="number"
+        value={price === undefined ? "" : price}
+        onChange={onChangePrice}
+        placeholder="500"
+        id="price"
+        label="Price"
+        required
+      />
+      <FormInputField
+        type="text"
+        value={note}
+        onChange={onChangeNote}
+        placeholder="coffee☕"
+        id="note"
+        label="Note"
+      />
       <Box sx={{ display: "flex", justifyContent: "right", margin: "8px" }}>
         <Button type="submit" color="primary" loading={loading}>
           Add
