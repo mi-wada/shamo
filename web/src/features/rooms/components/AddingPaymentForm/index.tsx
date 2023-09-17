@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { FormInputField, FormSelectField } from "@/components/common/FormField";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 import { usePostPayment } from "../../hooks/usePostPayment";
 import { User } from "../../types/user";
@@ -32,6 +33,8 @@ export const AddingPaymentForm = ({
     setNote(event.target.value);
   };
 
+  const { showSnackbar } = useSnackbar();
+
   const { loading, postPayment } = usePostPayment({
     callback: async () => {
       const resetForm = () => {
@@ -40,6 +43,7 @@ export const AddingPaymentForm = ({
         setNote("");
       };
       resetForm();
+      showSnackbar({ message: "Added", success: true });
 
       await afterSubmit();
     },

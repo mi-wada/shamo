@@ -7,6 +7,7 @@ import "@fontsource/roboto/700.css";
 import { AppBar } from "@/components/common/AppBar";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import { MSWInitClientSide } from "@/mock/MSWInitClientSide";
+import { Snackbar, SnackbarProvider } from "@/providers/SnackbarProvider";
 
 if (process.env.NEXT_PUBLIC_ENABLE_MOCK) {
   require("../mock");
@@ -26,10 +27,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* TODO: Workaround to avoid error before MSW starts. If there are better ways, Let's fix */}
         <MSWInitClientSide>
           <ThemeRegistry darkmode={prefersDarkMode}>
-            <header>
-              <AppBar />
-            </header>
-            {children}
+            <SnackbarProvider>
+              <header>
+                <AppBar />
+              </header>
+              {children}
+              <Snackbar />
+            </SnackbarProvider>
           </ThemeRegistry>
         </MSWInitClientSide>
       </body>

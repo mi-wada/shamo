@@ -3,6 +3,7 @@ import { Table, TableContainer, TableBody, TableCell, TableHead, TableRow } from
 
 import { IconButton } from "@/components/common/IconButton";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 import { useDeletePayment } from "../../hooks/useDeletePayment";
 import { usePayments } from "../../hooks/usePayments";
@@ -13,8 +14,14 @@ type PaymentHistoryProps = {
 
 export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
   const { payments, loading: paymentsLoading, refetch } = usePayments(roomId);
+  const { showSnackbar } = useSnackbar();
 
-  const { loading: deleteLoading, deletePayment } = useDeletePayment({ callback: refetch });
+  const { loading: deleteLoading, deletePayment } = useDeletePayment({
+    callback: async () => {
+      showSnackbar({ message: "Deleted", success: true });
+      await refetch();
+    },
+  });
 
   const handleDelete = (id: string) => async () => {
     await deletePayment(roomId, id);
