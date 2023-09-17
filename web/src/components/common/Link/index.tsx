@@ -1,7 +1,6 @@
 import { OpenInNew } from "@mui/icons-material";
 import { Link as MuiLink } from "@mui/material";
 import NextLink from "next/link";
-import { muiLinkStyle, openInNewIconStyle } from "./style";
 
 type LinkProps = {
   href: string;
@@ -17,9 +16,9 @@ export const Link = ({ href, children }: LinkProps) => {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      sx={muiLinkStyle}
+      sx={{ display: "flex", alignItems: "center" }}
     >
-      <OpenInNew sx={openInNewIconStyle} />
+      <OpenInNew sx={{ fontSize: "inherit", marginRight: "4px" }} />
       {children}
     </MuiLink>
   ) : (
