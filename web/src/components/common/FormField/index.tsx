@@ -37,6 +37,7 @@ export const FormInputField = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+      required={required}
       sx={{ width: "100%" }}
     />
   </Box>
@@ -59,7 +60,13 @@ export const FormSelectField = ({
     <FormLabel htmlFor={id} required={required}>
       {label}
     </FormLabel>
-    <Select id={id} value={value} onChange={onChange} sx={{ width: "100%", height: "40px" }}>
+    <Select
+      id={id}
+      value={value}
+      onChange={onChange}
+      required={required}
+      sx={{ width: "100%", height: "40px" }}
+    >
       {children}
     </Select>
   </Box>
