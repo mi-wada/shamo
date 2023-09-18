@@ -16,14 +16,22 @@ defaults:
 permissions:
   contents: read
   pull-requests: write
-  checks: write
-  actions: write
 jobs:
   openapi_lint:
     runs-on: ubuntu-latest
+    env:
+      SPECTRAL_CLI_VERSION: "6.11.0"
     steps:
       - uses: actions/checkout@v4
-      - uses: stoplightio/spectral-action@v0.8.10
+      - name: Cache spectral-cli
+        id: cache-spectral-cli
+        uses: actions/cache@v3
         with:
-          file_glob: ./backend/openapi/index.yml
-          spectral_ruleset: ./backend/.spectral.yaml
+          path: |
+            /usr/local/bin/spectral
+            /usr/local/lib/node_modules/@stoplight/spectral-cli
+          key: ${{ runner.os }}-spectral-cli-${{ env.SPECTRAL_CLI_VERSION }}
+      - if: steps.cache-spectral-cli.outputs.cache-hit != 'true'
+        name: Install spectral-cli
+        run: npm install -g @stoplight/spectral-cli@${{ env.SPECTRAL_CLI_VERSION }}
+      - run: spectral lint ./openapi/index.yml
