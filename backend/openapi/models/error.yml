@@ -1,0 +1,39 @@
+components:
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorItem'
+      required:
+        - errors
+    ErrorItem:
+      type: object
+      additionalProperties: false
+      properties:
+        field:
+          type: string
+          description: The field name which has an error. Matches with the key name in Path, Query and Body params.
+          example: name
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+          description: This is for developers.
+          example: name is too long.
+      required:
+        - field
+        - code
+        - message
+    ErrorCode:
+      type: enum
+      description: It is intended to be referenced by the program.
+      enum:
+        - TOO_LONG
+        - TOO_SHORT
+        - INVALID_FORMAT
+        - NOT_FOUND
+        - ALREADY_EXISTS

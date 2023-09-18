@@ -1,0 +1,52 @@
+components:
+  schemas:
+    Room:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          $ref: '#/components/schemas/Name'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+      required:
+        - id
+        - name
+        - created_by
+    Id:
+      $ref: './common.yml#/components/schemas/Id'
+    Name:
+      type: string
+      example: いつめん
+      maxLength: 20
+    CreatedBy:
+      $ref: './user.yml#/components/schemas/Id'
+      description: User's ID
+
+    CreateRoomRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '../models/room.yml#/components/schemas/Name'
+        created_by:
+          $ref: '../models/room.yml#/components/schemas/CreatedBy'
+      required:
+        - name
+        - created_by
+
+    CreatedRoomResponse:
+      $ref: '#/components/schemas/Room'
+    RoomResponse:
+      allOf:
+        - $ref: '#/components/schemas/Room'
+        - type: object
+          additionalProperties: false
+          properties:
+            members:
+              type: array
+              items:
+                $ref: './room_member.yml#/components/schemas/RoomMember'
+          required:
+            - members

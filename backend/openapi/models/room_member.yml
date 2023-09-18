@@ -1,0 +1,23 @@
+components:
+  schemas:
+    RoomMember:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        total_amount:
+          $ref: '#/components/schemas/TotalAmount'
+        created_at:
+          $ref: './common.yml#/components/schemas/DateTime'
+        user:
+          $ref: './user.yml#/components/schemas/User'
+      required:
+        - user
+        - total_amount
+        - created_at
+    Id:
+      $ref: './common.yml#/components/schemas/Id'
+    TotalAmount:
+      $ref: './common.yml#/components/schemas/Uint64'
+      example: 240000

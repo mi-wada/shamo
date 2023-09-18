@@ -1,0 +1,29 @@
+post:
+  summary: Create room
+  description: Creates a new room.
+  operationId: createRoom
+  tags:
+    - Room
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../models/room.yml#/components/schemas/CreateRoomRequest'
+  responses:
+    '201':
+      description: Room created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../models/room.yml#/components/schemas/CreatedRoomResponse'
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '../models/error.yml#/components/schemas/Error'
+    '500':
+      $ref: '../responses/error.yml#/components/responses/InternalServerError'
+    '503':
+      $ref: '../responses/error.yml#/components/responses/ServiceUnavailable'

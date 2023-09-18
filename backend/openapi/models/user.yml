@@ -1,0 +1,27 @@
+components:
+  schemas:
+    User:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          $ref: '#/components/schemas/Name'
+        picture_url:
+          $ref: '#/components/schemas/PictureUrl'
+      required:
+        - id
+        - name
+        - picture_url
+    Id:
+      $ref: './common.yml#/components/schemas/Id'
+    Name:
+      type: string
+      maxLength: 20
+      example: mitsuaki
+    PictureUrl:
+      type: string
+      format: uri
+      nullable: true
+      example: https://example.com/picture.png
