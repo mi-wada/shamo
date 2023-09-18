@@ -13,11 +13,16 @@ export const Snackbar = () => {
   return (
     <MuiSnackbar
       open={open}
-      autoHideDuration={3500}
+      autoHideDuration={7000}
       onClose={hideSnackbar}
       TransitionComponent={RightSlide}
       message={
-        <Box sx={{ flex: "display", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           {success ? <CheckCircle color="success" /> : <ErrorIcon color="error" />}
           <Typography variant="body1" component="span" sx={{ marginLeft: "4px" }}>
             {message}
