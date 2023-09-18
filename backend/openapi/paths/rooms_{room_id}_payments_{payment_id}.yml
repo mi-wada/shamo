@@ -10,17 +10,17 @@ delete:
       description: Room's ID
       required: true
       schema:
-        $ref: '../models/room.yml#/components/schemas/Id'
+        $ref: "../models/room.yml#/components/schemas/Id"
     - name: payment_id
       in: path
       description: Payment's ID
       required: true
       schema:
-        $ref: '../models/payment.yml#/components/schemas/Id'
+        $ref: "../models/payment.yml#/components/schemas/Id"
   responses:
-    '204':
+    "204":
       description: Deleted successfully
-    '500':
-      $ref: '../responses/error.yml#/components/responses/InternalServerError'
-    '503':
-      $ref: '../responses/error.yml#/components/responses/ServiceUnavailable'
+    "500":
+      $ref: "../responses/error.yml#/components/responses/InternalServerError"
+    "503":
+      $ref: "../responses/error.yml#/components/responses/ServiceUnavailable"

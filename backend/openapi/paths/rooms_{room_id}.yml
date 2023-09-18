@@ -10,21 +10,21 @@ get:
       description: Room's ID
       required: true
       schema:
-        $ref: '../models/room.yml#/components/schemas/Id'
+        $ref: "../models/room.yml#/components/schemas/Id"
   responses:
-    '200':
+    "200":
       description: OK
       content:
         application/json:
           schema:
-            $ref: '../models/room.yml#/components/schemas/RoomResponse'
-    '404':
+            $ref: "../models/room.yml#/components/schemas/RoomResponse"
+    "404":
       description: Not found
       content:
         application/json:
           schema:
-            $ref: '../models/error.yml#/components/schemas/Error'
-    '500':
-      $ref: '../responses/error.yml#/components/responses/InternalServerError'
-    '503':
-      $ref: '../responses/error.yml#/components/responses/ServiceUnavailable'
+            $ref: "../models/error.yml#/components/schemas/Error"
+    "500":
+      $ref: "../responses/error.yml#/components/responses/InternalServerError"
+    "503":
+      $ref: "../responses/error.yml#/components/responses/ServiceUnavailable"

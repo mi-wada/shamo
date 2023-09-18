@@ -5,18 +5,18 @@ components:
       content:
         application/json:
           schema:
-            $ref: '../models/error.yml#/components/schemas/Error'
+            $ref: "../models/error.yml#/components/schemas/Error"
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
-            $ref: '../models/error.yml#/components/schemas/Error'
+            $ref: "../models/error.yml#/components/schemas/Error"
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: '../models/error.yml#/components/schemas/Error'
+            $ref: "../models/error.yml#/components/schemas/Error"
     ServiceUnavailable:
       description: Indicates that the backend is in maintenance mode.

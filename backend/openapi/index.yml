@@ -17,10 +17,10 @@ servers:
     description: Production server
 paths:
   /rooms:
-    $ref: './paths/rooms.yml'
+    $ref: "./paths/rooms.yml"
   /rooms/{room_id}:
-    $ref: './paths/rooms_{room_id}.yml'
+    $ref: "./paths/rooms_{room_id}.yml"
   /rooms/{room_id}/payments:
-    $ref: './paths/rooms_{room_id}_payments.yml'
+    $ref: "./paths/rooms_{room_id}_payments.yml"
   /rooms/{room_id}/payments/{payment_id}:
-    $ref: './paths/rooms_{room_id}_payments_{payment_id}.yml'
+    $ref: "./paths/rooms_{room_id}_payments_{payment_id}.yml"

@@ -7,7 +7,7 @@ components:
         errors:
           type: array
           items:
-            $ref: '#/components/schemas/ErrorItem'
+            $ref: "#/components/schemas/ErrorItem"
       required:
         - errors
     ErrorItem:
@@ -19,7 +19,7 @@ components:
           description: The field name which has an error. Matches with the key name in Path, Query and Body params.
           example: name
         code:
-          $ref: '#/components/schemas/ErrorCode'
+          $ref: "#/components/schemas/ErrorCode"
         message:
           type: string
           description: This is for developers.

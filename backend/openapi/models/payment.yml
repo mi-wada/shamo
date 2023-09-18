@@ -5,25 +5,25 @@ components:
       additionalProperties: false
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: "#/components/schemas/Id"
         amount:
-          $ref: '#/components/schemas/Amount'
+          $ref: "#/components/schemas/Amount"
         paid_by:
-          $ref: '#/components/schemas/PaidBy'
+          $ref: "#/components/schemas/PaidBy"
         note:
-          $ref: '#/components/schemas/Note'
+          $ref: "#/components/schemas/Note"
       required:
         - id
         - amount
         - paid_by
         - note
     Id:
-      $ref: './common.yml#/components/schemas/Id'
+      $ref: "./common.yml#/components/schemas/Id"
     Amount:
-      $ref: './common.yml#/components/schemas/Uint64'
+      $ref: "./common.yml#/components/schemas/Uint64"
       example: 400
     PaidBy:
-      $ref: './room_member.yml#/components/schemas/Id'
+      $ref: "./room_member.yml#/components/schemas/Id"
       description: RoomMember's ID
     Note:
       type: string
@@ -36,14 +36,14 @@ components:
       additionalProperties: false
       properties:
         paid_by:
-          $ref: '#/components/schemas/PaidBy'
+          $ref: "#/components/schemas/PaidBy"
         amount:
-          $ref: '#/components/schemas/Amount'
+          $ref: "#/components/schemas/Amount"
         description:
-          $ref: '#/components/schemas/Note'
+          $ref: "#/components/schemas/Note"
       required:
         - paid_by
         - amount
 
     CreatedPaymentResponse:
-      $ref: '#/components/schemas/Payment'
+      $ref: "#/components/schemas/Payment"

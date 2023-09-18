@@ -10,25 +10,25 @@ post:
       description: Room's ID
       required: true
       schema:
-        $ref: '../models/room.yml#/components/schemas/Id'
+        $ref: "../models/room.yml#/components/schemas/Id"
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: '../models/payment.yml#/components/schemas/CreatePaymentRequest'
+          $ref: "../models/payment.yml#/components/schemas/CreatePaymentRequest"
   responses:
-    '201':
+    "201":
       description: Created successfully
       content:
         application/json:
           schema:
-            $ref: '../models/payment.yml#/components/schemas/CreatedPaymentResponse'
-    '400':
-      $ref: '../responses/error.yml#/components/responses/BadRequest'
-    '404':
-      $ref: '../responses/error.yml#/components/responses/NotFound'
-    '500':
-      $ref: '../responses/error.yml#/components/responses/InternalServerError'
-    '503':
-      $ref: '../responses/error.yml#/components/responses/ServiceUnavailable'
+            $ref: "../models/payment.yml#/components/schemas/CreatedPaymentResponse"
+    "400":
+      $ref: "../responses/error.yml#/components/responses/BadRequest"
+    "404":
+      $ref: "../responses/error.yml#/components/responses/NotFound"
+    "500":
+      $ref: "../responses/error.yml#/components/responses/InternalServerError"
+    "503":
+      $ref: "../responses/error.yml#/components/responses/ServiceUnavailable"

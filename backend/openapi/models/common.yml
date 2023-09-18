@@ -7,7 +7,7 @@ components:
     DateTime:
       type: string
       format: date-time
-      example: '2022-01-01T12:34:56+09:00'
+      example: "2022-01-01T12:34:56+09:00"
     Uint64:
       type: integer
       format: int64
