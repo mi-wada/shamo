@@ -3,7 +3,7 @@ import { Table, TableContainer, TableBody, TableCell, TableHead, TableRow } from
 
 import { IconButton } from "@/components/common/IconButton";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
-import { useSnackbar } from "@/providers/SnackbarProvider";
+import { useSnackbar } from "@/components/common/Snackbar/hooks";
 
 import { useDeletePayment } from "../../hooks/useDeletePayment";
 import { usePayments } from "../../hooks/usePayments";

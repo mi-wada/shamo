@@ -5,9 +5,10 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { AppBar } from "@/components/common/AppBar";
+import { Snackbar } from "@/components/common/Snackbar";
+import { SnackbarProvider } from "@/components/common/Snackbar/provider";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import { MSWInitClientSide } from "@/mock/MSWInitClientSide";
-import { Snackbar, SnackbarProvider } from "@/providers/SnackbarProvider";
 
 if (process.env.NEXT_PUBLIC_ENABLE_MOCK) {
   require("../mock");

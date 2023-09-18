@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/common/Button";
 import { FormInputField, FormSelectField } from "@/components/common/FormField";
-import { useSnackbar } from "@/providers/SnackbarProvider";
+import { useSnackbar } from "@/components/common/Snackbar/hooks";
 
 import { usePostPayment } from "../../hooks/usePostPayment";
 import { User } from "../../types/user";
