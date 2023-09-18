@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  db:
+    # https://www.cockroachlabs.com/docs/v23.1/start-a-local-cluster-in-docker-mac#start-a-single-node-cluster
+    container_name: shamo-backend-db
+    image: cockroachdb/cockroach:v23.1.10
+    ports:
+      - 26257:26257
+      - 8080:8080
+    command: start-single-node
+    env_file:
+      - .env.development
+    volumes:
+      - db:/cockroach/cockroach-data
+volumes:
+  db:
+    driver: local
