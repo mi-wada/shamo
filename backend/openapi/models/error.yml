@@ -29,7 +29,7 @@ components:
         - code
         - message
     ErrorCode:
-      type: enum
+      type: string
       description: It is intended to be referenced by the program.
       enum:
         - TOO_LONG

@@ -1,7 +1,20 @@
 openapi: 3.0.0
 info:
   title: Shamo 🐔 API
+  description: Shamo 🐔 API
   version: 1.0.0
+  contact:
+    name: Mitsuaki Wada
+tags:
+  - name: Room
+    description: Room API
+  - name: Payment
+    description: Payment API
+servers:
+  - url: http://localhost:8080
+    description: Local server
+  - url: https://shamo-api.vercel.app
+    description: Production server
 paths:
   /rooms:
     $ref: './paths/rooms.yml'
