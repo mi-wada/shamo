@@ -46,7 +46,7 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
       <Table stickyHeader size="small" sx={{ minWidth: 350, maxHeight: "100vh" }}>
         <TableHead>
           <TableRow>
-            <TableCell>Price</TableCell>
+            <TableCell>Amount</TableCell>
             <TableCell>User</TableCell>
             <TableCell>Memo</TableCell>
             <TableCell></TableCell>

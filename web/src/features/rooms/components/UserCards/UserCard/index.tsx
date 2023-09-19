@@ -14,11 +14,11 @@ function formatCurrency(amount: number): string {
 
 type UserCardProps = {
   user: User;
-  totalPrice: number;
+  totalAmount: number;
   onClick: (user: User) => () => void;
 };
 
-export const UserCard = ({ user, totalPrice, onClick }: UserCardProps) => (
+export const UserCard = ({ user, totalAmount, onClick }: UserCardProps) => (
   <Card sx={{ minWidth: "170px" }}>
     <CardActionArea onClick={onClick(user)}>
       <CardContent sx={{ padding: 0 }}>
@@ -30,7 +30,7 @@ export const UserCard = ({ user, totalPrice, onClick }: UserCardProps) => (
           component="p"
           sx={{ fontWeight: "bold", textAlign: "center", margin: "8px", fontSize: "1.6rem" }}
         >
-          {formatCurrency(totalPrice)}
+          {formatCurrency(totalAmount)}
         </Typography>
       </CardContent>
     </CardActionArea>
