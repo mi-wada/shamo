@@ -57,7 +57,7 @@ export const useQuery = <TData = any, TError = any>({
 
   useEffect(() => {
     fetchData();
-  });
+  }, [url]);
 
   if (status === "loading") {
     return {
