@@ -25,3 +25,12 @@ npm run test
 ```zsh
 npm run format
 ```
+
+### How to update packages?
+
+Uses []`npm-check-updates`](<https://github.com/raineorshine/npm-check-updates>)
+
+```zsh
+npm-check-updates -u
+npm i
+```
