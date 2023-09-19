@@ -13,7 +13,12 @@ type PaymentHistoryProps = {
 };
 
 export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
-  const { payments, loading: paymentsLoading, refetch } = usePayments(roomId);
+  const {
+    data: payments,
+    loading: paymentsLoading,
+    error: paymentsError,
+    refetch,
+  } = usePayments({ roomId });
   const { showSnackbar } = useSnackbar();
 
   const { loading: deleteLoading, deletePayment } = useDeletePayment({
@@ -27,9 +32,16 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
     await deletePayment(roomId, id);
   };
 
-  return paymentsLoading ? (
-    <LoadingScreen />
-  ) : (
+  if (paymentsLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (paymentsError) {
+    // TODO: ちゃんとやる
+    return <div>Error</div>;
+  }
+
+  return (
     <TableContainer>
       <Table stickyHeader size="small" sx={{ minWidth: 350, maxHeight: "100vh" }}>
         <TableHead>
@@ -43,9 +55,9 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
         <TableBody>
           {payments.map((payment) => (
             <TableRow key={payment.id}>
-              <TableCell>{payment.price}</TableCell>
-              <TableCell>{payment.user_id}</TableCell>
-              <TableCell>{payment.what}</TableCell>
+              <TableCell>{payment.amount}</TableCell>
+              <TableCell>{payment.userId}</TableCell>
+              <TableCell>{payment.note}</TableCell>
               <TableCell>
                 <IconButton
                   iconType="delete"

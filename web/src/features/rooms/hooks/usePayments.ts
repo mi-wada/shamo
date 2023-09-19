@@ -1,28 +1,21 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@/hooks/useQuery";
 
-import { Payment } from "../types/payment";
+import { Payment, PaymentsResponse } from "../types/payment";
 
-export const usePayments = (roomId: string) => {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [loading, setLoading] = useState(true);
+export const usePayments = ({ roomId }: { roomId: string }) => {
+  const { data, ...rest } = useQuery<PaymentsResponse, ShamoApiErrorResponse>({
+    url: `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`,
+  });
 
-  const fetchPayments = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`,
-    );
-    const data = await res.json();
-    setPayments(data);
-    setLoading(false);
+  return {
+    data: data?.map((payment) => ({
+      id: payment.id,
+      amount: payment.price,
+      roomId: payment.room_id,
+      userId: payment.user_id,
+      note: payment.what,
+      createdAt: payment.created_at,
+    })) as Payment[],
+    ...rest,
   };
-
-  useEffect(() => {
-    fetchPayments();
-  }, [roomId]);
-
-  const refetch = async () => {
-    setLoading(true);
-    fetchPayments();
-  };
-
-  return { payments, loading, refetch };
 };

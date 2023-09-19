@@ -15,7 +15,7 @@ export const UserCards = ({ users, cardOnClick }: UserCardsProps) => (
       <UserCard
         key={user.id}
         user={user}
-        totalPrice={user.payments.map((p) => p.price).reduce((acc, cur) => acc + cur, 0)}
+        totalPrice={user.payments.map((p) => p.amount).reduce((acc, cur) => acc + cur, 0)}
         onClick={cardOnClick}
       />
     ))}

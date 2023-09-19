@@ -28,8 +28,13 @@ type HomeScreenProps = {
 };
 
 export const HomeScreen = ({ roomId }: HomeScreenProps) => {
-  const { payments, loading: paymentsLoading, refetch: paymentsRefetch } = usePayments(roomId);
-  const { users, loading: usersLoading } = useUsers(roomId);
+  const {
+    data: payments,
+    loading: paymentsLoading,
+    error: paymentsError,
+    refetch: paymentsRefetch,
+  } = usePayments({ roomId });
+  const { data: users, error: usersError, loading: usersLoading } = useUsers({ roomId });
 
   const [open, setOpen] = useState(false);
 
@@ -40,13 +45,20 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
     await paymentsRefetch();
   };
 
+  if (paymentsLoading || usersLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (paymentsError || usersError) {
+    // TODO: ちゃんとやる
+    return <div>Error</div>;
+  }
+
   users.forEach((user) => {
-    user.payments = payments.filter((payment) => payment.user_id === user.id);
+    user.payments = payments.filter((payment) => payment.userId === user.id);
   });
 
-  return paymentsLoading || usersLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <Box sx={{ margin: "8px" }}>
       <UserCards
         users={users}

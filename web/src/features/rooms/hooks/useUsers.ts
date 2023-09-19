@@ -1,26 +1,21 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@/hooks/useQuery";
 
-import { User } from "../types/user";
+import { User, UsersResponse } from "../types/user";
 
-export const useUsers = (roomId: string) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+export const useUsers = ({ roomId }: { roomId: string }) => {
+  const { data, ...rest } = useQuery<UsersResponse, ShamoApiErrorResponse>({
+    url: `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/users`,
+  });
 
-  const fetchUsers = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/users`);
-    const data = await res.json();
-    setUsers(data);
-    setLoading(false);
+  return {
+    data: data?.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      pictureUrl: user.picture_url,
+      roomId: user.room_id,
+      payments: [],
+    })) as User[],
+    ...rest,
   };
-
-  useEffect(() => {
-    fetchUsers();
-  }, [roomId]);
-
-  const refetch = async () => {
-    setLoading(true);
-    fetchUsers();
-  };
-
-  return { users, loading, refetch };
 };
