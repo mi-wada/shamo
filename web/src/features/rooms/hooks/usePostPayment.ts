@@ -1,24 +1,22 @@
-import { useState } from "react";
+import { useMutation } from "@/hooks/useMutation";
 
-export const usePostPayment = ({ callback }: { callback: () => Promise<void> }) => {
-  const [loading, setLoading] = useState(false);
+type MutateProps = {
+  roomId: string;
+  amount: number;
+  paiedBy: string;
+  note: string;
+};
 
-  const postPayment = async (roomId: string, price: number, paiedBy: string, note: string) => {
-    setLoading(true);
-    await fetch(`${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        price: price,
-        user_id: paiedBy,
-        what: note,
-      }),
-    });
-    setLoading(false);
-    await callback();
-  };
-
-  return { loading, postPayment };
+export const usePostPayment = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
+  return useMutation<any, ShamoApiErrorResponse, MutateProps>({
+    method: "POST",
+    url: (props: MutateProps) =>
+      `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${props.roomId}/payments`,
+    body: (props: MutateProps) => ({
+      price: props.amount,
+      paied_by: props.paiedBy,
+      note: props.note,
+    }),
+    onSuccess: onSuccess,
+  });
 };

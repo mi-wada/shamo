@@ -24,9 +24,9 @@ export const AddingPaymentForm = ({
   const onChangePaiedBy = (event: SelectChangeEvent<unknown>) => {
     setPaiedBy(event.target.value as string);
   };
-  const [price, setPrice] = useState<number | undefined>(undefined);
-  const onChangePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice(event.target.value === "" ? undefined : Number(event.target.value));
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value === "" ? undefined : Number(event.target.value));
   };
   const [note, setNote] = useState<string>("");
   const onChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +35,10 @@ export const AddingPaymentForm = ({
 
   const { showSnackbar } = useSnackbar();
 
-  const { loading, postPayment } = usePostPayment({
-    callback: async () => {
+  const { loading, mutate: postPayment } = usePostPayment({
+    onSuccess: async () => {
       const resetForm = () => {
-        setPrice(undefined);
+        setAmount(undefined);
         setPaiedBy(users[0]?.id);
         setNote("");
       };
@@ -52,7 +52,7 @@ export const AddingPaymentForm = ({
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // TODO: validation by zod
-    await postPayment(roomId, price as number, paiedBy, note);
+    await postPayment({ roomId, amount: amount as number, paiedBy, note });
     // TODO: show toast
   };
 
@@ -73,11 +73,11 @@ export const AddingPaymentForm = ({
       </FormSelectField>
       <FormInputField
         type="number"
-        value={price === undefined ? "" : price}
-        onChange={onChangePrice}
+        value={amount === undefined ? "" : amount}
+        onChange={onChangeAmount}
         placeholder="500"
-        id="price"
-        label="Price"
+        id="amount"
+        label="Amount"
         required
       />
       <FormInputField

@@ -21,15 +21,15 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
   } = usePayments({ roomId });
   const { showSnackbar } = useSnackbar();
 
-  const { loading: deleteLoading, deletePayment } = useDeletePayment({
-    callback: async () => {
+  const { loading: deleteLoading, mutate: deletePayment } = useDeletePayment({
+    onSuccess: async () => {
       showSnackbar({ message: "Deleted", success: true });
       await refetch();
     },
   });
 
   const handleDelete = (id: string) => async () => {
-    await deletePayment(roomId, id);
+    await deletePayment({ roomId, paymentId: id });
   };
 
   if (paymentsLoading) {

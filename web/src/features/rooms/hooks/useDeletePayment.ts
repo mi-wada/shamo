@@ -1,22 +1,18 @@
-import { useState } from "react";
+import { useMutation } from "@/hooks/useMutation";
 
-export const useDeletePayment = ({ callback }: { callback: () => Promise<void> }) => {
-  const [loading, setLoading] = useState(false);
+type MutateProps = {
+  roomId: string;
+  paymentId: string;
+};
 
-  const deletePayment = async (roomId: string, paymentId: string) => {
-    setLoading(true);
-    await fetch(`${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${roomId}/payments`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: paymentId,
-      }),
-    });
-    setLoading(false);
-    await callback();
-  };
-
-  return { loading, deletePayment };
+export const useDeletePayment = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
+  return useMutation<any, ShamoApiErrorResponse, MutateProps>({
+    method: "DELETE",
+    url: (props: MutateProps) =>
+      `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${props.roomId}/payments`,
+    body: (props: MutateProps) => ({
+      id: props.paymentId,
+    }),
+    onSuccess: onSuccess,
+  });
 };
