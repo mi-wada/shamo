@@ -1,4 +1,4 @@
-use crate::{RoomId, UserId};
+use crate::{RoomId, User};
 
 pub type MemberId = String;
 
@@ -6,6 +6,6 @@ pub type MemberId = String;
 pub struct Member {
     pub id: MemberId,
     pub room_id: RoomId,
-    pub user_id: UserId,
+    pub user: User,
     pub total_amount: u64,
 }

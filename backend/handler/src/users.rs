@@ -41,7 +41,7 @@ pub async fn get_user(
 #[derive(serde::Deserialize)]
 pub struct CreateUserPayload {
     name: String,
-    picture_url: Option<String>,
+    icon_url: Option<String>,
 }
 
 pub async fn post_user(
@@ -49,11 +49,7 @@ pub async fn post_user(
     Json(payload): Json<CreateUserPayload>,
 ) -> (StatusCode, Json<User>) {
     let user = UserRepository::new(pool)
-        .create(
-            Uuid::new_v4().to_string(),
-            payload.name,
-            payload.picture_url,
-        )
+        .create(Uuid::new_v4().to_string(), payload.name, payload.icon_url)
         .await;
 
     (StatusCode::CREATED, Json(user))

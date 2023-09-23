@@ -66,7 +66,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/health", get(health::get_health))
-        // curl -X POST -H 'Content-Type: application/json' http://localhost:8080/users -d '{"name": "ほげほげ", "picture_url": "http://hoge.com"}'
+        // curl -X POST -H 'Content-Type: application/json' http://localhost:8080/users -d '{"name": "ほげほげ", "icon_url": "http://hoge.com"}'
         .route("/users", post(users::post_user))
         .route("/users/:user_id", get(users::get_user))
         // curl -X POST -H 'Content-Type: application/json' http://localhost:8080/rooms -d '{"name": "ほげほげ", "created_by": "1"}'

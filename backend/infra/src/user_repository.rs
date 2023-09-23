@@ -10,20 +10,16 @@ impl UserRepository {
         Self { pool }
     }
 
-    pub async fn create(&self, id: UserId, name: String, picture_url: Option<String>) -> User {
-        sqlx::query("INSERT INTO users (id, name, picture_url) VALUES ($1, $2, $3)")
+    pub async fn create(&self, id: UserId, name: String, icon_url: Option<String>) -> User {
+        sqlx::query("INSERT INTO users (id, name, icon_url) VALUES ($1, $2, $3)")
             .bind(&id)
             .bind(&name)
-            .bind(&picture_url)
+            .bind(&icon_url)
             .execute(&self.pool)
             .await
             .unwrap();
 
-        User {
-            id,
-            name,
-            picture_url,
-        }
+        User { id, name, icon_url }
     }
 
     pub async fn get_by_id(&self, id: UserId) -> Option<User> {
@@ -38,7 +34,7 @@ impl UserRepository {
             Some(row) => Some(User {
                 id: row.get("id"),
                 name: row.get("name"),
-                picture_url: row.get("picture_url"),
+                icon_url: row.get("icon_url"),
             }),
         }
     }

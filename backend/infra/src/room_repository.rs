@@ -1,7 +1,7 @@
 use bigdecimal::ToPrimitive;
 use domain::{
     room::{Member, MemberId, Payment, PaymentId},
-    Room, RoomId, UserId,
+    Room, RoomId, User, UserId,
 };
 use sqlx::{types::BigDecimal, PgPool, Row};
 use uuid::Uuid;
@@ -42,7 +42,11 @@ impl RoomRepository {
             members: vec![Member {
                 id: member_id,
                 room_id,
-                user_id: created_by,
+                user: User {
+                    id: created_by,
+                    name: "".to_string(),
+                    icon_url: None,
+                },
                 total_amount: 0,
             }],
         }
@@ -55,7 +59,7 @@ impl RoomRepository {
             .await
             .ok()?;
 
-        let members = sqlx::query("SELECT * FROM room_members WHERE room_id = $1")
+        let members = sqlx::query("SELECT * FROM room_members JOIN users ON room_members.user_id = users.id WHERE room_id = $1")
             .bind(&id)
             .fetch_all(&self.pool)
             .await
@@ -72,7 +76,11 @@ impl RoomRepository {
             .into_iter()
             .map(|row| {
                 let member_id = row.get("id");
-                let user_id = row.get("user_id");
+                let user = User {
+                    id: row.get("user_id"),
+                    name: row.get("name"),
+                    icon_url: row.get("icon_url"),
+                };
                 let total_amount = each_member_total_amounts
                     .iter()
                     .find(|row| row.get::<String, _>("room_member_id") == member_id)
@@ -82,7 +90,7 @@ impl RoomRepository {
                 domain::room::Member {
                     id: member_id,
                     room_id: id.clone(),
-                    user_id,
+                    user,
                     total_amount,
                 }
             })
@@ -110,7 +118,11 @@ impl RoomRepository {
         Member {
             id: member_id,
             room_id,
-            user_id,
+            user: User {
+                id: user_id,
+                name: "".to_string(),
+                icon_url: None,
+            },
             total_amount: 0,
         }
     }
