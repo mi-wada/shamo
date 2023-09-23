@@ -1,17 +1,17 @@
 export type PaymentsResponse = {
   id: string;
-  price: number;
+  amount: number;
   room_id: string;
-  user_id: string;
-  what: string;
-  created_at: string;
+  member_id: string;
+  note: string;
+  // created_at: string;
 }[];
 
 export type Payment = {
   id: string;
   amount: number;
   roomId: string;
-  userId: string;
+  memberId: string;
   note: string;
-  createdAt: string;
+  // createdAt: string;
 };

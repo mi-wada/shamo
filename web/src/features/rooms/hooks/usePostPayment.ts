@@ -13,7 +13,7 @@ export const usePostPayment = ({ onSuccess }: { onSuccess: () => Promise<void> }
     url: (props: MutateProps) =>
       `${process.env.NEXT_PUBLIC_SHAMO_API_BASE_URL}/rooms/${props.roomId}/payments`,
     body: (props: MutateProps) => ({
-      price: props.amount,
+      amount: props.amount,
       paied_by: props.paiedBy,
       note: props.note,
     }),

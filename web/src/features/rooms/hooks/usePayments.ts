@@ -10,11 +10,11 @@ export const usePayments = ({ roomId }: { roomId: string }) => {
   return {
     data: data?.map((payment) => ({
       id: payment.id,
-      amount: payment.price,
+      amount: payment.amount,
       roomId: payment.room_id,
-      userId: payment.user_id,
-      note: payment.what,
-      createdAt: payment.created_at,
+      memberId: payment.member_id,
+      note: payment.note,
+      // createdAt: payment.created_at,
     })) as Payment[],
     ...rest,
   };

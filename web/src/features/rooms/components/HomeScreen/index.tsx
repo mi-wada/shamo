@@ -6,7 +6,7 @@ import { useState } from "react";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 
 import { usePayments } from "../../hooks/usePayments";
-import { useUsers } from "../../hooks/useUsers";
+import { useRoom } from "../../hooks/useRoom";
 import { AddingPaymentForm } from "../AddingPaymentForm";
 import { UserCards } from "../UserCards";
 
@@ -34,7 +34,7 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
     error: paymentsError,
     refetch: paymentsRefetch,
   } = usePayments({ roomId });
-  const { data: users, error: usersError, loading: usersLoading } = useUsers({ roomId });
+  const { data: room, error: roomError, loading: roomLoading } = useRoom({ roomId });
 
   const [open, setOpen] = useState(false);
 
@@ -45,25 +45,21 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
     await paymentsRefetch();
   };
 
-  if (paymentsLoading || usersLoading) {
+  if (paymentsLoading || roomLoading) {
     return <LoadingScreen />;
   }
 
-  if (paymentsError || usersError) {
+  if (paymentsError || roomError) {
     // TODO: ちゃんとやる
     return <div>Error</div>;
   }
 
-  users.forEach((user) => {
-    user.payments = payments.filter((payment) => payment.userId === user.id);
-  });
-
   return (
     <Box sx={{ margin: "8px" }}>
       <UserCards
-        users={users}
-        cardOnClick={(user) => () => {
-          setDefaultPaiedBy(user.id);
+        members={room.members}
+        cardOnClick={(member) => () => {
+          setDefaultPaiedBy(member.id);
           setOpen(true);
         }}
       />
@@ -81,7 +77,7 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
       >
         <AddingPaymentForm
           roomId={roomId}
-          users={users}
+          members={room.members}
           afterSubmit={afterSubmit}
           defaultPaiedBy={defaultPaiedBy}
         />

@@ -1,21 +1,21 @@
 import { Box } from "@mui/material";
 
-import { User } from "../../types/user";
+import { Member } from "../../types/room";
 
 import { UserCard } from "./UserCard";
 
 type UserCardsProps = {
-  users: User[];
-  cardOnClick: (user: User) => () => void;
+  members: Member[];
+  cardOnClick: (member: Member) => () => void;
 };
 
-export const UserCards = ({ users, cardOnClick }: UserCardsProps) => (
+export const UserCards = ({ members, cardOnClick }: UserCardsProps) => (
   <Box sx={{ display: "flex", justifyContent: "center", gap: "16px", margin: "24px" }}>
-    {users.map((user) => (
+    {members.map((member) => (
       <UserCard
-        key={user.id}
-        user={user}
-        totalAmount={user.payments.map((p) => p.amount).reduce((acc, cur) => acc + cur, 0)}
+        key={member.id}
+        member={member}
+        totalAmount={member.totalAmount}
         onClick={cardOnClick}
       />
     ))}

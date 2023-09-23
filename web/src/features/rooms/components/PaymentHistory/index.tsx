@@ -56,7 +56,7 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
           {payments.map((payment) => (
             <TableRow key={payment.id}>
               <TableCell>{payment.amount}</TableCell>
-              <TableCell>{payment.userId}</TableCell>
+              <TableCell>{payment.memberId}</TableCell>
               <TableCell>{payment.note}</TableCell>
               <TableCell>
                 <IconButton

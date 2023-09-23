@@ -7,20 +7,20 @@ import { FormInputField, FormSelectField } from "@/components/common/FormField";
 import { useSnackbar } from "@/components/common/Snackbar/hooks";
 
 import { usePostPayment } from "../../hooks/usePostPayment";
-import { User } from "../../types/user";
+import { Member } from "../../types/room";
 
 export const AddingPaymentForm = ({
   roomId,
-  users,
+  members,
   afterSubmit,
   defaultPaiedBy,
 }: {
   roomId: string;
-  users: User[];
+  members: Member[];
   afterSubmit: () => Promise<void>;
   defaultPaiedBy?: string;
 }) => {
-  const [paiedBy, setPaiedBy] = useState<string>(defaultPaiedBy || users[0]?.id);
+  const [paiedBy, setPaiedBy] = useState<string>(defaultPaiedBy || members[0]?.id);
   const onChangePaiedBy = (event: SelectChangeEvent<unknown>) => {
     setPaiedBy(event.target.value as string);
   };
@@ -39,7 +39,7 @@ export const AddingPaymentForm = ({
     onSuccess: async () => {
       const resetForm = () => {
         setAmount(undefined);
-        setPaiedBy(users[0]?.id);
+        setPaiedBy(members[0]?.id);
         setNote("");
       };
       resetForm();
@@ -65,9 +65,9 @@ export const AddingPaymentForm = ({
         label="Paied By"
         required
       >
-        {users.map((user) => (
-          <MenuItem key={user.id} value={user.id}>
-            {user.name}
+        {members.map((member) => (
+          <MenuItem key={member.id} value={member.id}>
+            {member.id}
           </MenuItem>
         ))}
       </FormSelectField>

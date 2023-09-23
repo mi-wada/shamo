@@ -1,6 +1,6 @@
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
-import { User } from "../../../types/user";
+import { Member } from "../../../types/room";
 
 function formatCurrency(amount: number): string {
   const formatter = new Intl.NumberFormat("ja-JP", {
@@ -13,17 +13,17 @@ function formatCurrency(amount: number): string {
 }
 
 type UserCardProps = {
-  user: User;
+  member: Member;
   totalAmount: number;
-  onClick: (user: User) => () => void;
+  onClick: (member: Member) => () => void;
 };
 
-export const UserCard = ({ user, totalAmount, onClick }: UserCardProps) => (
+export const UserCard = ({ member, totalAmount, onClick }: UserCardProps) => (
   <Card sx={{ minWidth: "170px" }}>
-    <CardActionArea onClick={onClick(user)}>
+    <CardActionArea onClick={onClick(member)}>
       <CardContent sx={{ padding: 0 }}>
         <Typography variant="body1" component="p" sx={{ textAlign: "center", margin: "8px" }}>
-          {user.name}
+          {member.id}
         </Typography>
         <Typography
           variant="body1"
