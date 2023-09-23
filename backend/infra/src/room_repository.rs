@@ -59,7 +59,7 @@ impl RoomRepository {
             .await
             .ok()?;
 
-        let members = sqlx::query("SELECT * FROM room_members JOIN users ON room_members.user_id = users.id WHERE room_id = $1")
+        let members = sqlx::query("SELECT room_members.id AS room_member_id,  * FROM room_members JOIN users ON room_members.user_id = users.id WHERE room_id = $1")
             .bind(&id)
             .fetch_all(&self.pool)
             .await
@@ -75,7 +75,7 @@ impl RoomRepository {
         let members = members
             .into_iter()
             .map(|row| {
-                let member_id = row.get("id");
+                let member_id = row.get("room_member_id");
                 let user = User {
                     id: row.get("user_id"),
                     name: row.get("name"),
