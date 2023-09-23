@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type Room = {
   id: string;
   name: string;
@@ -9,6 +11,6 @@ export type Room = {
 export type Member = {
   id: string;
   roomId: string;
-  userId: string;
+  user: User;
   totalAmount: number;
 };

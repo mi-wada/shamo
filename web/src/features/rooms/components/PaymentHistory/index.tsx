@@ -7,6 +7,7 @@ import { useSnackbar } from "@/components/common/Snackbar/hooks";
 
 import { useDeletePayment } from "../../hooks/useDeletePayment";
 import { usePayments } from "../../hooks/usePayments";
+import { useRoom } from "../../hooks/useRoom";
 
 type PaymentHistoryProps = {
   roomId: string;
@@ -17,14 +18,22 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
     data: payments,
     loading: paymentsLoading,
     error: paymentsError,
-    refetch,
+    refetch: refetchPayments,
   } = usePayments({ roomId });
+  const {
+    data: room,
+    loading: roomLoading,
+    error: roomError,
+    refetch: refetchRoom,
+  } = useRoom({ roomId });
+
   const { showSnackbar } = useSnackbar();
 
   const { loading: deleteLoading, mutate: deletePayment } = useDeletePayment({
     onSuccess: async () => {
       showSnackbar({ message: "Deleted", success: true });
-      await refetch();
+      await refetchPayments();
+      await refetchRoom();
     },
   });
 
@@ -32,11 +41,11 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
     await deletePayment({ roomId, paymentId: id });
   };
 
-  if (paymentsLoading) {
+  if (paymentsLoading || roomLoading) {
     return <LoadingScreen />;
   }
 
-  if (paymentsError) {
+  if (paymentsError || roomError) {
     // TODO: ちゃんとやる
     return <div>Error</div>;
   }
@@ -56,7 +65,9 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
           {payments.map((payment) => (
             <TableRow key={payment.id}>
               <TableCell>{payment.amount}</TableCell>
-              <TableCell>{payment.memberId}</TableCell>
+              <TableCell>
+                {room.members.find((m) => m.id === payment.memberId)?.user.name}
+              </TableCell>
               <TableCell>{payment.note}</TableCell>
               <TableCell>
                 <IconButton

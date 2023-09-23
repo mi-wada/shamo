@@ -67,7 +67,7 @@ export const AddingPaymentForm = ({
       >
         {members.map((member) => (
           <MenuItem key={member.id} value={member.id}>
-            {member.id}
+            {member.user.name}
           </MenuItem>
         ))}
       </FormSelectField>

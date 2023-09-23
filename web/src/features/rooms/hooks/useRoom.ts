@@ -9,7 +9,11 @@ type RoomResponse = {
   members: {
     id: string;
     room_id: string;
-    user_id: string;
+    user: {
+      id: string;
+      name: string;
+      icon_url: string;
+    };
     total_amount: number;
   }[];
 };
@@ -26,7 +30,11 @@ export const useRoom = ({ roomId }: { roomId: string }) => {
       members: data?.members.map((member) => ({
         id: member.id,
         roomId: member.room_id,
-        userId: member.user_id,
+        user: {
+          id: member.user.id,
+          name: member.user.name,
+          iconUrl: member.user.icon_url,
+        },
         totalAmount: member.total_amount,
       })) as Member[],
     } as Room,

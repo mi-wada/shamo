@@ -23,7 +23,7 @@ export const UserCard = ({ member, totalAmount, onClick }: UserCardProps) => (
     <CardActionArea onClick={onClick(member)}>
       <CardContent sx={{ padding: 0 }}>
         <Typography variant="body1" component="p" sx={{ textAlign: "center", margin: "8px" }}>
-          {member.id}
+          {member.user.name}
         </Typography>
         <Typography
           variant="body1"

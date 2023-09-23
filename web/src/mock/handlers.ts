@@ -13,13 +13,23 @@ const getRoomHandler = rest.get("http://localhost:8080/rooms/:roomId", (req, res
         {
           id: "550e8400-e29b-41d4-a716-446655440000",
           room_id: roomId,
-          user_id: "550e8400-e29b-41d4-a716-446655440000",
+          user: {
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "ほげ",
+            icon_url:
+              "https://lh3.googleusercontent.com/a-/ALV-UjWjcjWgV7GpAO8x9mh4B2ryGRsmCxRGVlVvmvHgofq6Hpk=s128-p-k-rw-no",
+          },
           total_amount: 1200,
         },
         {
           id: "550e1200-e29b-41d4-a716-446655440001",
           room_id: roomId,
-          user_id: "550e1200-e29b-41d4-a716-446655440001",
+          user: {
+            id: "550e1200-e29b-41d4-a716-446655440001",
+            name: "ふが",
+            icon_url:
+              "https://lh3.googleusercontent.com/a/ACg8ocLPV3xr7Eyo-hVtDdsCAaSMj37x_LOWAF-9dy5eyhT2EA=s80-p",
+          },
           total_amount: 4300,
         },
       ],
