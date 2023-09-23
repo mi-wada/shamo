@@ -3,14 +3,18 @@ use std::{env, str::FromStr, time::Duration};
 use axum::{
     body::Bytes,
     extract::MatchedPath,
-    http::{HeaderMap, Request},
+    http::{header::CONTENT_TYPE, HeaderMap, HeaderValue, Request},
     response::Response,
     routing::{delete, get, post},
     Router,
 };
 use handler::{health, rooms, users};
 use sqlx::postgres::{PgConnectOptions, PgPoolOptions};
-use tower_http::{classify::ServerErrorsFailureClass, trace::TraceLayer};
+use tower_http::{
+    classify::ServerErrorsFailureClass,
+    cors::{self, CorsLayer},
+    trace::TraceLayer,
+};
 use tracing::{info_span, Span};
 use tracing_subscriber::{prelude::__tracing_subscriber_SubscriberExt, util::SubscriberInitExt};
 
@@ -125,6 +129,15 @@ async fn main() {
                         // ...
                     },
                 ),
+        )
+        .layer(
+            CorsLayer::new()
+                .allow_origin(vec![
+                    "http://localhost:3000".parse().unwrap(),
+                    "https://shamo.vercel.app".parse().unwrap(),
+                ])
+                .allow_methods(cors::Any)
+                .allow_headers(vec![CONTENT_TYPE]),
         );
 
     axum::Server::bind(&"0.0.0.0:8080".parse().unwrap())
