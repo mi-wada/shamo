@@ -12,7 +12,7 @@ export const usePayments = ({ roomId }: { roomId: string }) => {
       id: payment.id,
       amount: payment.amount,
       roomId: payment.room_id,
-      memberId: payment.member_id,
+      memberId: payment.room_member_id,
       note: payment.note,
       // createdAt: payment.created_at,
     })) as Payment[],

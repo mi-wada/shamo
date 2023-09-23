@@ -2,7 +2,7 @@ export type PaymentsResponse = {
   id: string;
   amount: number;
   room_id: string;
-  member_id: string;
+  room_member_id: string;
   note: string;
   // created_at: string;
 }[];
