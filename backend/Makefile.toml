@@ -1,0 +1,19 @@
+[config]
+skip_core_tasks = true
+
+[tasks.run-local]
+script = "docker compose up -d && ENV=development cargo watch -x run"
+
+[tasks.in-db]
+script = 'docker exec -it shamo-backend-db ./cockroach sql --url="postgresql://127.0.0.1:26257/shamo?user=username&password=password&sslmode=verify-full&sslcert=certs%2Fclient.username.crt&sslkey=certs%2Fclient.username.key&sslrootcert=certs%2Fca.crt"'
+
+[tasks.test]
+script = "ENV=test cargo test"
+
+[tasks.db-migration-local]
+script = "docker build -t psqldef-executor -f Dockerfile.sqldef . && docker run --rm psqldef-executor"
+
+[tasks.setup-local]
+dependencies = [
+  "db-migration-local"
+]

@@ -6,12 +6,27 @@ services:
     image: cockroachdb/cockroach:v23.1.10
     ports:
       - 26257:26257
-      - 8080:8080
+      - 8081:8080
     command: start-single-node
-    env_file:
-      - .env.development
+    environment:
+      - COCKROACH_USER=username
+      - COCKROACH_PASSWORD=password
     volumes:
-      - db:/cockroach/cockroach-data
+      - type: volume
+        source: db
+        target: /cockroach/cockroach-data
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./docker/cockroach/certs
+        target: /cockroach/certs
+        bind:
+          # Configuration to create `certs` directories created on the container side on the host side.
+          # https://docs.docker.com/compose/compose-file/05-services/#long-syntax-5
+          create_host_path: true
+      - type: bind
+        source: ./docker/cockroach/init
+        target: /docker-entrypoint-initdb.d
 volumes:
   db:
     driver: local

@@ -38,6 +38,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           version: ">= 379.0.0"
+      # TODO: remove this deps, because it's too old.
       - name: Authorize Docker
         uses: docker/login-action@v1
         with:
@@ -50,7 +51,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          build-args: "ENV=development"
+          build-args: "ENV=production"
           push: true
           tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/shamo-backend/shamo-backend:${{ github.sha }},${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/shamo-backend/shamo-backend:latest
           cache-from: type=registry,ref=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/shamo-backend/shamo-backend:latest
