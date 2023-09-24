@@ -3,7 +3,7 @@ use std::{env, str::FromStr, time::Duration};
 use axum::{
     body::Bytes,
     extract::MatchedPath,
-    http::{header::CONTENT_TYPE, HeaderMap, HeaderValue, Request},
+    http::{header::CONTENT_TYPE, HeaderMap, Request},
     response::Response,
     routing::{delete, get, post},
     Router,
