@@ -28,10 +28,10 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 
 FROM debian:bookworm-slim
 
+WORKDIR /app
+
 ARG ENV
 ENV ENV=${ENV}
-
-WORKDIR /app
 
 COPY --from=builder /app/backend .
 COPY --from=builder /app/.env.${ENV} .env.${ENV}
