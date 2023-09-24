@@ -134,7 +134,7 @@ async fn main() {
             CorsLayer::new()
                 .allow_origin(vec![
                     "http://localhost:3000".parse().unwrap(),
-                    "https://shamo.vercel.app".parse().unwrap(),
+                    "https://shamo.app".parse().unwrap(),
                 ])
                 .allow_methods(cors::Any)
                 .allow_headers(vec![CONTENT_TYPE]),
