@@ -10,7 +10,7 @@ type UserCardsProps = {
 };
 
 export const UserCards = ({ members, cardOnClick }: UserCardsProps) => (
-  <Box sx={{ display: "flex", justifyContent: "center", gap: "16px", margin: "24px" }}>
+  <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "16px" }}>
     {members.map((member) => (
       <UserCard
         key={member.id}
