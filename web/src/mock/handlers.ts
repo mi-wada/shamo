@@ -15,7 +15,7 @@ const getRoomHandler = rest.get("http://localhost:8080/rooms/:roomId", (req, res
           room_id: roomId,
           user: {
             id: "550e8400-e29b-41d4-a716-446655440000",
-            name: "ほげ",
+            name: "まじょ",
             icon_url:
               "https://lh3.googleusercontent.com/a-/ALV-UjWjcjWgV7GpAO8x9mh4B2ryGRsmCxRGVlVvmvHgofq6Hpk=s128-p-k-rw-no",
           },
@@ -26,7 +26,7 @@ const getRoomHandler = rest.get("http://localhost:8080/rooms/:roomId", (req, res
           room_id: roomId,
           user: {
             id: "550e1200-e29b-41d4-a716-446655440001",
-            name: "ふが",
+            name: "きゅうべい",
             icon_url:
               "https://lh3.googleusercontent.com/a/ACg8ocLPV3xr7Eyo-hVtDdsCAaSMj37x_LOWAF-9dy5eyhT2EA=s80-p",
           },
@@ -37,7 +37,7 @@ const getRoomHandler = rest.get("http://localhost:8080/rooms/:roomId", (req, res
           room_id: roomId,
           user: {
             id: "550e8400-e29b-41d4-a716-446655440000",
-            name: "ほげ",
+            name: "みきさやか",
             icon_url:
               "https://lh3.googleusercontent.com/a-/ALV-UjWjcjWgV7GpAO8x9mh4B2ryGRsmCxRGVlVvmvHgofq6Hpk=s128-p-k-rw-no",
           },
@@ -48,7 +48,7 @@ const getRoomHandler = rest.get("http://localhost:8080/rooms/:roomId", (req, res
           room_id: roomId,
           user: {
             id: "550e1200-e29b-41d4-a716-446655440001",
-            name: "ふが",
+            name: "あいうえおかきくけこさし",
             icon_url:
               "https://lh3.googleusercontent.com/a/ACg8ocLPV3xr7Eyo-hVtDdsCAaSMj37x_LOWAF-9dy5eyhT2EA=s80-p",
           },

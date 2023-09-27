@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
 import { Member } from "../../../types/room";
 
@@ -19,16 +19,23 @@ type UserCardProps = {
 };
 
 export const UserCard = ({ member, totalAmount, onClick }: UserCardProps) => (
-  <Card sx={{ minWidth: "170px" }}>
+  <Card sx={{ width: "160px" }}>
     <CardActionArea onClick={onClick(member)}>
-      <CardContent sx={{ padding: 0 }}>
-        <Typography variant="body1" component="p" sx={{ textAlign: "center", margin: "8px" }}>
-          {member.user.name}
-        </Typography>
+      <CardContent sx={{ padding: "0px 8px" }}>
+        <Box sx={{ display: "flex", alignItems: "center", height: "45px" }}>
+          <Avatar alt="user icon" src={member.user.iconUrl} sx={{ width: 30, height: 30 }} />
+          <Typography
+            variant="body1"
+            component="span"
+            sx={{ marginLeft: "4px", overflowWrap: "break-word" }}
+          >
+            {member.user.name}
+          </Typography>
+        </Box>
         <Typography
           variant="body1"
           component="p"
-          sx={{ fontWeight: "bold", textAlign: "center", margin: "8px", fontSize: "1.6rem" }}
+          sx={{ fontWeight: "bold", textAlign: "center", fontSize: "1.6rem" }}
         >
           {formatCurrency(totalAmount)}
         </Typography>
