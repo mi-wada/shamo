@@ -55,7 +55,7 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
   }
 
   return (
-    <Box sx={{ margin: "8px" }}>
+    <Box>
       <UserCards
         members={room.members}
         cardOnClick={(member) => () => {
