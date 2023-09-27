@@ -21,8 +21,14 @@ type UserCardProps = {
 export const UserCard = ({ member, totalAmount, onClick }: UserCardProps) => (
   <Card sx={{ width: "160px" }}>
     <CardActionArea onClick={onClick(member)}>
-      <CardContent sx={{ padding: "0px 8px" }}>
-        <Box sx={{ display: "flex", alignItems: "center", height: "45px" }}>
+      <CardContent sx={{ padding: "0px 4px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            height: "45px",
+          }}
+        >
           <Avatar alt="user icon" src={member.user.iconUrl} sx={{ width: 30, height: 30 }} />
           <Typography
             variant="body1"

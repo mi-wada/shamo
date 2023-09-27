@@ -7,7 +7,8 @@ const getRoomHandler = rest.get("http://localhost:8080/rooms/:roomId", (req, res
     ctx.status(200),
     ctx.json({
       id: roomId,
-      name: "ほげほげ",
+      name: "ほげほげハウス",
+      emoji: "🏠",
       created_by: "550e8400-e29b-41d4-a716-446655440000",
       members: [
         {

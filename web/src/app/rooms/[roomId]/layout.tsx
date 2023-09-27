@@ -1,8 +1,16 @@
 import { Box, Typography } from "@mui/material";
 
-import { TogglePageButton } from "@/features/rooms";
+import { TogglePageButton, getRooms } from "@/features/rooms";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { roomId: string };
+}) => {
+  const room = await getRooms({ roomId: params.roomId });
+
   return (
     <main>
       <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap", margin: "8px" }}>
@@ -17,9 +25,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           }}
         >
           <Typography component="span" sx={{ fontSize: "1.5rem" }}>
-            👾
+            {room.emoji}
           </Typography>
-          <Typography variant="h2">ほげほげの部屋</Typography>
+          <Typography variant="h2">{room.name}</Typography>
         </Box>
         <TogglePageButton />
       </Box>
