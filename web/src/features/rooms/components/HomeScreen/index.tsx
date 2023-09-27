@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 
-import { usePayments } from "../../hooks/usePayments";
 import { useRoom } from "../../hooks/useRoom";
 import { AddingPaymentForm } from "../AddingPaymentForm";
 import { UserCards } from "../UserCards";
@@ -29,12 +28,11 @@ type HomeScreenProps = {
 
 export const HomeScreen = ({ roomId }: HomeScreenProps) => {
   const {
-    data: payments,
-    loading: paymentsLoading,
-    error: paymentsError,
-    refetch: paymentsRefetch,
-  } = usePayments({ roomId });
-  const { data: room, error: roomError, loading: roomLoading } = useRoom({ roomId });
+    data: room,
+    error: roomError,
+    loading: roomLoading,
+    refetch: roomRefetch,
+  } = useRoom({ roomId });
 
   const [open, setOpen] = useState(false);
 
@@ -42,14 +40,14 @@ export const HomeScreen = ({ roomId }: HomeScreenProps) => {
 
   const afterSubmit = async () => {
     setOpen(false);
-    await paymentsRefetch();
+    await roomRefetch();
   };
 
-  if (paymentsLoading || roomLoading) {
+  if (roomLoading) {
     return <LoadingScreen />;
   }
 
-  if (paymentsError || roomError) {
+  if (roomError) {
     // TODO: ちゃんとやる
     return <div>Error</div>;
   }
