@@ -12,6 +12,7 @@ pub type RoomId = String;
 pub struct Room {
     pub id: RoomId,
     pub name: String,
+    pub emoji: String,
     pub created_by: UserId,
     pub members: Vec<Member>,
 }

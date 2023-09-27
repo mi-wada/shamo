@@ -8,6 +8,8 @@ components:
           $ref: "#/components/schemas/Id"
         name:
           $ref: "#/components/schemas/Name"
+        emoji:
+          $ref: "#/components/schemas/Emoji"
         created_by:
           $ref: "#/components/schemas/CreatedBy"
       required:
@@ -20,6 +22,10 @@ components:
       type: string
       example: いつめん
       maxLength: 20
+    Emoji:
+      type: string
+      example: "🐱"
+      maxLength: 1
     CreatedBy:
       $ref: "./user.yml#/components/schemas/Id"
       description: User's ID
@@ -30,6 +36,8 @@ components:
       properties:
         name:
           $ref: "../models/room.yml#/components/schemas/Name"
+        emoji:
+          $ref: "../models/room.yml#/components/schemas/Emoji"
         created_by:
           $ref: "../models/room.yml#/components/schemas/CreatedBy"
       required:

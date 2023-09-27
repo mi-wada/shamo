@@ -15,11 +15,12 @@ impl RoomRepository {
         Self { pool }
     }
 
-    pub async fn create(&self, name: String, created_by: UserId) -> Room {
+    pub async fn create(&self, name: String, emoji: String, created_by: UserId) -> Room {
         let room_id = Uuid::new_v4().to_string();
 
-        sqlx::query("INSERT INTO rooms (id, name, created_by) VALUES ($1, $2, $3)")
+        sqlx::query("INSERT INTO rooms (id, name, emoji, created_by) VALUES ($1, $2, $3, $4)")
             .bind(&room_id)
+            .bind(&emoji)
             .bind(&name)
             .bind(&created_by)
             .execute(&self.pool)
@@ -37,6 +38,7 @@ impl RoomRepository {
 
         Room {
             id: room_id.clone(),
+            emoji: emoji.clone(),
             name,
             created_by: created_by.clone(),
             members: vec![Member {
@@ -99,6 +101,7 @@ impl RoomRepository {
         Some(Room {
             id: row.get("id"),
             name: row.get("name"),
+            emoji: row.get("emoji"),
             created_by: row.get("created_by"),
             members,
         })

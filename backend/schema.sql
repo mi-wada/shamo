@@ -9,6 +9,7 @@ CREATE TABLE users (
 CREATE TABLE rooms (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    emoji VARCHAR(1) NOT NULL,
     created_by VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT now() NOT NULL,
     updated_at TIMESTAMP DEFAULT now() NOT NULL

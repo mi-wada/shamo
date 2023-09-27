@@ -15,6 +15,7 @@ use crate::utils::error::ErrorResponseBody;
 #[derive(serde::Deserialize)]
 pub struct CreateRoomPayload {
     name: String,
+    emoji: String,
     created_by: UserId,
 }
 
@@ -24,7 +25,7 @@ pub async fn post_room(
     Json(payload): Json<CreateRoomPayload>,
 ) -> (StatusCode, Json<Room>) {
     let room = RoomRepository::new(pool)
-        .create(payload.name, payload.created_by)
+        .create(payload.name, payload.emoji, payload.created_by)
         .await;
 
     (StatusCode::CREATED, Json(room))
