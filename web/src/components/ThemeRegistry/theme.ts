@@ -11,7 +11,7 @@ export const theme = (darkmode: boolean) =>
         fontWeight: 500,
       },
       h2: {
-        fontSize: "1.5rem",
+        fontSize: "1.35rem",
         fontWeight: 500,
       },
       h3: {
