@@ -26,8 +26,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     cargo build --release && \
     mv target/release/backend .
 
-# https://github.com/GoogleContainerTools/distroless/blob/0aaf3a9a08c66b7f3dda323be174251a98e11ced/examples/rust/Dockerfile
-FROM gcr.io/distroless/cc
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
