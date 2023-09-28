@@ -34,6 +34,8 @@ WORKDIR /app
 ARG ENV
 ENV ENV=${ENV}
 
+EXPOSE 8080
+
 COPY --from=builder /app/backend .
 COPY --from=builder /app/.env.${ENV} .env.${ENV}
 
