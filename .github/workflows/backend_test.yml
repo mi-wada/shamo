@@ -1,0 +1,25 @@
+name: backend / Test
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/**'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/**'
+defaults:
+  run:
+    working-directory: ./backend
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/backend-setup-rust
+      - run: cargo test
