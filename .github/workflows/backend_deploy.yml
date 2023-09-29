@@ -1,16 +1,16 @@
 name: backend / Deploy
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - "backend/**"
-  #     - ".github/**"
-  # pull_request:
-  #   paths:
-  #     - "backend/**"
-  #     - ".github/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - ".github/**"
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/**"
 defaults:
   run:
     working-directory: ./backend
