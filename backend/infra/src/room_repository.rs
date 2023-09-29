@@ -143,7 +143,7 @@ impl RoomRepository {
             .bind(&payment_id)
             .bind(&room_id)
             .bind(&room_member_id)
-            .bind(&(amount as i64))
+            .bind(amount as i64)
             .bind(&note)
             .execute(&self.pool)
             .await

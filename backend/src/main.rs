@@ -23,7 +23,8 @@ async fn main() {
     let app_env = env::var("ENV").expect("ENV not set");
 
     let env_file_name = format!(".env.{}", app_env);
-    dotenvy::from_filename(env_file_name).expect(&format!("Failed to load .env.{}", app_env));
+    dotenvy::from_filename(env_file_name)
+        .unwrap_or_else(|_| panic!("Failed to load .env.{}", app_env));
 
     tracing_subscriber::registry()
         // .with(
@@ -44,7 +45,7 @@ async fn main() {
             .username(&env::var("PGUSER").unwrap())
             .password(&env::var("PGPASSWORD").unwrap())
             .ssl_mode(sqlx::postgres::PgSslMode::from_str(&env::var("PGSSLMODE").unwrap()).unwrap())
-            .ssl_root_cert(&env::var("PGSSLROOTCERT").unwrap())
+            .ssl_root_cert(env::var("PGSSLROOTCERT").unwrap())
     } else {
         PgConnectOptions::new()
             .host(&env::var("PGHOST").unwrap())
@@ -53,9 +54,9 @@ async fn main() {
             .username(&env::var("PGUSER").unwrap())
             .password(&env::var("PGPASSWORD").unwrap())
             .ssl_mode(sqlx::postgres::PgSslMode::from_str(&env::var("PGSSLMODE").unwrap()).unwrap())
-            .ssl_client_cert(&env::var("PGSSLCERT").unwrap())
-            .ssl_client_key(&env::var("PGSSLKEY").unwrap())
-            .ssl_root_cert(&env::var("PGSSLROOTCERT").unwrap())
+            .ssl_client_cert(env::var("PGSSLCERT").unwrap())
+            .ssl_client_key(env::var("PGSSLKEY").unwrap())
+            .ssl_root_cert(env::var("PGSSLROOTCERT").unwrap())
     };
 
     let pool = PgPoolOptions::new()

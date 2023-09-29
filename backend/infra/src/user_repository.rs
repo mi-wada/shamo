@@ -29,13 +29,10 @@ impl UserRepository {
             .await
             .unwrap();
 
-        match row {
-            None => None,
-            Some(row) => Some(User {
-                id: row.get("id"),
-                name: row.get("name"),
-                icon_url: row.get("icon_url"),
-            }),
-        }
+        row.map(|row| User {
+            id: row.get("id"),
+            name: row.get("name"),
+            icon_url: row.get("icon_url"),
+        })
     }
 }

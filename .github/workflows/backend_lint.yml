@@ -44,3 +44,4 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/backend-setup-rust
       - run: cargo fmt --all -- --check
+      - run: cargo clippy --all
