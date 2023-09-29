@@ -1,0 +1,25 @@
+name: Setup Rust
+description: Setup Rust. Install toolchain.
+runs:
+  using: composite
+  steps:
+    - name: Cache Rust toolchains.
+      id: cache-rust-toolchains
+      uses: actions/cache@v3
+      with:
+        # https://github.com/actions/cache/blob/main/examples.md#rust---cargo
+        path: |
+          ~/.cargo/bin
+          ~/.cargo/registry/index
+          ~/.cargo/registry/cache
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-rust-${{ hashFiles('**/rust-toolchain.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rust-${{ hashFiles('**/rust-toolchain.toml') }}
+          ${{ runner.os }}-
+    - if: steps.cache-rust-toolchains.outputs.cache-hit != 'true'
+      name: Install Rust toolchains.
+      run: cargo check
+      working-directory: ./backend
+      shell: bash

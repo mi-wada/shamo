@@ -35,3 +35,9 @@ jobs:
         name: Install spectral-cli
         run: npm install -g @stoplight/spectral-cli@${{ env.SPECTRAL_CLI_VERSION }}
       - run: spectral lint ./openapi/index.yml
+  cargo_fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/backend-setup-rust
+      - run: cargo fmt --all -- --check
