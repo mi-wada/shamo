@@ -26,6 +26,10 @@ jobs:
       SERVICE_ACCOUNT: deploy-role@shamo-333603.iam.gserviceaccount.com
     steps:
       - uses: actions/checkout@v4
+        with:
+          # For git-restore-mtime-action in .github/actions/backend-setup-rust
+          fetch-depth: 0
+      - uses: ./.github/actions/backend-setup-rust
       - id: auth
         name: Authenticate to GCP
         uses: google-github-actions/auth@v1
@@ -47,7 +51,6 @@ jobs:
           password: ${{ steps.auth.outputs.access_token }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - uses: ./.github/actions/backend-setup-rust
       - run: cargo build --release
       - name: Build and push
         uses: docker/build-push-action@v5

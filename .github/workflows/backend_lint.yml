@@ -39,5 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # For git-restore-mtime-action in .github/actions/backend-setup-rust
+          fetch-depth: 0
       - uses: ./.github/actions/backend-setup-rust
       - run: cargo fmt --all -- --check

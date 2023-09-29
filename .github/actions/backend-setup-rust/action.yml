@@ -1,8 +1,19 @@
 name: Setup Rust
-description: Setup Rust. Install toolchain.
+description: |
+  Setup Rust. Install toolchain.
+  ⚠️ When this action uses, please call `actions/checkout` with `fetch-depth: 0`.
 runs:
   using: composite
   steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    # https://zenn.dev/kt3k/articles/d557cc874961ab
+    - name: restore timestamps
+      run: python ./script/git-restore-mtime
+      shell: bash
+      working-directory: ./backend
     - name: Cache Rust toolchains.
       id: cache-rust-toolchains
       uses: actions/cache@v3
@@ -17,7 +28,7 @@ runs:
         key: ${{ runner.os }}-rust-${{ hashFiles('**/rust-toolchain.toml') }}-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-rust-${{ hashFiles('**/rust-toolchain.toml') }}
-          ${{ runner.os }}-
+          ${{ runner.os }}-rust-
     - if: steps.cache-rust-toolchains.outputs.cache-hit != 'true'
       name: Install Rust toolchains.
       run: |
