@@ -5,7 +5,7 @@ use axum::{
     extract::MatchedPath,
     http::{header::CONTENT_TYPE, HeaderMap, Request},
     response::Response,
-    routing::{delete, get, post},
+    routing::{delete, get, post, put},
     Router,
 };
 use handler::{health, rooms, users};
@@ -70,6 +70,7 @@ async fn main() {
         // curl -X POST -H 'Content-Type: application/json' http://localhost:8080/users -d '{"name": "ほげほげ", "icon_url": "http://hoge.com"}'
         .route("/users", post(users::post_user))
         .route("/users/:user_id", get(users::get_user))
+        .route("/users/:user_id", put(users::put_user))
         // curl -X POST -H 'Content-Type: application/json' http://localhost:8080/rooms -d '{"name": "ほげほげ", "created_by": "1"}'
         .route("/rooms", post(rooms::post_room))
         // curl -X GET -H 'Content-Type: application/json' http://localhost:8080/rooms/73da8f05-a946-447c-ba51-05278a44da9e

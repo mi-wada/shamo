@@ -10,18 +10,20 @@ members = [
   "handler"
 ]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.32.0", features = ["full"] }
+
+# For dotenv
+dotenvy = "0.15.7"
 
 [dependencies]
 # Async runtime
-tokio = { version = "1.32.0", features = ["full"] }
+tokio = { workspace = true }
 
 # Web framework
 axum = { version = "0.6.20", features = ["tracing"] }
 tower-http = { version = "0.4.4", features = ["trace", "cors"] }
-
-# For dotenv
-dotenvy = "0.15.7"
 
 # Logger
 tracing = "0.1.26"
@@ -36,6 +38,8 @@ sqlx = { version = "0.7.1", features = ["runtime-tokio", "postgres", "uuid", "tl
 
 # uuid
 uuid = { version = "1.4.1", features = ["v4", "serde"] }
+
+dotenvy = { workspace = true }
 
 handler = { path = "./handler" }
 # chrono
