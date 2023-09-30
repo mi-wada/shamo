@@ -27,4 +27,10 @@ jobs:
           # For git-restore-mtime-action in .github/actions/backend-setup-rust
           fetch-depth: 0
       - uses: ./.github/actions/backend-setup-rust
-      - run: cargo test
+      - run: docker compose up -d
+      - run: sleep 10
+      - run: sudo chown -R runner:docker ./docker/cockroach/certs/ ./docker/cockroach/certs/*
+      - run: docker logs shamo-backend-db
+      - run: ls -la && ls -la ./docker/cockroach && ls -la ./docker/cockroach/certs
+      - run: docker ps
+      - run: cargo test --all

@@ -32,8 +32,6 @@ runs:
     - if: steps.cache-rust-toolchains.outputs.cache-hit != 'true'
       name: Install Rust toolchains.
       run: |
-        cargo check
-        cargo build
-        cargo build --release
+        cargo check --workspace
       working-directory: ./backend
       shell: bash
