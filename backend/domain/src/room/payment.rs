@@ -1,8 +1,16 @@
+use uuid::Uuid;
+
 use crate::RoomId;
 
 use super::MemberId;
 
-pub type PaymentId = String;
+#[derive(serde::Serialize, Clone)]
+pub struct PaymentId(pub String);
+impl Default for PaymentId {
+    fn default() -> Self {
+        Self(Uuid::now_v7().to_string())
+    }
+}
 
 #[derive(serde::Serialize)]
 pub struct Payment {

@@ -6,7 +6,6 @@ use axum::{
 use domain::{User, UserId};
 use infra::UserRepository;
 use sqlx::PgPool;
-use uuid::Uuid;
 
 use crate::utils::error::{ErrorItem, ErrorResponseBody};
 
@@ -19,9 +18,9 @@ pub enum GetUserResponse {
 
 pub async fn get_user(
     State(pool): State<PgPool>,
-    Path(user_id): Path<UserId>,
+    Path(user_id): Path<String>,
 ) -> (StatusCode, Json<GetUserResponse>) {
-    let user = UserRepository::get_by_id(user_id, &mut pool.acquire().await.unwrap()).await;
+    let user = UserRepository::get_by_id(UserId(user_id), &mut pool.acquire().await.unwrap()).await;
 
     match user {
         Some(user) => (StatusCode::OK, Json(GetUserResponse::Ok(user))),
@@ -49,7 +48,7 @@ pub async fn post_user(
     Json(payload): Json<CreateUserPayload>,
 ) -> (StatusCode, Json<User>) {
     let user = User {
-        id: Uuid::new_v4().to_string(),
+        id: UserId::default(),
         name: payload.name,
         icon_url: payload.icon_url,
     };
@@ -67,11 +66,11 @@ pub struct UpdateUserPayload {
 
 pub async fn put_user(
     State(pool): State<PgPool>,
-    Path(user_id): Path<UserId>,
+    Path(user_id): Path<String>,
     Json(payload): Json<UpdateUserPayload>,
 ) -> StatusCode {
     let user = User {
-        id: user_id,
+        id: UserId(user_id),
         name: payload.name,
         icon_url: payload.icon_url,
     };

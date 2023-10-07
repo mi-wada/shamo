@@ -10,11 +10,8 @@ edition = "2021"
 tokio = { workspace = true }
 
 # DB client
-sqlx = { version = "0.7.1", features = ["runtime-tokio", "postgres", "uuid", "tls-rustls", "bigdecimal"] }
+sqlx = { workspace = true }
 bigdecimal = "0.4.1"
-
-# uuid
-uuid = { version = "1.4.1", features = ["v4", "serde"] }
 
 dotenvy = { workspace = true }
 

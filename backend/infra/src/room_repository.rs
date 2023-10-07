@@ -4,7 +4,6 @@ use domain::{
     Room, RoomId, User, UserId,
 };
 use sqlx::{types::BigDecimal, PgPool, Row};
-use uuid::Uuid;
 
 pub struct RoomRepository {
     pub pool: PgPool,
@@ -16,22 +15,22 @@ impl RoomRepository {
     }
 
     pub async fn create(&self, name: String, emoji: String, created_by: UserId) -> Room {
-        let room_id = Uuid::new_v4().to_string();
+        let room_id = RoomId::default();
 
         sqlx::query("INSERT INTO rooms (id, name, emoji, created_by) VALUES ($1, $2, $3, $4)")
-            .bind(&room_id)
+            .bind(&room_id.0)
             .bind(&emoji)
             .bind(&name)
-            .bind(&created_by)
+            .bind(&created_by.0)
             .execute(&self.pool)
             .await
             .unwrap();
 
-        let member_id = Uuid::new_v4().to_string();
+        let member_id = MemberId::default();
         sqlx::query("INSERT INTO room_members (id, room_id, user_id) VALUES ($1, $2, $3)")
-            .bind(&member_id)
-            .bind(&room_id)
-            .bind(&created_by)
+            .bind(&member_id.0)
+            .bind(&room_id.0)
+            .bind(&created_by.0)
             .execute(&self.pool)
             .await
             .unwrap();
@@ -56,20 +55,20 @@ impl RoomRepository {
 
     pub async fn get_by_id(&self, id: RoomId) -> Option<Room> {
         let row = sqlx::query("SELECT * FROM rooms WHERE id = $1")
-            .bind(&id)
+            .bind(&id.0)
             .fetch_one(&self.pool)
             .await
             .ok()?;
 
         let members = sqlx::query("SELECT room_members.id AS room_member_id, * FROM room_members JOIN users ON room_members.user_id = users.id WHERE room_id = $1")
-            .bind(&id)
+            .bind(&id.0)
             .fetch_all(&self.pool)
             .await
             .unwrap();
 
         let each_member_total_amounts = sqlx::query(
             "SELECT room_member_id, SUM(amount) AS total_amount FROM payments WHERE room_id = $1 GROUP BY room_member_id",
-        ).bind(&id)
+        ).bind(&id.0)
             .fetch_all(&self.pool)
             .await
             .unwrap();
@@ -77,15 +76,15 @@ impl RoomRepository {
         let members = members
             .into_iter()
             .map(|row| {
-                let member_id = row.get("room_member_id");
+                let member_id = MemberId(row.get("room_member_id"));
                 let user = User {
-                    id: row.get("user_id"),
+                    id: UserId(row.get("user_id")),
                     name: row.get("name"),
                     icon_url: row.get("icon_url"),
                 };
                 let total_amount = each_member_total_amounts
                     .iter()
-                    .find(|row| row.get::<String, _>("room_member_id") == member_id)
+                    .find(|row| row.get::<String, _>("room_member_id") == member_id.0)
                     .map(|row| row.get::<BigDecimal, _>("total_amount").to_u64().unwrap())
                     .unwrap_or(0);
 
@@ -99,21 +98,21 @@ impl RoomRepository {
             .collect();
 
         Some(Room {
-            id: row.get("id"),
+            id: RoomId(row.get("id")),
             name: row.get("name"),
             emoji: row.get("emoji"),
-            created_by: row.get("created_by"),
+            created_by: UserId(row.get("created_by")),
             members,
         })
     }
 
     pub async fn add_member(&self, room_id: RoomId, user_id: UserId) -> Member {
-        let member_id = Uuid::new_v4().to_string();
+        let member_id = MemberId::default();
 
         sqlx::query("INSERT INTO room_members (id, room_id, user_id) VALUES ($1, $2, $3)")
-            .bind(&member_id)
-            .bind(&room_id)
-            .bind(&user_id)
+            .bind(&member_id.0)
+            .bind(&room_id.0)
+            .bind(&user_id.0)
             .execute(&self.pool)
             .await
             .unwrap();
@@ -137,12 +136,12 @@ impl RoomRepository {
         amount: u64,
         note: Option<String>,
     ) -> Payment {
-        let payment_id = Uuid::new_v4().to_string();
+        let payment_id = PaymentId::default();
 
         sqlx::query("INSERT INTO payments (id, room_id, room_member_id, amount, note) VALUES ($1, $2, $3, $4, $5)")
-            .bind(&payment_id)
-            .bind(&room_id)
-            .bind(&room_member_id)
+            .bind(&payment_id.0)
+            .bind(&room_id.0)
+            .bind(&room_member_id.0)
             .bind(amount as i64)
             .bind(&note)
             .execute(&self.pool)
@@ -160,8 +159,8 @@ impl RoomRepository {
 
     pub async fn remove_payment(&self, room_id: RoomId, payment_id: PaymentId) {
         sqlx::query("DELETE FROM payments WHERE room_id = $1 AND id = $2")
-            .bind(&room_id)
-            .bind(&payment_id)
+            .bind(&room_id.0)
+            .bind(&payment_id.0)
             .execute(&self.pool)
             .await
             .unwrap();
@@ -170,16 +169,16 @@ impl RoomRepository {
     pub async fn get_payments(&self, room_id: RoomId) -> Vec<Payment> {
         let rows =
             sqlx::query("SELECT * FROM payments WHERE room_id = $1 ORDER BY created_at DESC")
-                .bind(&room_id)
+                .bind(&room_id.0)
                 .fetch_all(&self.pool)
                 .await
                 .unwrap();
 
         rows.into_iter()
             .map(|row| Payment {
-                id: row.get("id"),
-                room_id: row.get("room_id"),
-                room_member_id: row.get("room_member_id"),
+                id: PaymentId(row.get("id")),
+                room_id: RoomId(row.get("room_id")),
+                room_member_id: MemberId(row.get("room_member_id")),
                 amount: row.get::<i64, _>("amount") as u64,
                 note: row.get("note"),
             })

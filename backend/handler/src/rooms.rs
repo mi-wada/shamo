@@ -16,7 +16,7 @@ use crate::utils::error::ErrorResponseBody;
 pub struct CreateRoomPayload {
     name: String,
     emoji: String,
-    created_by: UserId,
+    created_by: String,
 }
 
 // curl -X POST -H 'Content-Type: application/json' http://localhost:8080/rooms -d '{"name": "ほげほげ", "created_by": "1"}'
@@ -25,7 +25,7 @@ pub async fn post_room(
     Json(payload): Json<CreateRoomPayload>,
 ) -> (StatusCode, Json<Room>) {
     let room = RoomRepository::new(pool)
-        .create(payload.name, payload.emoji, payload.created_by)
+        .create(payload.name, payload.emoji, UserId(payload.created_by))
         .await;
 
     (StatusCode::CREATED, Json(room))
@@ -40,9 +40,9 @@ pub enum GetRoomResponse {
 
 pub async fn get_room(
     State(pool): State<PgPool>,
-    Path(room_id): Path<RoomId>,
+    Path(room_id): Path<String>,
 ) -> (StatusCode, Json<GetRoomResponse>) {
-    let room = RoomRepository::new(pool).get_by_id(room_id).await;
+    let room = RoomRepository::new(pool).get_by_id(RoomId(room_id)).await;
 
     match room {
         Some(room) => (StatusCode::OK, Json(GetRoomResponse::Ok(room))),

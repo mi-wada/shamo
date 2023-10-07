@@ -1,0 +1,4 @@
+[build]
+# For uuidv7
+# ref: https://docs.rs/uuid/latest/uuid/#unstable-features
+rustflags = ["--cfg", "uuid_unstable"]

@@ -1,4 +1,13 @@
-pub type UserId = String;
+use uuid::Uuid;
+
+#[derive(serde::Serialize, Clone)]
+pub struct UserId(pub String);
+
+impl Default for UserId {
+    fn default() -> Self {
+        Self(Uuid::now_v7().to_string())
+    }
+}
 
 #[derive(serde::Serialize)]
 pub struct User {

@@ -1,6 +1,15 @@
+use uuid::Uuid;
+
 use crate::{RoomId, User};
 
-pub type MemberId = String;
+#[derive(serde::Serialize, Clone)]
+pub struct MemberId(pub String);
+
+impl Default for MemberId {
+    fn default() -> Self {
+        Self(Uuid::now_v7().to_string())
+    }
+}
 
 #[derive(serde::Serialize)]
 pub struct Member {

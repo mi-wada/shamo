@@ -12,7 +12,7 @@ impl UserRepository {
         ON CONFLICT (id) DO UPDATE SET name = $2, icon_url = $3
         ",
         )
-        .bind(&user.id)
+        .bind(&user.id.0)
         .bind(&user.name)
         .bind(&user.icon_url)
         .execute(conn)
@@ -22,13 +22,13 @@ impl UserRepository {
 
     pub async fn get_by_id(id: UserId, conn: &mut PgConnection) -> Option<User> {
         let row = sqlx::query("SELECT * FROM users WHERE id = $1")
-            .bind(id)
+            .bind(id.0)
             .fetch_optional(conn)
             .await
             .unwrap();
 
         row.map(|row| User {
-            id: row.get("id"),
+            id: UserId(row.get("id")),
             name: row.get("name"),
             icon_url: row.get("icon_url"),
         })
@@ -47,7 +47,7 @@ mod tests {
         let mut tx = get_tx().await;
 
         let user = User {
-            id: UserId::new(),
+            id: UserId::default(),
             name: "test".to_string(),
             icon_url: Some("https://example.com".to_string()),
         };
@@ -65,7 +65,7 @@ mod tests {
         let mut tx = get_tx().await;
 
         let user = User {
-            id: UserId::new(),
+            id: UserId::default(),
             name: "test".to_string(),
             icon_url: Some("https://example.com".to_string()),
         };
