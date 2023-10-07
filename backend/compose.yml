@@ -7,10 +7,7 @@ services:
     ports:
       - 26257:26257
       - 8081:8080
-    command: start-single-node
-    environment:
-      - COCKROACH_USER=username
-      - COCKROACH_PASSWORD=password
+    command: start-single-node --insecure
     volumes:
       - type: volume
         source: db
@@ -18,14 +15,7 @@ services:
         volume:
           nocopy: true
       - type: bind
-        source: ./docker/cockroach/certs
-        target: /cockroach/certs
-        bind:
-          # Configuration to create `certs` directories created on the container side on the host side.
-          # https://docs.docker.com/compose/compose-file/05-services/#long-syntax-5
-          create_host_path: true
-      - type: bind
-        source: ./docker/cockroach/init
+        source: ./docker/db/init
         target: /docker-entrypoint-initdb.d
 volumes:
   db:

@@ -28,9 +28,5 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/backend-setup-rust
       - run: docker compose up -d
-      - run: sleep 10
-      - run: sudo chown -R runner:docker ./docker/cockroach/certs/ ./docker/cockroach/certs/*
-      - run: docker logs shamo-backend-db
-      - run: ls -la && ls -la ./docker/cockroach && ls -la ./docker/cockroach/certs
-      - run: docker ps
+      # wait for db starting
       - run: cargo test --all

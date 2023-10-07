@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS shamo_development;
 CREATE DATABASE IF NOT EXISTS shamo_test;
 
-CREATE TABLE shamo_test.users (
+CREATE TABLE IF NOT EXISTS shamo_test.users  (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     icon_url VARCHAR(1000),
@@ -9,7 +9,7 @@ CREATE TABLE shamo_test.users (
     updated_at TIMESTAMP DEFAULT now() NOT NULL
 );
 
-CREATE TABLE shamo_test.rooms (
+CREATE TABLE IF NOT EXISTS shamo_test.rooms (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     emoji VARCHAR(1) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE shamo_test.rooms (
     updated_at TIMESTAMP DEFAULT now() NOT NULL
 );
 
-CREATE TABLE shamo_test.room_members (
+CREATE TABLE IF NOT EXISTS shamo_test.room_members (
     id VARCHAR(255) PRIMARY KEY,
     room_id VARCHAR(255) NOT NULL,
     user_id VARCHAR(255) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE shamo_test.room_members (
     CONSTRAINT room_members_room_id_user_id_idx UNIQUE (room_id, user_id)
 );
 
-CREATE TABLE shamo_test.payments (
+CREATE TABLE IF NOT EXISTS shamo_test.payments (
     id VARCHAR(255) PRIMARY KEY,
     room_id VARCHAR(255) NOT NULL,
     room_member_id VARCHAR(255) NOT NULL,
@@ -40,5 +40,5 @@ CREATE TABLE shamo_test.payments (
     FOREIGN KEY (room_id) REFERENCES shamo_test.rooms(id),
     FOREIGN KEY (room_member_id) REFERENCES shamo_test.room_members(id)
 );
-CREATE INDEX payments_room_room_member_idx ON shamo_test.payments (room_id, room_member_id);
-CREATE INDEX payments_created_at_desc_idx ON shamo_test.payments (created_at DESC);
+CREATE INDEX IF NOT EXISTS payments_room_room_member_idx ON shamo_test.payments (room_id, room_member_id);
+CREATE INDEX IF NOT EXISTS payments_created_at_desc_idx ON shamo_test.payments (created_at DESC);

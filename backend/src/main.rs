@@ -52,11 +52,7 @@ async fn main() {
             .port(env::var("PGPORT").unwrap().parse::<u16>().unwrap())
             .database(&env::var("PGDATABASE").unwrap())
             .username(&env::var("PGUSER").unwrap())
-            .password(&env::var("PGPASSWORD").unwrap())
             .ssl_mode(sqlx::postgres::PgSslMode::from_str(&env::var("PGSSLMODE").unwrap()).unwrap())
-            .ssl_client_cert(env::var("PGSSLCERT").unwrap())
-            .ssl_client_key(env::var("PGSSLKEY").unwrap())
-            .ssl_root_cert(env::var("PGSSLROOTCERT").unwrap())
     };
 
     let pool = PgPoolOptions::new()
