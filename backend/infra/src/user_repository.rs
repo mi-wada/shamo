@@ -1,10 +1,13 @@
-use domain::{User, UserId};
+use domain::{user::UserRepository as UserRepositoryTrait, User, UserId};
 use sqlx::{PgConnection, Row};
 
-pub struct UserRepository;
+pub struct UserRepository<'a> {
+    pub conn: &'a mut PgConnection,
+}
 
-impl UserRepository {
-    pub async fn save(user: &User, conn: &mut PgConnection) {
+#[async_trait::async_trait]
+impl<'a> UserRepositoryTrait for UserRepository<'a> {
+    async fn save(&mut self, user: &User) {
         sqlx::query(
             "
         INSERT INTO users (id, name, icon_url)
@@ -15,15 +18,15 @@ impl UserRepository {
         .bind(&user.id.0)
         .bind(&user.name)
         .bind(&user.icon_url)
-        .execute(conn)
+        .execute(&mut *self.conn)
         .await
         .unwrap();
     }
 
-    pub async fn get_by_id(id: UserId, conn: &mut PgConnection) -> Option<User> {
+    async fn get_by_id(&mut self, id: UserId) -> Option<User> {
         let row = sqlx::query("SELECT * FROM users WHERE id = $1")
             .bind(id.0)
-            .fetch_optional(conn)
+            .fetch_optional(&mut *self.conn)
             .await
             .unwrap();
 
@@ -51,9 +54,12 @@ mod tests {
             name: "test".to_string(),
             icon_url: Some("https://example.com".to_string()),
         };
-        UserRepository::save(&user, &mut tx).await;
+        UserRepository { conn: &mut tx }.save(&user).await;
 
-        let user = UserRepository::get_by_id(user.id, &mut tx).await.unwrap();
+        let user = UserRepository { conn: &mut tx }
+            .get_by_id(user.id)
+            .await
+            .unwrap();
         assert_eq!(user.name, "test");
         assert_eq!(user.icon_url, Some("https://example.com".to_string()));
 
@@ -69,12 +75,15 @@ mod tests {
             name: "test".to_string(),
             icon_url: Some("https://example.com".to_string()),
         };
-        UserRepository::save(&user, &mut tx).await;
+        UserRepository { conn: &mut tx }.save(&user).await;
 
         let user = user.change_name("new_name".into());
-        UserRepository::save(&user, &mut tx).await;
+        UserRepository { conn: &mut tx }.save(&user).await;
 
-        let user = UserRepository::get_by_id(user.id, &mut tx).await.unwrap();
+        let user = UserRepository { conn: &mut tx }
+            .get_by_id(user.id)
+            .await
+            .unwrap();
         assert_eq!(user.name, "new_name");
         assert_eq!(user.icon_url, Some("https://example.com".to_string()));
 

@@ -18,7 +18,8 @@ pub async fn post_member(
     Path(room_id): Path<String>,
     Json(payload): Json<CreateMemberPayload>,
 ) -> (StatusCode, Json<Member>) {
-    let member = RoomRepository::new(pool)
+    let mut conn = pool.acquire().await.unwrap();
+    let member = RoomRepository { conn: &mut conn }
         .add_member(RoomId(room_id), UserId(payload.user_id))
         .await;
 

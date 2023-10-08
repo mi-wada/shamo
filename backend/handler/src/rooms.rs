@@ -6,9 +6,10 @@ use axum::{
     http::StatusCode,
     Json,
 };
-use domain::{Room, RoomId, UserId};
-use infra::RoomRepository;
+use domain::{room, Room, RoomId};
+use infra::{room_query::RoomQuery, RoomRepository};
 use sqlx::PgPool;
+use usecase::query::room_query::{RoomQuery as RoomQueryTrait, RoomQueryResult};
 
 use crate::utils::error::ErrorResponseBody;
 
@@ -19,13 +20,15 @@ pub struct CreateRoomPayload {
     created_by: String,
 }
 
-// curl -X POST -H 'Content-Type: application/json' http://localhost:8080/rooms -d '{"name": "ほげほげ", "created_by": "1"}'
 pub async fn post_room(
     State(pool): State<PgPool>,
     Json(payload): Json<CreateRoomPayload>,
 ) -> (StatusCode, Json<Room>) {
-    let room = RoomRepository::new(pool)
-        .create(payload.name, payload.emoji, UserId(payload.created_by))
+    let mut conn = pool.acquire().await.unwrap();
+
+    let room_repository = Box::new(RoomRepository { conn: &mut conn });
+    let room = usecase::command::room_command::RoomCommand { room_repository }
+        .create_room(payload.name, payload.emoji, payload.created_by)
         .await;
 
     (StatusCode::CREATED, Json(room))
@@ -34,7 +37,7 @@ pub async fn post_room(
 #[derive(serde::Serialize)]
 #[serde(untagged)]
 pub enum GetRoomResponse {
-    Ok(Room),
+    Ok(RoomQueryResult),
     NotFound(ErrorResponseBody),
 }
 
@@ -42,7 +45,11 @@ pub async fn get_room(
     State(pool): State<PgPool>,
     Path(room_id): Path<String>,
 ) -> (StatusCode, Json<GetRoomResponse>) {
-    let room = RoomRepository::new(pool).get_by_id(RoomId(room_id)).await;
+    let room = RoomQuery {
+        conn: &mut pool.acquire().await.unwrap(),
+    }
+    .get_by_id(RoomId(room_id))
+    .await;
 
     match room {
         Some(room) => (StatusCode::OK, Json(GetRoomResponse::Ok(room))),

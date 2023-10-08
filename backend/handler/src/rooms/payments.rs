@@ -4,11 +4,12 @@ use axum::{
     Json,
 };
 use domain::{
-    room::{MemberId, Payment, PaymentId},
+    room::{payment::PaymentRepository as PaymentRepositoryTrait, MemberId, Payment, PaymentId},
     RoomId,
 };
-use infra::RoomRepository;
+use infra::{payment_repository::PaymentRepository, RoomRepository};
 use sqlx::PgPool;
+use usecase::command::payment_command::PaymentCommand;
 
 #[derive(serde::Deserialize)]
 pub struct CreatePaymentPayload {
@@ -22,8 +23,11 @@ pub async fn post_payment(
     Path(room_id): Path<String>,
     Json(payload): Json<CreatePaymentPayload>,
 ) -> (StatusCode, Json<Payment>) {
-    let payment = RoomRepository::new(pool)
-        .add_payment(
+    let mut conn = pool.acquire().await.unwrap();
+
+    let payment_repository = Box::new(PaymentRepository { conn: &mut conn });
+    let payment = PaymentCommand { payment_repository }
+        .create_payment(
             RoomId(room_id),
             MemberId(payload.member_id),
             payload.amount,
@@ -38,11 +42,11 @@ pub async fn get_payments(
     State(pool): State<PgPool>,
     Path(room_id): Path<String>,
 ) -> (StatusCode, Json<Vec<Payment>>) {
-    let room = RoomRepository::new(pool)
-        .get_payments(RoomId(room_id))
+    let mut conn = pool.acquire().await.unwrap();
+    let room = PaymentRepository { conn: &mut conn }
+        .get_payments_by_room_id(RoomId(room_id))
         .await;
 
-    // TODO: 404, room
     (StatusCode::OK, Json(room))
 }
 
@@ -50,8 +54,9 @@ pub async fn delete_payment(
     State(pool): State<PgPool>,
     Path((room_id, payment_id)): Path<(String, String)>,
 ) -> StatusCode {
-    RoomRepository::new(pool)
-        .remove_payment(RoomId(room_id), PaymentId(payment_id))
+    let mut conn = pool.acquire().await.unwrap();
+    PaymentRepository { conn: &mut conn }
+        .delete(PaymentId(payment_id))
         .await;
 
     StatusCode::NO_CONTENT

@@ -39,3 +39,8 @@ CREATE TABLE payments (
 );
 CREATE INDEX payments_room_room_member_idx ON payments (room_id, room_member_id);
 CREATE INDEX payments_created_at_desc_idx ON payments (created_at DESC);
+
+-- drop table payments;
+-- drop table room_members;
+-- drop table rooms;
+-- drop table users;

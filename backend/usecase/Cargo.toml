@@ -1,21 +1,16 @@
 [package]
-name = "infra"
+name = "usecase"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# Async runtime
-tokio = { workspace = true }
 
-# DB client
 sqlx = { workspace = true }
-bigdecimal = "0.4.1"
-
-dotenvy = { workspace = true }
-
 async-trait = { workspace = true }
 
-domain = { path = "../domain" }
-usecase = { path = "../usecase" }
+serde = { version = "1.0.188", features = ["derive"] }
+serde_json = "1.0.107"
+
+domain = { path = '../domain' }

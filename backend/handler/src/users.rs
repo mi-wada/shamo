@@ -3,7 +3,7 @@ use axum::{
     http::StatusCode,
     Json,
 };
-use domain::{User, UserId};
+use domain::{user::UserRepository as UserRepositoryTrait, User, UserId};
 use infra::UserRepository;
 use sqlx::PgPool;
 
@@ -20,7 +20,11 @@ pub async fn get_user(
     State(pool): State<PgPool>,
     Path(user_id): Path<String>,
 ) -> (StatusCode, Json<GetUserResponse>) {
-    let user = UserRepository::get_by_id(UserId(user_id), &mut pool.acquire().await.unwrap()).await;
+    let mut conn = pool.acquire().await.unwrap();
+
+    let user = UserRepository { conn: &mut conn }
+        .get_by_id(UserId(user_id))
+        .await;
 
     match user {
         Some(user) => (StatusCode::OK, Json(GetUserResponse::Ok(user))),
@@ -47,13 +51,14 @@ pub async fn post_user(
     State(pool): State<PgPool>,
     Json(payload): Json<CreateUserPayload>,
 ) -> (StatusCode, Json<User>) {
+    let mut conn = pool.acquire().await.unwrap();
     let user = User {
         id: UserId::default(),
         name: payload.name,
         icon_url: payload.icon_url,
     };
 
-    UserRepository::save(&user, &mut pool.acquire().await.unwrap()).await;
+    UserRepository { conn: &mut conn }.save(&user).await;
 
     (StatusCode::CREATED, Json(user))
 }
@@ -69,13 +74,14 @@ pub async fn put_user(
     Path(user_id): Path<String>,
     Json(payload): Json<UpdateUserPayload>,
 ) -> StatusCode {
+    let mut conn = pool.acquire().await.unwrap();
     let user = User {
         id: UserId(user_id),
         name: payload.name,
         icon_url: payload.icon_url,
     };
 
-    UserRepository::save(&user, &mut pool.acquire().await.unwrap()).await;
+    UserRepository { conn: &mut conn }.save(&user).await;
 
     StatusCode::NO_CONTENT
 }

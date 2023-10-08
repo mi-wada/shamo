@@ -6,8 +6,9 @@ edition = "2021"
 [workspace]
 members = [
   "infra",
-  "domain",
-  "handler"
+  "handler",
+  "usecase",
+  "domain"
 ]
 
 [workspace.dependencies]
@@ -26,12 +27,14 @@ anyhow = "1.0.75"
 # uuid
 uuid = { version = "1.4.1", features = ["v7", "serde"] }
 
+async-trait = "0.1.73"
+
 [dependencies]
 # Async runtime
 tokio = { workspace = true }
 
 # Web framework
-axum = { version = "0.6.20", features = ["tracing"] }
+axum = { version = "0.6.20", features = ["tracing", "macros"] }
 tower-http = { version = "0.4.4", features = ["trace", "cors"] }
 
 # Logger
