@@ -147,8 +147,6 @@ dependencies = [
  "axum",
  "dotenvy",
  "handler",
- "serde",
- "serde_json",
  "sqlx",
  "tokio",
  "tower-http",

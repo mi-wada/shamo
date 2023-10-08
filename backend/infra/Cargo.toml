@@ -6,16 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# Async runtime
-tokio = { workspace = true }
 
-# DB client
-sqlx = { workspace = true }
 bigdecimal = "0.4.1"
 
+tokio = { workspace = true }
+sqlx = { workspace = true }
+async-trait = { workspace = true }
 dotenvy = { workspace = true }
 
-async-trait = { workspace = true }
-
-domain = { path = "../domain" }
 usecase = { path = "../usecase" }
+domain = { path = "../domain" }
