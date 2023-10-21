@@ -1,4 +1,4 @@
-import { Box, Input, type InputProps, Select, type SelectProps } from "@mui/material";
+import { Box, Input, type InputProps, Select, type SelectProps, Typography } from "@mui/material";
 import React from "react";
 
 import { FormLabel } from "../FormLabel";
@@ -11,6 +11,7 @@ type FormFieldProps = {
   value: unknown;
   label: React.ReactNode;
   required?: boolean;
+  error?: string;
 };
 
 type FormInputFieldProps = FormFieldProps & {
@@ -27,6 +28,7 @@ export const FormInputField = ({
   id,
   label,
   required = false,
+  error,
 }: FormInputFieldProps) => (
   <Box sx={{ margin: "8px", display: "block" }}>
     <FormLabel htmlFor={id} required={required}>
@@ -41,6 +43,11 @@ export const FormInputField = ({
       required={required}
       sx={{ width: "100%" }}
     />
+    {error && (
+      <Typography variant="caption" color="error">
+        {error}
+      </Typography>
+    )}
   </Box>
 );
 
@@ -54,6 +61,7 @@ export const FormSelectField = ({
   value,
   label,
   required = false,
+  error,
   onChange,
   children,
 }: FormSelectFieldProps) => (
@@ -70,5 +78,10 @@ export const FormSelectField = ({
     >
       {children}
     </Select>
+    {error && (
+      <Typography variant="caption" color="error">
+        {error}
+      </Typography>
+    )}
   </Box>
 );
