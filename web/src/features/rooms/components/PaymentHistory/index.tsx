@@ -57,7 +57,7 @@ export const PaymentHistory = ({ roomId }: PaymentHistoryProps) => {
           <TableRow>
             <TableCell>Amount</TableCell>
             <TableCell>User</TableCell>
-            <TableCell>Memo</TableCell>
+            <TableCell>Note</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>

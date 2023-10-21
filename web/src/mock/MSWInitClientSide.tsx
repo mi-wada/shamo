@@ -18,7 +18,7 @@ export const MSWInitClientSide = ({ children }: { children: React.ReactNode }) =
     setLoading(false);
   });
 
-  if (loading === true) {
+  if (loading) {
     return <></>;
   }
 

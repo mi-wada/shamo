@@ -53,7 +53,6 @@ export const AddingPaymentForm = ({
     event.preventDefault();
     // TODO: validation by zod
     await postPayment({ roomId, amount: amount as number, paiedBy, note });
-    // TODO: show toast
   };
 
   return (

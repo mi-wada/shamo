@@ -4,10 +4,10 @@ import React from "react";
 import { FormLabel } from "../FormLabel";
 
 type FormFieldProps = {
-  id: string;
   /**
    * This value automatically set to `for` prop of label component.
    */
+  id: string;
   value: unknown;
   label: React.ReactNode;
   required?: boolean;
