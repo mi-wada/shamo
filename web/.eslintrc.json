@@ -9,6 +9,7 @@
       }
     ],
     "unused-imports/no-unused-imports": "error",
+    "import/no-cycle": "error",
     "import/order": [
       "error",
       {

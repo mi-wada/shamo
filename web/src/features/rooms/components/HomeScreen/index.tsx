@@ -4,8 +4,8 @@ import { Box, Drawer, Fab } from "@mui/material";
 import { useState } from "react";
 
 import { LoadingScreen } from "@/components/common/LoadingScreen";
-import { useRoom } from "@/features/rooms";
 
+import { useRoom } from "../../hooks/useRoom";
 import { AddingPaymentForm } from "../AddingPaymentForm";
 import { UserCards } from "../UserCards";
 
