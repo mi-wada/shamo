@@ -12,7 +12,6 @@ pub struct CreateMemberPayload {
     user_id: String,
 }
 
-// curl -X POST -H 'Content-Type: application/json' http://localhost:8080/rooms -d '{"name": "ほげほげ", "created_by": "1"}'
 pub async fn post_member(
     State(pool): State<PgPool>,
     Path(room_id): Path<String>,

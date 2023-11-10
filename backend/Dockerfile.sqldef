@@ -1,0 +1,15 @@
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+RUN apt update && apt install -y \
+  curl \
+  tar
+
+ARG SQLDEF_VERSION=v0.16.9
+RUN curl -L https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/psqldef_linux_arm64.tar.gz | tar xvz -C /usr/local/bin
+
+ENV SCHEMA_FILE_NAME=schema.sql
+COPY ${SCHEMA_FILE_NAME} ${SCHEMA_FILE_NAME}
+
+CMD ["/bin/bash", "-c", "psqldef -h host.docker.internal -p ${PGPORT} -U ${PGUSER} -W ${PGPASSWORD} -f ${SCHEMA_FILE_NAME} ${PGDATABASE}"]

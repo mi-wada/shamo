@@ -12,7 +12,7 @@
 ### How to run?
 
 ```zsh
-cargo make run-local
+cargo make run
 ```
 
 ### How to run test?
