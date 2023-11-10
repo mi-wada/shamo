@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 
-bigdecimal = "0.4.1"
+bigdecimal = "0.4.2"
 
 tokio = { workspace = true }
 sqlx = { workspace = true }
