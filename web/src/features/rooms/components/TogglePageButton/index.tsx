@@ -1,5 +1,5 @@
 "use client";
-import { History, Home } from "@mui/icons-material";
+import { History, Home, Settings } from "@mui/icons-material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -16,6 +16,10 @@ const PATHS: Path[] = [
   {
     icon: <History />,
     path: "/history",
+  },
+  {
+    icon: <Settings />,
+    path: "/settings",
   },
 ];
 
