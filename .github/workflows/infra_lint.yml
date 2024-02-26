@@ -24,10 +24,13 @@ jobs:
       name: production
     steps:
       - uses: actions/checkout@v4
+      - name: Get Terraform version
+        id: tf_version
+        run: echo ::set-output name=version::$(cat .terraform-version)
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.7.4
+          terraform_version: ${{ steps.tf_version.outputs.version }}
       - name: Terraform Init
         run: terraform init
         env:
