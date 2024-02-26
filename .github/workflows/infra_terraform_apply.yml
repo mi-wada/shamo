@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'infra/**'
+      - '.github/**'
 defaults:
   run:
     working-directory: ./infra
