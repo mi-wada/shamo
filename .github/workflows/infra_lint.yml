@@ -1,0 +1,37 @@
+name: infra / Lint
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+      - '.github/**'
+  pull_request:
+    paths:
+      - 'infra/**'
+      - '.github/**'
+defaults:
+  run:
+    working-directory: ./infra
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  terraform_validate:
+    runs-on: ubuntu-latest
+    # TODO: 消したい
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.4
+      - name: Terraform Init
+        run: terraform init
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Terraform Validate
+        run: terraform validate
+# TODO: Add tflint
