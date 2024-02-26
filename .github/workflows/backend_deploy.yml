@@ -20,11 +20,13 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: production
     env:
-      PROJECT_ID: shamo-333603
-      PROJECT_NUMBER: "799296946906"
+      PROJECT_ID: ${{ vars.GCP_PJ_ID }}
+      PROJECT_NUMBER: ${{ vars.GCP_PJ_NUMBER }}
       REGION: asia-northeast1
-      SERVICE_ACCOUNT: deploy-role@shamo-333603.iam.gserviceaccount.com
+      SERVICE_ACCOUNT: deploy-role@${{ vars.GCP_PJ_ID }}.iam.gserviceaccount.com
     steps:
       - uses: actions/checkout@v4
       - id: auth
