@@ -6,8 +6,14 @@ default_to_workspace = false
 # https://github.com/sagiegurari/cargo-make#disabling-predefined-tasksflows
 skip_core_tasks = true
 
+[tasks.run-middleware]
+script = 'docker compose up -d'
+
 [tasks.run]
-script = 'docker compose up -d && ENV=development cargo watch -x run'
+script = 'ENV=development cargo watch -x run'
+dependencies = [
+  "run-middleware"
+]
 
 [tasks.in-db]
 script = 'docker exec -it shamo-backend-db ./cockroach sql --url="postgresql://127.0.0.1:26257/shamo?user=root&sslmode=disable"'

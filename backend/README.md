@@ -19,7 +19,8 @@ cargo make run
 ### How to run test?
 
 ```zsh
-cargo test --all
+cargo make run-middleware
+cargo make test
 ```
 
 ### How to auto format files?
