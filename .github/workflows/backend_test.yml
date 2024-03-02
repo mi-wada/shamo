@@ -28,5 +28,4 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/backend-setup-rust
       - run: docker compose up -d
-      - run: sleep 10
       - run: cargo test --workspace

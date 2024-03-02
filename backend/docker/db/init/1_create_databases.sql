@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS shamo_test.rooms (
     created_by VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT now() NOT NULL,
     updated_at TIMESTAMP DEFAULT now() NOT NULL,
-    FOREIGN KEY (created_by) REFERENCES users(id)
+    FOREIGN KEY (created_by) REFERENCES shamo_test.users(id)
 );
 
 CREATE TABLE IF NOT EXISTS shamo_test.room_members (
