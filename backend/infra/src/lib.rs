@@ -6,6 +6,4 @@ pub use room_repository::RoomRepository;
 
 pub mod room_query;
 
-pub mod payment_repository;
-
 mod test_helper;

@@ -20,10 +20,3 @@ pub struct Payment {
     pub amount: u64,
     pub note: Option<String>,
 }
-
-#[async_trait::async_trait]
-pub trait PaymentRepository {
-    async fn save(&mut self, payment: &Payment);
-    async fn get_payments_by_room_id(&mut self, room_id: RoomId) -> Vec<Payment>;
-    async fn delete(&mut self, id: PaymentId);
-}

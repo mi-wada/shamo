@@ -1,6 +1,12 @@
 use std::{env, str::FromStr};
 
-use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
+use domain::User;
+use sqlx::{
+    postgres::{PgConnectOptions, PgPool, PgPoolOptions},
+    PgConnection,
+};
+
+use crate::user_repository;
 
 pub(crate) async fn get_tx() -> sqlx::Transaction<'static, sqlx::Postgres> {
     let pool = get_pool().await;
