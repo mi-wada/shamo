@@ -39,14 +39,14 @@ mod tests {
         };
         add(&mut tx, &user).await.unwrap();
 
-        let row = sqlx::query("SELECT * FROM users WHERE id = $1")
+        let added_user = sqlx::query_as::<_, User>("SELECT * FROM users WHERE id = $1")
             .bind(&user.id.0)
             .fetch_one(&mut *tx)
             .await
             .unwrap();
-        assert_eq!(row.get::<String, _>("id"), user.id.0);
-        assert_eq!(row.get::<String, _>("name"), user.name);
-        assert_eq!(row.get::<Option<String>, _>("icon_url"), user.icon_url);
+        assert_eq!(added_user.id.0, user.id.0);
+        assert_eq!(added_user.name, user.name);
+        assert_eq!(added_user.icon_url, user.icon_url);
 
         tx.rollback().await.unwrap();
     }

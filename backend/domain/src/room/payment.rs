@@ -4,7 +4,8 @@ use crate::RoomId;
 
 use super::MemberId;
 
-#[derive(serde::Serialize, Clone)]
+#[derive(serde::Serialize, Clone, sqlx::Type)]
+#[sqlx(transparent)]
 pub struct PaymentId(pub String);
 impl Default for PaymentId {
     fn default() -> Self {
@@ -12,11 +13,12 @@ impl Default for PaymentId {
     }
 }
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, sqlx::FromRow)]
 pub struct Payment {
     pub id: PaymentId,
     pub room_id: RoomId,
     pub room_member_id: MemberId,
+    #[sqlx(try_from = "i64")]
     pub amount: u64,
     pub note: Option<String>,
 }

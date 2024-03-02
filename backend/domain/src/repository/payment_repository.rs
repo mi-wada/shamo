@@ -32,21 +32,14 @@ pub async fn get_list_by_room_id(
     db_conn: &mut PgConnection,
     room_id: &crate::room::RoomId,
 ) -> Result<Vec<Payment>> {
-    let rows = sqlx::query("SELECT * FROM payments WHERE room_id = $1  ORDER BY created_at DESC")
-        .bind(&room_id.0)
-        .fetch_all(db_conn)
-        .await?;
+    let payments = sqlx::query_as::<_, Payment>(
+        "SELECT * FROM payments WHERE room_id = $1  ORDER BY created_at DESC",
+    )
+    .bind(&room_id.0)
+    .fetch_all(db_conn)
+    .await?;
 
-    Ok(rows
-        .into_iter()
-        .map(|row| Payment {
-            id: PaymentId(row.get("id")),
-            room_id: RoomId(row.get("room_id")),
-            room_member_id: MemberId(row.get("room_member_id")),
-            amount: row.get::<i64, _>("amount") as u64,
-            note: row.get("note"),
-        })
-        .collect())
+    Ok(payments)
 }
 
 #[cfg(test)]

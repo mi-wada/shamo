@@ -2,7 +2,8 @@ use uuid::Uuid;
 
 use crate::{RoomId, User};
 
-#[derive(serde::Serialize, Clone)]
+#[derive(serde::Serialize, Clone, sqlx::Type)]
+#[sqlx(transparent)]
 pub struct MemberId(pub String);
 
 impl Default for MemberId {
