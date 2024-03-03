@@ -3,8 +3,7 @@ use axum::{
     http::StatusCode,
     Json,
 };
-use domain::{user::UserRepository as UserRepositoryTrait, User, UserId};
-use infra::UserRepository;
+use domain::{repository::user_repository, User, UserId};
 use sqlx::PgPool;
 
 use crate::utils::error::{ErrorItem, ErrorResponseBody};
@@ -22,9 +21,9 @@ pub async fn get_user(
 ) -> (StatusCode, Json<GetUserResponse>) {
     let mut conn = pool.acquire().await.unwrap();
 
-    let user = UserRepository { conn: &mut conn }
-        .get_by_id(UserId(user_id))
-        .await;
+    let user = user_repository::get_by_id(&mut conn, &UserId(user_id))
+        .await
+        .unwrap();
 
     match user {
         Some(user) => (StatusCode::OK, Json(GetUserResponse::Ok(user))),
@@ -58,7 +57,7 @@ pub async fn post_user(
         icon_url: payload.icon_url,
     };
 
-    UserRepository { conn: &mut conn }.save(&user).await;
+    user_repository::add(&mut conn, &user).await.unwrap();
 
     (StatusCode::CREATED, Json(user))
 }
@@ -81,7 +80,7 @@ pub async fn put_user(
         icon_url: payload.icon_url,
     };
 
-    UserRepository { conn: &mut conn }.save(&user).await;
+    user_repository::update(&mut conn, &user).await.unwrap();
 
     StatusCode::NO_CONTENT
 }

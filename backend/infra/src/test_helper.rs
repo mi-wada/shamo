@@ -6,8 +6,6 @@ use sqlx::{
     PgConnection,
 };
 
-use crate::user_repository;
-
 pub(crate) async fn get_tx() -> sqlx::Transaction<'static, sqlx::Postgres> {
     let pool = get_pool().await;
     pool.begin().await.unwrap()

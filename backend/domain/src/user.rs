@@ -22,9 +22,3 @@ impl User {
         User { name, ..self }
     }
 }
-
-#[async_trait::async_trait]
-pub trait UserRepository {
-    async fn save(&mut self, user: &User);
-    async fn get_by_id(&mut self, id: UserId) -> Option<User>;
-}

@@ -1,5 +1,5 @@
 use anyhow::Result;
-use sqlx::{Connection, PgConnection};
+use sqlx::PgConnection;
 
 use crate::Room;
 
@@ -32,7 +32,7 @@ mod tests {
     use crate::{
         repository::test_helper::{add_user, get_tx},
         room::{Member, MemberId},
-        RoomId, User, UserId,
+        RoomId,
     };
 
     use super::*;
