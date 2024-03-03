@@ -3,8 +3,11 @@ use axum::{
     http::StatusCode,
     Json,
 };
-use domain::{room::Member, RoomId, UserId};
-use infra::RoomRepository;
+use domain::{
+    repository::room_repository::add_member,
+    room::{Member, MemberId},
+    RoomId, UserId,
+};
 use sqlx::PgPool;
 
 #[derive(serde::Deserialize)]
@@ -18,9 +21,15 @@ pub async fn post_member(
     Json(payload): Json<CreateMemberPayload>,
 ) -> (StatusCode, Json<Member>) {
     let mut conn = pool.acquire().await.unwrap();
-    let member = RoomRepository { conn: &mut conn }
-        .add_member(RoomId(room_id), UserId(payload.user_id))
-        .await;
+
+    let member = add_member(
+        &mut conn,
+        MemberId::default(),
+        RoomId(room_id),
+        UserId(payload.user_id),
+    )
+    .await
+    .unwrap();
 
     (StatusCode::CREATED, Json(member))
 }

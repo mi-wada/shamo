@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::{RoomId, User};
 
-#[derive(serde::Serialize, Clone, sqlx::Type)]
+#[derive(serde::Serialize, Clone, sqlx::Type, PartialEq, Debug)]
 #[sqlx(transparent)]
 pub struct MemberId(pub String);
 
@@ -12,10 +12,12 @@ impl Default for MemberId {
     }
 }
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, sqlx::FromRow)]
 pub struct Member {
     pub id: MemberId,
     pub room_id: RoomId,
+    #[sqlx(skip)]
     pub user: User,
+    #[sqlx(skip)]
     pub total_amount: u64,
 }

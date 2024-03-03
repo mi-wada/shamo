@@ -9,7 +9,7 @@ use crate::UserId;
 
 use uuid::Uuid;
 
-#[derive(serde::Serialize, Clone, sqlx::Type)]
+#[derive(serde::Serialize, Clone, sqlx::Type, PartialEq, Debug)]
 #[sqlx(transparent)]
 pub struct RoomId(pub String);
 
@@ -19,7 +19,7 @@ impl Default for RoomId {
     }
 }
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, sqlx::FromRow)]
 pub struct Room {
     pub id: RoomId,
     // TODO: 名前の長さに制限をかける
@@ -31,10 +31,6 @@ pub struct Room {
     pub created_by: UserId,
     // TODO: Vec<UserId>でいいな
     // TODO: ユニークである必要がある
+    #[sqlx(skip)]
     pub members: Vec<Member>,
-}
-
-#[async_trait::async_trait]
-pub trait RoomRepository {
-    async fn save(&mut self, room: &Room);
 }

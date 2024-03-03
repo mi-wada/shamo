@@ -567,7 +567,6 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "domain",
- "infra",
  "serde",
  "serde_json",
  "sqlx",
@@ -722,19 +721,6 @@ checksum = "d5477fe2230a79769d8dc68e0eabf5437907c0457a5614a9e8dddb67f65eb65d"
 dependencies = [
  "equivalent",
  "hashbrown",
-]
-
-[[package]]
-name = "infra"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bigdecimal 0.4.2",
- "domain",
- "dotenvy",
- "sqlx",
- "tokio",
- "usecase",
 ]
 
 [[package]]
@@ -2028,6 +2014,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
+ "bigdecimal 0.4.2",
  "domain",
  "serde",
  "serde_json",

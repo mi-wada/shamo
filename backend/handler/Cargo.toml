@@ -12,6 +12,5 @@ sqlx = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true}
 
-infra = { path = "../infra" }
 usecase = { path = "../usecase" }
 domain = { path = "../domain" }

@@ -6,12 +6,10 @@ WORKDIR /app
 
 # Install and build crates first to increase the layer cache hit rate.
 COPY ./Cargo.toml ./Cargo.lock ./
-COPY ./infra/Cargo.toml ./infra/Cargo.toml
 COPY ./handler/Cargo.toml ./handler/Cargo.toml
 COPY ./usecase/Cargo.toml ./usecase/Cargo.toml
 COPY ./domain/Cargo.toml ./domain/Cargo.toml
 RUN mkdir src && echo 'fn main() {}' > src/main.rs && \
-    mkdir ./infra/src && echo 'fn main() {}' > ./infra/src/lib.rs && \
     mkdir ./handler/src && echo 'fn main() {}' > ./handler/src/lib.rs && \
     mkdir ./usecase/src && echo 'fn main() {}' > ./usecase/src/lib.rs && \
     mkdir ./domain/src && echo 'fn main() {}' > ./domain/src/lib.rs

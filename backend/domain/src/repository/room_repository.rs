@@ -1,7 +1,10 @@
 use anyhow::Result;
 use sqlx::PgConnection;
 
-use crate::Room;
+use crate::{
+    room::{Member, MemberId},
+    Room, RoomId, User, UserId,
+};
 
 pub async fn add(db_conn: &mut PgConnection, room: &Room) -> Result<()> {
     sqlx::query("INSERT INTO rooms (id, name, emoji, created_by) VALUES ($1, $2, $3, $4)")
@@ -24,13 +27,38 @@ pub async fn add(db_conn: &mut PgConnection, room: &Room) -> Result<()> {
     Ok(())
 }
 
+pub async fn add_member(
+    db_conn: &mut PgConnection,
+    member_id: MemberId,
+    room_id: RoomId,
+    user_id: UserId,
+) -> Result<Member> {
+    sqlx::query("INSERT INTO room_members (id, room_id, user_id) VALUES ($1, $2, $3)")
+        .bind(&member_id)
+        .bind(&room_id)
+        .bind(&user_id)
+        .execute(&mut *db_conn)
+        .await?;
+
+    Ok(Member {
+        id: member_id,
+        room_id,
+        user: User {
+            id: user_id,
+            name: "".to_string(),
+            icon_url: None,
+        },
+        total_amount: 0,
+    })
+}
+
 #[cfg(test)]
 mod tests {
 
     use sqlx::Row;
 
     use crate::{
-        repository::test_helper::{add_user, get_tx},
+        repository::test_helper::{add_room, add_user, get_tx},
         room::{Member, MemberId},
         RoomId,
     };
@@ -75,6 +103,35 @@ mod tests {
             .unwrap();
         assert_eq!(room_member_row.get::<String, _>("room_id"), room.id.0);
         assert_eq!(room_member_row.get::<String, _>("user_id"), user_id.0);
+
+        tx.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn test_add_member() {
+        let mut tx = get_tx().await;
+
+        let user = add_user(&mut tx, None).await.unwrap();
+        let room = add_room(&mut tx, None).await.unwrap();
+
+        add_member(
+            &mut tx,
+            MemberId::default(),
+            room.id.clone(),
+            user.id.clone(),
+        )
+        .await
+        .unwrap();
+
+        let room_member_row =
+            sqlx::query("SELECT * FROM room_members WHERE room_id = $1 AND user_id = $2")
+                .bind(&room.id)
+                .bind(&user.id)
+                .fetch_one(&mut *tx)
+                .await
+                .unwrap();
+        assert_eq!(room_member_row.get::<String, _>("room_id"), room.id.0);
+        assert_eq!(room_member_row.get::<String, _>("user_id"), user.id.0);
 
         tx.rollback().await.unwrap();
     }

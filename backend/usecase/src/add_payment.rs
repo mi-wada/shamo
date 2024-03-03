@@ -6,6 +6,7 @@ use domain::{
 };
 use sqlx::{Acquire, PgConnection};
 
+// TODO: change id's to reference
 pub async fn add_payment(
     db_conn: &mut PgConnection,
     room_id: RoomId,

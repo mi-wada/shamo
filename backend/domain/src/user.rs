@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-#[derive(serde::Serialize, Clone, sqlx::Type)]
+#[derive(serde::Serialize, Clone, sqlx::Type, PartialEq, Debug)]
 #[sqlx(transparent)]
 pub struct UserId(pub String);
 
@@ -10,7 +10,7 @@ impl Default for UserId {
     }
 }
 
-#[derive(serde::Serialize, sqlx::FromRow)]
+#[derive(serde::Serialize, sqlx::FromRow, Default)]
 pub struct User {
     pub id: UserId,
     pub name: String,
