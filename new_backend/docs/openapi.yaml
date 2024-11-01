@@ -188,7 +188,7 @@ components:
         - $ref: "#/components/schemas/User"
         - type: object
           properties:
-            total_payment_amount:
+            payments_total_amount:
               $ref: "#/components/schemas/PaymentAmount"
           required:
             - total_payment_amount

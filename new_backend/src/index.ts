@@ -2,7 +2,11 @@ import { Hono } from "hono";
 import { findRoomById } from "./room";
 import { NOT_FOUND_ERROR } from "./error";
 
-const app = new Hono();
+type Bindings = {
+	DB: D1Database;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
 
 app.get("/", (c) => {
 	return c.text("🔥");
@@ -12,7 +16,7 @@ app.get("/healthz", (c) => {
 	return c.text("ok");
 });
 
-app.get("rooms/:roomId", (c) => {
+app.get("/rooms/:roomId", (c) => {
 	const roomId = c.req.param("roomId");
 
 	const room = findRoomById(roomId);

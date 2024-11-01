@@ -32,7 +32,7 @@ erDiagram
   RoomUser {
     String room_id FK "Room.id"
     String user_id FK "User.id"
-    UnsignedInt total_amount
+    UnsignedInt payments_total_amount
     DateTime created_at
   }
 

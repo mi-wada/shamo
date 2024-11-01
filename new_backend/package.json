@@ -4,7 +4,9 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "lint": "biome lint",
-    "lint:fix": "biome lint --fix"
+    "lint:fix": "biome lint --fix",
+    "db:migrate:local": "wrangler d1 execute shamo-api-db --local --file=./schema.sql",
+    "db:migrate:prod": "wrangler d1 execute shamo-api-db --remote --file=./schema.sql"
   },
   "dependencies": {
     "hono": "4.6.8",
