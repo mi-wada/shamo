@@ -1,0 +1,268 @@
+openapi: 3.1.0
+info:
+  title: Shamo API.
+  version: 1.0.0
+  contact:
+    name: Mitsuaki Wada
+servers:
+  - url: http://localhost:8888
+paths:
+  /rooms/{room_id}:
+    get:
+      summary: Get a room by ID.
+      operationId: getRoom
+      parameters:
+        - $ref: "#/components/parameters/RoomIdPathParam"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /rooms/{room_id}/users:
+    get:
+      summary: Get users in a room.
+      operationId: getRoomUsers
+      parameters:
+        - $ref: "#/components/parameters/RoomIdPathParam"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoomUser"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /rooms/{room_id}/payments:
+    get:
+      summary: Get payments in a room.
+      operationId: getRoomPayments
+      parameters:
+        - $ref: "#/components/parameters/RoomIdPathParam"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payment"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    post:
+      summary: Create a payment in a room.
+      operationId: createPayment
+      parameters:
+        - $ref: "#/components/parameters/RoomIdPathParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePaymentPayload"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Error"
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            enum:
+                              - AmountRequired
+                              - AmountMustBeGreaterThanZero
+                              - NoteTooLong
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+  /rooms/{room_id}/payments/{payment_id}:
+    delete:
+      summary: Delete a payment in a room.
+      operationId: deletePayment
+      parameters:
+        - $ref: "#/components/parameters/RoomIdPathParam"
+        - $ref: "#/components/parameters/PaymentIdPathParam"
+      responses:
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+components:
+  responses:
+    NoContent:
+      description: No Content
+    NotFoundError:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        enum:
+                          - NotFound
+  schemas:
+    # common
+    Id:
+      type: string
+      format: uuid
+    DateTime:
+      type: string
+      format: date-time
+    # User
+    User:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UserId"
+        name:
+          $ref: "#/components/schemas/UserName"
+        icon_url:
+          $ref: "#/components/schemas/UserIconUrl"
+      required:
+        - id
+        - email
+    UserId:
+      $ref: "#/components/schemas/Id"
+    UserName:
+      type: string
+      maxLength: 20
+      example: mitsuaki
+    UserIconUrl:
+      type: string
+      format: uri
+      nullable: true
+      example: https://example.com/icon.png
+    # Room
+    Room:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/RoomId"
+        name:
+          $ref: "#/components/schemas/RoomName"
+        emoji:
+          $ref: "#/components/schemas/RoomEmoji"
+      required:
+        - id
+        - name
+        - emoji
+    RoomId:
+      $ref: "#/components/schemas/Id"
+    RoomName:
+      type: string
+      maxLength: 20
+      example: いつめん
+    RoomEmoji:
+      type: string
+      maxLength: 1
+      example: 🌟
+    # RoomUser
+    RoomUser:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - type: object
+          properties:
+            total_payment_amount:
+              $ref: "#/components/schemas/PaymentAmount"
+          required:
+            - total_payment_amount
+    # Payment
+    Payment:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/PaymentId"
+        user_id:
+          $ref: "#/components/schemas/UserId"
+        amount:
+          $ref: "#/components/schemas/PaymentAmount"
+        note:
+          $ref: "#/components/schemas/PaymentNote"
+        created_at:
+          $ref: "#/components/schemas/PaymentCreatedAt"
+      required:
+        - id
+        - user_id
+        - amount
+        - created_at
+    PaymentId:
+      $ref: "#/components/schemas/Id"
+    PaymentAmount:
+      type: integer
+      minimum: 1
+      example: 1000
+    PaymentNote:
+      type: string
+      maxLength: 100
+      nullable: true
+      example: お昼ご飯
+    PaymentCreatedAt:
+      $ref: "#/components/schemas/DateTime"
+    CreatePaymentPayload:
+      type: object
+      properties:
+        user_id:
+          $ref: "#/components/schemas/UserId"
+        amount:
+          $ref: "#/components/schemas/PaymentAmount"
+        note:
+          $ref: "#/components/schemas/PaymentNote"
+      required:
+        - user_id
+        - amount
+    # Error
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+              description: For debugging purposes.
+          required:
+            - code
+            - message
+      required:
+        - error
+  parameters:
+    RoomIdPathParam:
+      name: room_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/RoomId"
+    PaymentIdPathParam:
+      name: payment_id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/PaymentId"
