@@ -2,7 +2,9 @@
   "name": "shamo-api",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify"
+    "deploy": "wrangler deploy --minify",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --fix"
   },
   "dependencies": {
     "hono": "4.6.8"
