@@ -6,7 +6,11 @@ import {
 	NOT_FOUND_ERROR,
 } from "./error";
 import { findUserById, insertUser, newUser } from "./user";
-import { insertRoomUser, NewRoomUser } from "./room_user";
+import {
+	findRoomUsersByRoomId,
+	insertRoomUser,
+	NewRoomUser,
+} from "./room_user";
 
 type Bindings = {
 	DB: D1Database;
@@ -115,5 +119,21 @@ app.post("/rooms/:roomId/users", async (c) => {
 
 	return c.json(roomUser, 201);
 });
+
+// curl http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/users
+app.get("/rooms/:roomId/users", async (c) => {
+	const roomId = c.req.param("roomId");
+
+	const room = await findRoomById(c.env.DB, roomId);
+	if (!room) {
+		return c.json({ error: NOT_FOUND_ERROR }, 404);
+	}
+
+	const roomUsers = await findRoomUsersByRoomId(c.env.DB, roomId);
+
+	return c.json(roomUsers);
+});
+
+// TODO: どっかのレイヤでfieldをcamelCase -> snake_caseに変換する。ミドルウェア使うのかな。
 
 export default app;

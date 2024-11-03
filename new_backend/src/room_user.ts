@@ -1,8 +1,9 @@
 import type { RoomId } from "./room";
-import type { User, UserId } from "./user";
+import type { User, UserId, UserProfileTable } from "./user";
 
-export type RoomUser = User & {
+export type RoomUser = Omit<User, "id"> & {
 	roomId: RoomId;
+	userId: UserId;
 	paymentsTotalAmount: number;
 };
 
@@ -12,7 +13,30 @@ export type RoomUserTable = {
 	payments_total_amount: number;
 	created_at: string;
 };
+export type RoomUserJoinedUserProfileTable = RoomUserTable & UserProfileTable;
 
+export const findRoomUsersByRoomId = async (
+	db: D1Database,
+	roomId: RoomId,
+): Promise<RoomUser[]> => {
+	const { results: roomUserRecords } = await db
+		.prepare(`
+SELECT * FROM room_users
+	JOIN user_profiles ON room_users.user_id = user_profiles.user_id
+	WHERE room_id = ?;`)
+		.bind(roomId)
+		.all<RoomUserJoinedUserProfileTable>();
+
+	return roomUserRecords.map((roomUserRecord) => {
+		return {
+			roomId: roomUserRecord.room_id,
+			userId: roomUserRecord.user_id,
+			name: roomUserRecord.name,
+			iconUrl: roomUserRecord.icon_url,
+			paymentsTotalAmount: roomUserRecord.payments_total_amount,
+		};
+	});
+};
 export type InsertRoomUserError = undefined | "UserIdAlreadyExists";
 export const insertRoomUser = async (
 	db: D1Database,
@@ -23,7 +47,7 @@ export const insertRoomUser = async (
 			.prepare(
 				"INSERT INTO room_users (room_id, user_id, payments_total_amount) VALUES (?, ?, ?);",
 			)
-			.bind(roomUser.roomId, roomUser.id, roomUser.paymentsTotalAmount)
+			.bind(roomUser.roomId, roomUser.userId, roomUser.paymentsTotalAmount)
 			.run();
 		// biome-ignore lint/suspicious/noExplicitAny: https://developers.cloudflare.com/d1/observability/debug-d1/
 	} catch (error: any) {
@@ -37,7 +61,9 @@ export const insertRoomUser = async (
 
 export const NewRoomUser = (user: User, roomId: RoomId): RoomUser => {
 	return {
-		...user,
+		userId: user.id,
+		name: user.name,
+		iconUrl: user.iconUrl,
 		roomId,
 		paymentsTotalAmount: 0,
 	};

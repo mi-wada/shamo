@@ -7,15 +7,15 @@ export type User = {
 };
 
 export type UserTable = {
-	id: UserId;
+	id: string;
 	created_at: string;
 };
 export type UserProfileTable = {
-	user_id: UserId;
-	name: UserName;
-	icon_url: UserIconUrl;
+	user_id: string;
+	name: string;
+	icon_url: string;
 };
-export type UserTableJoinedProfileTable = UserTable &
+export type UserJoinedProfileTable = UserTable &
 	Exclude<UserProfileTable, "user_id">;
 
 export const findUserById = async (
@@ -30,7 +30,7 @@ export const findUserById = async (
 		WHERE users.id = ?;
 	`)
 		.bind(id)
-		.first<UserTableJoinedProfileTable>();
+		.first<UserJoinedProfileTable>();
 
 	if (!record) {
 		return undefined;
