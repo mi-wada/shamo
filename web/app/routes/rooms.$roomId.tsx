@@ -45,10 +45,26 @@ export default function Layout() {
 
 	return (
 		<>
-			<h2>
-				Room: {room.emoji}
-				{room.name}
-			</h2>
+			<h2>{`${room.emoji} ${room.name}`}</h2>
+			{/* Home | History */}
+			<nav>
+				<ul>
+					<li>
+						<a href={`/rooms/${room.id}`}>
+							<span role="img" aria-label="home">
+								🏠
+							</span>
+						</a>
+					</li>
+					<li>
+						<a href={`/rooms/${room.id}/history`}>
+							<span role="img" aria-label="history">
+								📜
+							</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
 			<Outlet />
 		</>
 	);
