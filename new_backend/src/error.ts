@@ -1,3 +1,4 @@
+import type { NewRoomError } from "./room";
 import type { NewUserError } from "./user";
 
 export type Error = {
@@ -8,7 +9,8 @@ export type Error = {
 type ErrorCode =
 	| "NotFound"
 	| "InternalServerError"
-	| Exclude<NewUserError, undefined>;
+	| Exclude<NewUserError, undefined>
+	| Exclude<NewRoomError, undefined>;
 
 export const badRequestError = (code: ErrorCode): Error => {
 	return {

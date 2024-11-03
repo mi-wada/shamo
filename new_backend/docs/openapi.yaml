@@ -43,6 +43,44 @@ paths:
                               - NameTooLong
                               - IconUrlInvalid
                               - IconUrlTooLong
+  /rooms:
+    post:
+      summary: Create a room.
+      operationId: createRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoomPayload"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Room"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Error"
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            enum:
+                              - NameRequired
+                              - NameTooLong
+                              - EmojiRequired
+                              - EmojiInvalid
+        "404":
+          $ref: "#/components/responses/NotFoundError"
   /rooms/{room_id}:
     get:
       summary: Get a room by ID.
@@ -227,6 +265,19 @@ components:
       type: string
       maxLength: 1
       example: 🌟
+    CreateRoomPayload:
+      type: object
+      properties:
+        user_id:
+          $ref: "#/components/schemas/UserId"
+        name:
+          $ref: "#/components/schemas/RoomName"
+        emoji:
+          $ref: "#/components/schemas/RoomEmoji"
+      required:
+        - user_id
+        - name
+        - emoji
     # RoomUser
     RoomUser:
       allOf:

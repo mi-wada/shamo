@@ -2,9 +2,57 @@ import { NewId, type Id } from "./id";
 
 export type User = {
 	id: UserId;
-	name: string;
-	iconUrl: string;
+	name: UserName;
+	iconUrl: UserIconUrl;
 };
+
+export type UserTable = {
+	id: UserId;
+	created_at: string;
+};
+export type UserProfileTable = {
+	user_id: UserId;
+	name: UserName;
+	icon_url: UserIconUrl;
+};
+export type UserTableJoinedProfileTable = UserTable &
+	Exclude<UserProfileTable, "user_id">;
+
+export const findUserById = async (
+	db: D1Database,
+	id: UserId,
+): Promise<User | undefined> => {
+	const record = await db
+		.prepare(`
+		SELECT users.*, user_profiles.name, user_profiles.icon_url
+		FROM users
+		JOIN user_profiles ON users.id = user_profiles.user_id
+		WHERE users.id = ?;
+	`)
+		.bind(id)
+		.first<UserTableJoinedProfileTable>();
+
+	if (!record) {
+		return undefined;
+	}
+	return {
+		id: record.id,
+		name: record.name,
+		iconUrl: record.icon_url,
+	};
+};
+export const insertUser = async (db: D1Database, user: User): Promise<User> => {
+	await db.prepare("INSERT INTO users (id) VALUES (?);").bind(user.id).run();
+	await db
+		.prepare(
+			"INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?);",
+		)
+		.bind(user.id, user.name, user.iconUrl)
+		.run();
+
+	return user;
+};
+
 export type NewUserError = undefined | NewUserNameError | NewUserIconUrlError;
 export const newUser = (
 	name: UserName,
