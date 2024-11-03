@@ -257,6 +257,7 @@ components:
       required:
         - id
         - email
+        - icon_url
     UserId:
       $ref: "#/components/schemas/Id"
     UserName:
@@ -266,7 +267,6 @@ components:
     UserIconUrl:
       type: string
       format: uri
-      nullable: true
       example: https://example.com/icon.png
     CreateUserPayload:
       type: object
