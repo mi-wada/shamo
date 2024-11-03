@@ -48,7 +48,7 @@ export default function Layout() {
 
 	return (
 		<>
-			<h2>{`${room.emoji} ${room.name}`}</h2>
+			<h1 className="text-h1">Shamo / {`${room.emoji} ${room.name}`}</h1>
 			<nav>
 				<ul>
 					<li>
