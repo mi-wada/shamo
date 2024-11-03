@@ -22,5 +22,26 @@ export const getRoomUsers = async (
 	if (!response.ok) {
 		throw new Error("Failed to fetch room users data");
 	}
-	return response.json();
+	return await response.json();
+};
+
+type PaymentResponseBoby = {
+	id: string;
+	user_id: string;
+	room_id: string;
+	amount: number;
+	note: string;
+	created_at: string;
+};
+
+export const getRoomPayments = async (
+	baseUrl: string,
+	fetcher: Fetcher,
+	roomId: string,
+): Promise<Array<PaymentResponseBoby>> => {
+	const response = await fetcher.fetch(`${baseUrl}/rooms/${roomId}/payments`);
+	if (!response.ok) {
+		throw new Error("Failed to fetch payments data");
+	}
+	return await response.json();
 };

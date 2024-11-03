@@ -1,11 +1,8 @@
-import type {
-	LoaderFunctionArgs,
-	MetaFunction,
-	ActionFunction,
-} from "@remix-run/cloudflare";
-import { json, useLoaderData, redirect } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { useLoaderData, redirect, Await, defer } from "@remix-run/react";
 import { Form } from "@remix-run/react";
-import { getRoomUsers } from "~/shamo_api/client";
+import { Suspense } from "react";
+import { getRoomPayments, getRoomUsers } from "~/shamo_api/client";
 import { rfc3339ToSimpleFormat } from "~/utils";
 
 type Payment = {
@@ -17,35 +14,15 @@ type Payment = {
 	createdAt: string;
 };
 
-type PaymentResponseBoby = {
-	id: string;
-	user_id: string;
-	room_id: string;
-	amount: number;
-	note: string;
-	created_at: string;
-};
+async function getPayments(
+	baseUrl: string,
+	fetcher: Fetcher,
+	roomId: string,
+): Promise<Array<Payment>> {
+	const paymentsResponseBody = await getRoomPayments(baseUrl, fetcher, roomId);
+	const roomUsersResponseBody = await getRoomUsers(baseUrl, fetcher, roomId);
 
-export async function loader({ params, context }: LoaderFunctionArgs) {
-	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
-	const fetcher = context.cloudflare.env.API;
-	const paymentsResponse = await fetcher.fetch(
-		`${baseUrl}/rooms/${params.roomId}/payments`,
-	);
-	if (!paymentsResponse.ok) {
-		console.log(paymentsResponse);
-		throw new Error("Failed to fetch payments data");
-	}
-	const paymentsResponseBody: Array<PaymentResponseBoby> =
-		await paymentsResponse.json();
-
-	const roomUsersResponseBody = await getRoomUsers(
-		baseUrl,
-		fetcher,
-		params.roomId as string,
-	);
-
-	const payments: Array<Payment> = paymentsResponseBody.map((payment) => ({
+	return paymentsResponseBody.map((payment) => ({
 		id: payment.id,
 		userName:
 			roomUsersResponseBody.find((ru) => ru.user_id === payment.user_id)
@@ -55,8 +32,17 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		note: payment.note,
 		createdAt: rfc3339ToSimpleFormat(payment.created_at),
 	}));
+}
 
-	return json(payments);
+export async function loader({ params, context }: LoaderFunctionArgs) {
+	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const payments = getPayments(
+		baseUrl,
+		context.cloudflare.env.API,
+		params.roomId as string,
+	);
+
+	return { payments };
 }
 
 export async function action({ request, params, context }: LoaderFunctionArgs) {
@@ -85,7 +71,7 @@ export async function action({ request, params, context }: LoaderFunctionArgs) {
 }
 
 export default function Page() {
-	const payments = useLoaderData<typeof loader>();
+	const { payments } = useLoaderData<typeof loader>();
 
 	return (
 		<table>
@@ -99,20 +85,30 @@ export default function Page() {
 				</tr>
 			</thead>
 			<tbody>
-				{payments.map((payment) => (
-					<tr key={payment.id}>
-						<td>{payment.userName}</td>
-						<td>{payment.amount}</td>
-						<td>{payment.note}</td>
-						<td>{payment.createdAt}</td>
-						<td>
-							<Form method="post">
-								<input type="hidden" name="paymentId" value={payment.id} />
-								<button type="submit">Delete</button>
-							</Form>
-						</td>
-					</tr>
-				))}
+				<Suspense fallback={<tr>Loading...</tr>}>
+					<Await resolve={payments}>
+						{(payments) =>
+							payments.map((payment) => (
+								<tr key={payment.id}>
+									<td>{payment.userName}</td>
+									<td>{payment.amount}</td>
+									<td>{payment.note}</td>
+									<td>{payment.createdAt}</td>
+									<td>
+										<Form method="post">
+											<input
+												type="hidden"
+												name="paymentId"
+												value={payment.id}
+											/>
+											<button type="submit">Delete</button>
+										</Form>
+									</td>
+								</tr>
+							))
+						}
+					</Await>
+				</Suspense>
 			</tbody>
 		</table>
 	);
