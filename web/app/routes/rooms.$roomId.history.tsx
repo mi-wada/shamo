@@ -5,10 +5,12 @@ import type {
 } from "@remix-run/cloudflare";
 import { json, useLoaderData, redirect } from "@remix-run/react";
 import { Form } from "@remix-run/react";
+import { getRoomUsers } from "~/shamo_api/client";
+import { rfc3339ToSimpleFormat } from "~/utils";
 
 type Payment = {
 	id: string;
-	userId: string;
+	userName: string;
 	roomId: string;
 	amount: number;
 	note: string;
@@ -37,13 +39,20 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 	const paymentsResponseBody: Array<PaymentResponseBoby> =
 		await paymentsResponse.json();
 
+	const roomUsersResponseBody = await getRoomUsers(
+		context.cloudflare.env.SHAMO_API_BASE_URL,
+		params.roomId as string,
+	);
+
 	const payments: Array<Payment> = paymentsResponseBody.map((payment) => ({
 		id: payment.id,
-		userId: payment.user_id,
+		userName:
+			roomUsersResponseBody.find((ru) => ru.user_id === payment.user_id)
+				?.name ?? "Unknown",
 		roomId: payment.room_id,
 		amount: payment.amount,
 		note: payment.note,
-		createdAt: payment.created_at,
+		createdAt: rfc3339ToSimpleFormat(payment.created_at),
 	}));
 
 	return json(payments);
@@ -80,7 +89,7 @@ export default function Page() {
 		<table>
 			<thead>
 				<tr>
-					<th>User ID</th>
+					<th>User Name</th>
 					<th>Amount</th>
 					<th>Note</th>
 					<th>Created At</th>
@@ -90,7 +99,7 @@ export default function Page() {
 			<tbody>
 				{payments.map((payment) => (
 					<tr key={payment.id}>
-						<td>{payment.userId}</td>
+						<td>{payment.userName}</td>
 						<td>{payment.amount}</td>
 						<td>{payment.note}</td>
 						<td>{payment.createdAt}</td>

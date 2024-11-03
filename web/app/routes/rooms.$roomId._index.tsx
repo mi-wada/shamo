@@ -4,6 +4,7 @@ import type {
 } from "@remix-run/cloudflare";
 import { json, useLoaderData, redirect } from "@remix-run/react";
 import { Form, useActionData } from "@remix-run/react";
+import { type ErrorResponseBody, getRoomUsers } from "~/shamo_api/client";
 
 type RoomUser = {
 	userId: string;
@@ -12,41 +13,21 @@ type RoomUser = {
 	iconUrl: string;
 };
 
-type RoomUserResponseBody = {
-	user_id: string;
-	name: string;
-	icon_url: string;
-	room_id: string;
-	payments_total_amount: number;
-};
-
 export async function loader({ params, context }: LoaderFunctionArgs) {
-	const baseURL = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const roomUsersResponseBody = await getRoomUsers(
+		context.cloudflare.env.SHAMO_API_BASE_URL,
+		params.roomId as string,
+	);
 
-	const rUsersResponse = await fetch(`${baseURL}/rooms/${params.roomId}/users`);
-	if (!rUsersResponse.ok) {
-		console.log(rUsersResponse);
-		throw new Error("Failed to fetch users data");
-	}
-	const usersResponseBody: Array<RoomUserResponseBody> =
-		await rUsersResponse.json();
-
-	const rUsers: Array<RoomUser> = usersResponseBody.map((ru) => ({
+	const roomUsers: Array<RoomUser> = roomUsersResponseBody.map((ru) => ({
 		userId: ru.user_id,
 		name: ru.name,
 		paymentsTotalAmount: ru.payments_total_amount,
 		iconUrl: ru.icon_url,
 	}));
 
-	return json(rUsers);
+	return json(roomUsers);
 }
-
-type ErrorResponseBody = {
-	error: {
-		code: string;
-		message: string;
-	};
-};
 
 export async function action({ request, params, context }: ActionFunctionArgs) {
 	const formData = await request.formData();
