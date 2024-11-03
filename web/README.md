@@ -1,36 +1,47 @@
-# Shamo 🐔 / Frontend
+# Welcome to Remix + Cloudflare!
 
-## Local development
+- 📖 [Remix docs](https://remix.run/docs)
+- 📖 [Remix Cloudflare docs](https://remix.run/guides/vite#cloudflare)
 
-### How to run?
+## Development
 
-```zsh
+Run the dev server:
+
+```sh
 npm run dev
 ```
 
-### How to run with mock?
+To run Wrangler:
 
-```zsh
-npm run dev:mock
+```sh
+npm run build
+npm run start
 ```
 
-### How to run test?
+## Typegen
 
-```zsh
-npm run test
+Generate types for your Cloudflare bindings in `wrangler.toml`:
+
+```sh
+npm run typegen
 ```
 
-### How to auto format files?
+You will need to rerun typegen whenever you make changes to `wrangler.toml`.
 
-```zsh
-npm run format
+## Deployment
+
+First, build your app for production:
+
+```sh
+npm run build
 ```
 
-### How to update packages?
+Then, deploy your app to Cloudflare Pages:
 
-Uses [`npm-check-updates`](<https://github.com/raineorshine/npm-check-updates>)
-
-```zsh
-npm-check-updates -u
-npm i
+```sh
+npm run deploy
 ```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
