@@ -7,6 +7,42 @@ info:
 servers:
   - url: http://localhost:8888
 paths:
+  /users:
+    post:
+      summary: Create a user.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserPayload"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Error"
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            enum:
+                              - NameRequired
+                              - NameTooLong
+                              - IconUrlInvalid
+                              - IconUrlTooLong
   /rooms/{room_id}:
     get:
       summary: Get a room by ID.
@@ -158,6 +194,15 @@ components:
       format: uri
       nullable: true
       example: https://example.com/icon.png
+    CreateUserPayload:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/UserName"
+        icon_url:
+          $ref: "#/components/schemas/UserIconUrl"
+      required:
+        - name
     # Room
     Room:
       type: object
