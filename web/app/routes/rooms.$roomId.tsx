@@ -2,6 +2,8 @@
 
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { json, Outlet, useLoaderData } from "@remix-run/react";
+import { Home } from "~/component/icon/home";
+import { Time } from "~/component/icon/time";
 
 export const meta: MetaFunction<typeof loader> = ({ data: room }) => {
 	return [{ title: room ? `Shamo / ${room.emoji}${room.name}` : "Shamo" }];
@@ -51,16 +53,12 @@ export default function Layout() {
 				<ul>
 					<li>
 						<a href={`/rooms/${room.id}`}>
-							<span role="img" aria-label="home">
-								🏠
-							</span>
+							<Home alt="Home" className="size-6" />
 						</a>
 					</li>
 					<li>
 						<a href={`/rooms/${room.id}/history`}>
-							<span role="img" aria-label="history">
-								🕒
-							</span>
+							<Time alt="History" className="size-6" />
 						</a>
 					</li>
 				</ul>

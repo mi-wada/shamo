@@ -4,6 +4,9 @@ import type {
 } from "@remix-run/cloudflare";
 import { json, useLoaderData, redirect } from "@remix-run/react";
 import { Form, useActionData } from "@remix-run/react";
+import { Money } from "~/component/icon/money";
+import { Note } from "~/component/icon/note";
+import { User } from "~/component/icon/user";
 import { type ErrorResponseBody, getRoomUsers } from "~/shamo_api/client";
 
 type RoomUser = {
@@ -71,7 +74,7 @@ export default function Page() {
 			{actionData?.error && <p className="text-red-500">{actionData.error}</p>}
 			<Form method="post">
 				<label>
-					User:
+					<User className="size-5" alt="User" />
 					<select name="userId">
 						{rUsers.map((rUser) => (
 							<option key={rUser.userId} value={rUser.userId}>
@@ -81,11 +84,11 @@ export default function Page() {
 					</select>
 				</label>
 				<label>
-					Amount:
+					<Money className="size-5" alt="Amount" />
 					<input type="number" name="amount" required />
 				</label>
 				<label>
-					Note:
+					<Note className="size-5" alt="Note" />
 					<input type="text" name="note" />
 				</label>
 				<button type="submit">Add</button>
