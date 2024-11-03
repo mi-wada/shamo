@@ -1,5 +1,5 @@
 import type { RoomId } from "./room";
-import type { User } from "./user";
+import type { User, UserId } from "./user";
 
 export type RoomUser = User & {
 	roomId: RoomId;
@@ -33,4 +33,12 @@ export const insertRoomUser = async (
 	}
 
 	return [roomUser, undefined];
+};
+
+export const NewRoomUser = (user: User, roomId: RoomId): RoomUser => {
+	return {
+		...user,
+		roomId,
+		paymentsTotalAmount: 0,
+	};
 };

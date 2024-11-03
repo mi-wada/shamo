@@ -6,7 +6,7 @@ import {
 	NOT_FOUND_ERROR,
 } from "./error";
 import { findUserById, insertUser, newUser } from "./user";
-import { insertRoomUser } from "./room_user";
+import { insertRoomUser, NewRoomUser } from "./room_user";
 
 type Bindings = {
 	DB: D1Database;
@@ -107,11 +107,7 @@ app.post("/rooms/:roomId/users", async (c) => {
 		return c.json({ error: NOT_FOUND_ERROR }, 404);
 	}
 
-	const roomUser = {
-		...user,
-		roomId,
-		paymentsTotalAmount: 0,
-	};
+	const roomUser = NewRoomUser(user, roomId);
 	const [_, err] = await insertRoomUser(c.env.DB, roomUser);
 	if (err) {
 		return c.json({ error: badRequestError(err) }, 400);
