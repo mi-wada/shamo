@@ -36,7 +36,7 @@ async function getPayments(
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
 	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
-	const payments = getPayments(
+	const payments = await getPayments(
 		baseUrl,
 		context.cloudflare.env.API,
 		params.roomId as string,
@@ -85,30 +85,20 @@ export default function Page() {
 				</tr>
 			</thead>
 			<tbody>
-				<Suspense fallback={<tr>Loading...</tr>}>
-					<Await resolve={payments}>
-						{(payments) =>
-							payments.map((payment) => (
-								<tr key={payment.id}>
-									<td>{payment.userName}</td>
-									<td>{payment.amount}</td>
-									<td>{payment.note}</td>
-									<td>{payment.createdAt}</td>
-									<td>
-										<Form method="post">
-											<input
-												type="hidden"
-												name="paymentId"
-												value={payment.id}
-											/>
-											<button type="submit">Delete</button>
-										</Form>
-									</td>
-								</tr>
-							))
-						}
-					</Await>
-				</Suspense>
+				{payments.map((payment) => (
+					<tr key={payment.id}>
+						<td>{payment.userName}</td>
+						<td>{payment.amount}</td>
+						<td>{payment.note}</td>
+						<td>{payment.createdAt}</td>
+						<td>
+							<Form method="post">
+								<input type="hidden" name="paymentId" value={payment.id} />
+								<button type="submit">Delete</button>
+							</Form>
+						</td>
+					</tr>
+				))}
 			</tbody>
 		</table>
 	);
