@@ -1,3 +1,4 @@
+import { currentRFC3339 } from "../utils";
 import { NewId, type Id } from "./id";
 import type { RoomId } from "./room";
 import type { UserId } from "./user";
@@ -27,7 +28,7 @@ export const insertPayment = async (
 	await db.batch([
 		db
 			.prepare(
-				"INSERT INTO payments (id, user_id, room_id, amount, note) VALUES (?, ?, ?, ?, ?);",
+				"INSERT INTO payments (id, user_id, room_id, amount, note, created_at) VALUES (?, ?, ?, ?, ?, ?);",
 			)
 			.bind(
 				payment.id,
@@ -35,6 +36,7 @@ export const insertPayment = async (
 				payment.roomId,
 				payment.amount,
 				payment.note,
+				payment.createdAt,
 			),
 		db
 			.prepare(
@@ -117,7 +119,7 @@ export const newPayment = (
 			roomId,
 			amount: a,
 			note: n,
-			createdAt: new Date().toISOString(),
+			createdAt: currentRFC3339(),
 		},
 		undefined,
 	];

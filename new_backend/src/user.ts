@@ -1,3 +1,4 @@
+import { currentRFC3339 } from "../utils";
 import { NewId, type Id } from "./id";
 
 export type User = {
@@ -42,7 +43,10 @@ export const findUserById = async (
 	};
 };
 export const insertUser = async (db: D1Database, user: User): Promise<User> => {
-	await db.prepare("INSERT INTO users (id) VALUES (?);").bind(user.id).run();
+	await db
+		.prepare("INSERT INTO users (id, created_at) VALUES (?, ?);")
+		.bind(user.id, currentRFC3339())
+		.run();
 	await db
 		.prepare(
 			"INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?);",

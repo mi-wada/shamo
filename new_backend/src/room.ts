@@ -1,3 +1,4 @@
+import { currentRFC3339 } from "../utils";
 import { NewId } from "./id";
 
 export type Room = {
@@ -16,8 +17,10 @@ export type RoomTable = {
 
 export const insertRoom = async (db: D1Database, room: Room): Promise<Room> => {
 	await db
-		.prepare("INSERT INTO rooms (id, name, emoji) VALUES (?, ?, ?);")
-		.bind(room.id, room.name, room.emoji)
+		.prepare(
+			"INSERT INTO rooms (id, name, emoji, created_at) VALUES (?, ?, ?, ?);",
+		)
+		.bind(room.id, room.name, room.emoji, currentRFC3339())
 		.run();
 
 	return room;

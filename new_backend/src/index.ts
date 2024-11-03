@@ -55,7 +55,7 @@ app.post("/users", async (c) => {
 	return c.json(user, 201);
 });
 
-// curl -X POST http://localhost:8787/rooms -d '{"user_id": "u-0192efe8-f923-7159-b881-9f3f2d78b67e", "name": "2024-11-03 旅行", "emoji": "🍜"}' -H 'Content-Type: application/json'
+// curl -X POST http://localhost:8787/rooms -d '{"user_id": "u-0192f06d-2f59-712e-a74b-65535d8d1863", "name": "2024-11-03 旅行", "emoji": "🍜"}' -H 'Content-Type: application/json'
 type CreateRoomPayload = {
 	user_id?: string;
 	name?: string;
@@ -85,7 +85,7 @@ app.post("/rooms", async (c) => {
 	return c.json(room, 201);
 });
 
-// curl http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7
+// curl -X GET http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50
 app.get("/rooms/:roomId", async (c) => {
 	const roomId = c.req.param("roomId");
 
@@ -97,7 +97,7 @@ app.get("/rooms/:roomId", async (c) => {
 	return c.json(room);
 });
 
-// curl -X POST http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/users -d '{"user_id": "u-0192efe8-f923-7159-b881-9f3f2d78b67e"}' -H 'Content-Type: application/json'
+// curl -X POST http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50/users -d '{"user_id": "u-0192f06d-2f59-712e-a74b-65535d8d1863"}' -H 'Content-Type: application/json'
 type CreateRoomUserPayload = {
 	user_id: string;
 };
@@ -127,7 +127,7 @@ app.post("/rooms/:roomId/users", async (c) => {
 	return c.json(roomUser, 201);
 });
 
-// curl http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/users
+// curl -X GET http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50/users
 app.get("/rooms/:roomId/users", async (c) => {
 	const roomId = c.req.param("roomId");
 
@@ -141,7 +141,7 @@ app.get("/rooms/:roomId/users", async (c) => {
 	return c.json(roomUsers);
 });
 
-// curl -X POST http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/payments -d '{"user_id": "u-0192efe8-f923-7159-b881-9f3f2d78b67e", "amount": 100, "note": "食費"}' -H 'Content-Type: application/json'
+// curl -X POST http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50/payments -d '{"user_id": "u-0192f06d-2f59-712e-a74b-65535d8d1863", "amount": 100, "note": "食費"}' -H 'Content-Type: application/json'
 type CreatePaymentPayload = {
 	user_id?: string;
 	amount?: number;
@@ -178,7 +178,7 @@ app.post("/rooms/:roomId/payments", async (c) => {
 	return c.json(payment, 201);
 });
 
-// curl -X GET http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/payments
+// curl -X GET http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50/payments
 app.get("/rooms/:roomId/payments", async (c) => {
 	const roomId = c.req.param("roomId");
 
@@ -192,7 +192,7 @@ app.get("/rooms/:roomId/payments", async (c) => {
 	return c.json(payments);
 });
 
-// curl -X DELETE http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/payments/p-0192f052-1db0-724d-8d8e-d022985f8168
+// curl -X DELETE http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50/payments/p-0192f06f-a21e-76be-8217-fed68b989856
 app.delete("/rooms/:roomId/payments/:paymentId", async (c) => {
 	const roomId = c.req.param("roomId");
 	const paymentId = c.req.param("paymentId");

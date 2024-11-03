@@ -1,3 +1,4 @@
+import { currentRFC3339 } from "../utils";
 import type { RoomId } from "./room";
 import type { User, UserId, UserProfileTable } from "./user";
 
@@ -70,9 +71,14 @@ export const insertRoomUser = async (
 	try {
 		await db
 			.prepare(
-				"INSERT INTO room_users (room_id, user_id, payments_total_amount) VALUES (?, ?, ?);",
+				"INSERT INTO room_users (room_id, user_id, payments_total_amount, created_at) VALUES (?, ?, ?, ?);",
 			)
-			.bind(roomUser.roomId, roomUser.userId, roomUser.paymentsTotalAmount)
+			.bind(
+				roomUser.roomId,
+				roomUser.userId,
+				roomUser.paymentsTotalAmount,
+				currentRFC3339(),
+			)
 			.run();
 		// biome-ignore lint/suspicious/noExplicitAny: https://developers.cloudflare.com/d1/observability/debug-d1/
 	} catch (error: any) {
