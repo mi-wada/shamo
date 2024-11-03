@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { json, useLoaderData } from "@remix-run/react";
 
 type User = {
@@ -40,10 +40,11 @@ export default function Page() {
 	const users = useLoaderData<typeof loader>();
 
 	return (
-		<ul>
-			{users.map((user) => (
-				<li key={user.id}>
-					<div className="flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500">
+		<>
+			<h3>Users</h3>
+			<ul>
+				{users.map((user) => (
+					<li key={user.id}>
 						<img
 							src={user.iconUrl}
 							alt={user.name}
@@ -53,9 +54,10 @@ export default function Page() {
 							<p className="font-bold">{user.name}</p>
 							<p>Total: {user.paymentsTotalAmount}</p>
 						</div>
-					</div>
-				</li>
-			))}
-		</ul>
+					</li>
+				))}
+			</ul>
+			<h3>Add a payment</h3>
+		</>
 	);
 }

@@ -59,7 +59,7 @@ export default function Layout() {
 					<li>
 						<a href={`/rooms/${room.id}/history`}>
 							<span role="img" aria-label="history">
-								📜
+								🕒
 							</span>
 						</a>
 					</li>
