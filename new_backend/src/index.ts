@@ -167,6 +167,7 @@ type CreatePaymentPayload = {
 app.post("/rooms/:roomId/payments", async (c) => {
 	const roomId = c.req.param("roomId");
 	const { user_id, amount, note }: CreatePaymentPayload = await c.req.json();
+	console.log({ user_id, amount, note });
 	if (!user_id) {
 		return c.json({ error: badRequestError("UserIdRequired") }, 400);
 	}
