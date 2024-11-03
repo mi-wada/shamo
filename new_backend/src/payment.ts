@@ -45,6 +45,26 @@ export const insertPayment = async (
 
 	return payment;
 };
+export const findPaymentsByRoomId = async (
+	db: D1Database,
+	roomId: RoomId,
+): Promise<Payment[]> => {
+	const { results: paymentRecords } = await db
+		.prepare("SELECT * FROM payments WHERE room_id = ?;")
+		.bind(roomId)
+		.all<PaymentTable>();
+
+	return paymentRecords.map((r) => {
+		return {
+			id: r.id,
+			userId: r.user_id,
+			roomId: r.room_id,
+			amount: r.amount,
+			note: r.note,
+			createdAt: r.created_at,
+		};
+	});
+};
 
 export type NewPaymentError =
 	| undefined

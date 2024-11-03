@@ -12,7 +12,7 @@ import {
 	insertRoomUser,
 	NewRoomUser,
 } from "./room_user";
-import { insertPayment, newPayment } from "./payment";
+import { findPaymentsByRoomId, insertPayment, newPayment } from "./payment";
 
 type Bindings = {
 	DB: D1Database;
@@ -171,6 +171,20 @@ app.post("/rooms/:roomId/payments", async (c) => {
 	await insertPayment(c.env.DB, payment);
 
 	return c.json(payment, 201);
+});
+
+// curl -X GET http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7/payments
+app.get("/rooms/:roomId/payments", async (c) => {
+	const roomId = c.req.param("roomId");
+
+	const room = await findRoomById(c.env.DB, roomId);
+	if (!room) {
+		return c.json({ error: NOT_FOUND_ERROR }, 404);
+	}
+
+	const payments = await findPaymentsByRoomId(c.env.DB, roomId);
+
+	return c.json(payments);
 });
 
 // TODO: どっかのレイヤでfieldをcamelCase -> snake_caseに変換する。ミドルウェア使うのかな。req.body, res.body両方でやりたい。
