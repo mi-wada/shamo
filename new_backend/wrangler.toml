@@ -7,6 +7,9 @@ binding = "DB"
 database_name = "shamo-api-db"
 database_id = "8c1cce3c-92e0-4251-a44f-c40f6591eee3"
 
+[observability]
+enabled = true
+
 # compatibility_flags = [ "nodejs_compat" ]
 
 # [vars]
