@@ -71,7 +71,7 @@ export default function Page() {
 	return (
 		<>
 			<h3>Add a payment</h3>
-			{actionData?.error && <p className="text-red-500">{actionData.error}</p>}
+			{actionData?.error && <p className="text-danger">{actionData.error}</p>}
 			<Form method="post">
 				<label>
 					<User className="size-5" alt="User" />
