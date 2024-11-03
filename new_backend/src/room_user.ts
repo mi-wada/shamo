@@ -27,15 +27,40 @@ SELECT * FROM room_users
 		.bind(roomId)
 		.all<RoomUserJoinedUserProfileTable>();
 
-	return roomUserRecords.map((roomUserRecord) => {
+	return roomUserRecords.map((r) => {
 		return {
-			roomId: roomUserRecord.room_id,
-			userId: roomUserRecord.user_id,
-			name: roomUserRecord.name,
-			iconUrl: roomUserRecord.icon_url,
-			paymentsTotalAmount: roomUserRecord.payments_total_amount,
+			roomId: r.room_id,
+			userId: r.user_id,
+			name: r.name,
+			iconUrl: r.icon_url,
+			paymentsTotalAmount: r.payments_total_amount,
 		};
 	});
+};
+export const findRoomUserByRoomIdAndUserId = async (
+	db: D1Database,
+	roomId: RoomId,
+	userId: UserId,
+): Promise<RoomUser | undefined> => {
+	const roomUserRecord = await db
+		.prepare(`
+SELECT * FROM room_users
+	JOIN user_profiles ON room_users.user_id = user_profiles.user_id
+	WHERE room_id = ? AND room_users.user_id = ?;`)
+		.bind(roomId, userId)
+		.first<RoomUserJoinedUserProfileTable>();
+
+	if (!roomUserRecord) {
+		return undefined;
+	}
+
+	return {
+		roomId: roomUserRecord.room_id,
+		userId: roomUserRecord.user_id,
+		name: roomUserRecord.name,
+		iconUrl: roomUserRecord.icon_url,
+		paymentsTotalAmount: roomUserRecord.payments_total_amount,
+	};
 };
 export type InsertRoomUserError = undefined | "UserIdAlreadyExists";
 export const insertRoomUser = async (

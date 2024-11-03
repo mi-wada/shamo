@@ -1,3 +1,4 @@
+import type { NewPaymentError } from "./payment";
 import type { NewRoomError } from "./room";
 import type { InsertRoomUserError } from "./room_user";
 import type { NewUserError } from "./user";
@@ -11,9 +12,11 @@ type ErrorCode =
 	| "NotFound"
 	| "InternalServerError"
 	| "UserIdRequired"
+	| "AmountRequired"
 	| Exclude<NewUserError, undefined>
 	| Exclude<NewRoomError, undefined>
-	| Exclude<InsertRoomUserError, undefined>;
+	| Exclude<InsertRoomUserError, undefined>
+	| Exclude<NewPaymentError, undefined>;
 
 export const badRequestError = (code: ErrorCode): Error => {
 	return {
