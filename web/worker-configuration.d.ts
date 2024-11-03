@@ -2,4 +2,5 @@
 
 interface Env {
 	SHAMO_API_BASE_URL: string;
+	API: Fetcher;
 }

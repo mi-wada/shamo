@@ -15,9 +15,10 @@ type RoomUserResponseBody = {
 
 export const getRoomUsers = async (
 	baseUrl: string,
+	fetcher: Fetcher,
 	roomId: string,
 ): Promise<Array<RoomUserResponseBody>> => {
-	const response = await fetch(`${baseUrl}/rooms/${roomId}/users`);
+	const response = await fetcher.fetch(`${baseUrl}/rooms/${roomId}/users`);
 	if (!response.ok) {
 		throw new Error("Failed to fetch room users data");
 	}

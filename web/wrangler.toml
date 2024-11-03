@@ -3,12 +3,15 @@ name = "shamo-web"
 compatibility_date = "2024-10-22"
 main = "./build/worker/index.js"
 assets = { directory = "./build/client" }
+services = [
+  { binding = "API", service = "shamo-api" }
+]
+
+[vars]
+SHAMO_API_BASE_URL = "https://shamo-api.test-20241005.workers.dev"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
 # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
 [observability]
 enabled = true
-
-[vars]
-SHAMO_API_BASE_URL = "https://shamo-api.test-20241005.workers.dev"

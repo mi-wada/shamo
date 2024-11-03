@@ -20,9 +20,10 @@ type RoomResponseBody = {
 };
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
-	const baseURL = context.cloudflare.env.SHAMO_API_BASE_URL;
-
-	const roomResponse = await fetch(`${baseURL}/rooms/${params.roomId}`);
+	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const roomResponse = await context.cloudflare.env.API.fetch(
+		`${baseUrl}/rooms/${params.roomId}`,
+	);
 	if (roomResponse.status === 404) {
 		throw json("Room not found", { status: 404 });
 	}
@@ -46,7 +47,6 @@ export default function Layout() {
 	return (
 		<>
 			<h2>{`${room.emoji} ${room.name}`}</h2>
-			{/* Home | History */}
 			<nav>
 				<ul>
 					<li>

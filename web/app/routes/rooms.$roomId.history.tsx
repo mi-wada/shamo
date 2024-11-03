@@ -27,10 +27,10 @@ type PaymentResponseBoby = {
 };
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
-	const baseURL = context.cloudflare.env.SHAMO_API_BASE_URL;
-
-	const paymentsResponse = await fetch(
-		`${baseURL}/rooms/${params.roomId}/payments`,
+	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const fetcher = context.cloudflare.env.API;
+	const paymentsResponse = await fetcher.fetch(
+		`${baseUrl}/rooms/${params.roomId}/payments`,
 	);
 	if (!paymentsResponse.ok) {
 		console.log(paymentsResponse);
@@ -40,7 +40,8 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		await paymentsResponse.json();
 
 	const roomUsersResponseBody = await getRoomUsers(
-		context.cloudflare.env.SHAMO_API_BASE_URL,
+		baseUrl,
+		fetcher,
 		params.roomId as string,
 	);
 
@@ -66,10 +67,11 @@ export async function action({ request, params, context }: LoaderFunctionArgs) {
 		throw new Error("Invalid payment ID");
 	}
 
-	const baseURL = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const fetcher = context.cloudflare.env.API;
 
-	const response = await fetch(
-		`${baseURL}/rooms/${params.roomId}/payments/${paymentId}`,
+	const response = await fetcher.fetch(
+		`${baseUrl}/rooms/${params.roomId}/payments/${paymentId}`,
 		{
 			method: "DELETE",
 		},

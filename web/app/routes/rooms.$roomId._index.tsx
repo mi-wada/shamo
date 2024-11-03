@@ -14,8 +14,10 @@ type RoomUser = {
 };
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
+	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
 	const roomUsersResponseBody = await getRoomUsers(
-		context.cloudflare.env.SHAMO_API_BASE_URL,
+		baseUrl,
+		context.cloudflare.env.API,
 		params.roomId as string,
 	);
 
@@ -35,15 +37,17 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 	const amount = formData.get("amount");
 	const note = formData.get("note");
 
-	const baseURL = context.cloudflare.env.SHAMO_API_BASE_URL;
-
-	const response = await fetch(`${baseURL}/rooms/${params.roomId}/payments`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
+	const baseUrl = context.cloudflare.env.SHAMO_API_BASE_URL;
+	const response = await context.cloudflare.env.API.fetch(
+		`${baseUrl}/rooms/${params.roomId}/payments`,
+		{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ user_id: userId, amount, note }),
 		},
-		body: JSON.stringify({ user_id: userId, amount, note }),
-	});
+	);
 
 	if (!response.ok) {
 		return json(
