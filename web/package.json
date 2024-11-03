@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix vite:build && wrangler pages functions build --outdir build/worker",
     "deploy": "npm run build && wrangler deploy",
-    "dev": "wrangler dev --local",
+    "dev": "remix vite:dev",
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "start": "wrangler pages dev ./build/client",
