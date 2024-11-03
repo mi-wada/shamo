@@ -22,6 +22,25 @@ export const insertRoom = async (db: D1Database, room: Room): Promise<Room> => {
 
 	return room;
 };
+// When added auth, add user_id to param.
+export const findRoomById = async (
+	db: D1Database,
+	id: RoomId,
+): Promise<Room | undefined> => {
+	const record = await db
+		.prepare("SELECT * FROM rooms WHERE id = ?;")
+		.bind(id)
+		.first<RoomTable>();
+
+	if (!record) {
+		return undefined;
+	}
+	return {
+		id: record.id,
+		name: record.name,
+		emoji: record.emoji,
+	};
+};
 
 export type NewRoomError = undefined | NewRoomNameError | NewRoomEmojiError;
 export const newRoom = (

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { insertRoom, newRoom } from "./room";
+import { findRoomById, insertRoom, newRoom } from "./room";
 import {
 	badRequestError,
 	INTERNAL_SERVER_ERROR,
@@ -70,15 +70,16 @@ app.post("/rooms", async (c) => {
 	return c.json(room, 201);
 });
 
-// app.get("/rooms/:roomId", (c) => {
-// 	const roomId = c.req.param("roomId");
+// curl http://localhost:8787/rooms/r-0192f002-c770-7407-8a0e-dfbde47112f7
+app.get("/rooms/:roomId", async (c) => {
+	const roomId = c.req.param("roomId");
 
-// 	const room = findRoomById(roomId);
-// 	if (!room) {
-// 		return c.json({ error: NOT_FOUND_ERROR }, 404);
-// 	}
+	const room = await findRoomById(c.env.DB, roomId);
+	if (!room) {
+		return c.json({ error: NOT_FOUND_ERROR }, 404);
+	}
 
-// 	return c.json(room);
-// });
+	return c.json(room);
+});
 
 export default app;
