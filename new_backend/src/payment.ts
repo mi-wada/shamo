@@ -52,7 +52,9 @@ export const findPaymentsByRoomId = async (
 	roomId: RoomId,
 ): Promise<Payment[]> => {
 	const { results: paymentRecords } = await db
-		.prepare("SELECT * FROM payments WHERE room_id = ?;")
+		.prepare(
+			"SELECT * FROM payments WHERE room_id = ? ORDER BY created_at DESC;",
+		)
 		.bind(roomId)
 		.all<PaymentTable>();
 
