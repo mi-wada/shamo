@@ -2,6 +2,11 @@ import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 import { useLoaderData, redirect, Await, defer } from "@remix-run/react";
 import { Form } from "@remix-run/react";
 import { Suspense } from "react";
+import { Money } from "~/component/icon/money";
+import { Note } from "~/component/icon/note";
+import { Time } from "~/component/icon/time";
+import { Trash } from "~/component/icon/trash";
+import { User } from "~/component/icon/user";
 import { getRoomPayments, getRoomUsers } from "~/shamo_api/client";
 import { rfc3339ToSimpleFormat } from "~/utils";
 
@@ -77,11 +82,19 @@ export default function Page() {
 		<table>
 			<thead>
 				<tr>
-					<th>User Name</th>
-					<th>Amount</th>
-					<th>Note</th>
-					<th>Created At</th>
-					<th>Actions</th>
+					<th>
+						<User alt="User's name" className="size-5" />
+					</th>
+					<th>
+						<Money alt="Amount" className="size-5" />
+					</th>
+					<th>
+						<Note alt="Note" className="size-5" />
+					</th>
+					<th>
+						<Time alt="Payment registered time" className="size-5" />
+					</th>
+					<th />
 				</tr>
 			</thead>
 			<tbody>
@@ -94,7 +107,9 @@ export default function Page() {
 						<td>
 							<Form method="post">
 								<input type="hidden" name="paymentId" value={payment.id} />
-								<button type="submit">Delete</button>
+								<button type="submit">
+									<Trash alt="Delete" className="size-5 text-danger" />
+								</button>
 							</Form>
 						</td>
 					</tr>
