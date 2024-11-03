@@ -47,15 +47,21 @@ export const insertPayment = async (
 
 	return payment;
 };
+const defaultPerPage = 20;
 export const findPaymentsByRoomId = async (
 	db: D1Database,
 	roomId: RoomId,
+	page?: number,
+	perPage?: number,
 ): Promise<Payment[]> => {
+	const limit = perPage ?? defaultPerPage;
+	const offset = ((page ?? 1) - 1) * limit;
+
 	const { results: paymentRecords } = await db
 		.prepare(
-			"SELECT * FROM payments WHERE room_id = ? ORDER BY created_at DESC;",
+			"SELECT * FROM payments WHERE room_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?;",
 		)
-		.bind(roomId)
+		.bind(roomId, limit, offset)
 		.all<PaymentTable>();
 
 	return paymentRecords.map((r) => {

@@ -38,8 +38,11 @@ export const getRoomPayments = async (
 	baseUrl: string,
 	fetcher: Fetcher,
 	roomId: string,
+	page: number,
 ): Promise<Array<PaymentResponseBoby>> => {
-	const response = await fetcher.fetch(`${baseUrl}/rooms/${roomId}/payments`);
+	const response = await fetcher.fetch(
+		`${baseUrl}/rooms/${roomId}/payments?page=${page}`,
+	);
 	if (!response.ok) {
 		throw new Error("Failed to fetch payments data");
 	}

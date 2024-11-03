@@ -154,12 +154,30 @@ paths:
   /rooms/{room_id}/payments:
     get:
       summary: Get payments in a room.
+      description: |
+        Returns a list of payments in a room.
+        The list is paginated. Following the `Link` header for pagination.
       operationId: getRoomPayments
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
+        - $ref: "#/components/parameters/PageQueryParam"
       responses:
         "200":
           description: OK
+          headers:
+            Link:
+              description: |
+                Link header for pagination.
+                Based on [RFC 8288](https://tools.ietf.org/html/rfc8288).
+              schema:
+                type: string
+              examples:
+                no_previous:
+                  value: <https://api.example.com/items?page=2>; rel="next"
+                no_next:
+                  value: <https://api.example.com/items?page=4>; rel="previous"
+                both:
+                  value: <https://api.example.com/items?page=2>; rel="previous", <https://api.example.com/items?page=4>; rel="next"
           content:
             application/json:
               schema:
@@ -399,6 +417,14 @@ components:
       required:
         - error
   parameters:
+    PageQueryParam:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
     RoomIdPathParam:
       name: room_id
       in: path

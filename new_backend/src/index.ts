@@ -167,7 +167,6 @@ type CreatePaymentPayload = {
 app.post("/rooms/:roomId/payments", async (c) => {
 	const roomId = c.req.param("roomId");
 	const { user_id, amount, note }: CreatePaymentPayload = await c.req.json();
-	console.log({ user_id, amount, note });
 	if (!user_id) {
 		return c.json({ error: badRequestError("UserIdRequired") }, 400);
 	}
@@ -199,13 +198,14 @@ app.post("/rooms/:roomId/payments", async (c) => {
 // curl -X GET http://localhost:8787/rooms/r-0192f06d-e7a1-77d7-90f7-3d4ae1a96a50/payments
 app.get("/rooms/:roomId/payments", async (c) => {
 	const roomId = c.req.param("roomId");
+	const page = Number.parseInt(c.req.query("page") ?? "1", 10);
 
 	const room = await findRoomById(c.env.DB, roomId);
 	if (!room) {
 		return c.json({ error: NOT_FOUND_ERROR }, 404);
 	}
 
-	const payments = await findPaymentsByRoomId(c.env.DB, roomId);
+	const payments = await findPaymentsByRoomId(c.env.DB, roomId, page);
 
 	return c.json(payments);
 });
