@@ -216,8 +216,6 @@ paths:
       responses:
         "204":
           $ref: "#/components/responses/NoContent"
-        "404":
-          $ref: "#/components/responses/NotFoundError"
 components:
   responses:
     NoContent:

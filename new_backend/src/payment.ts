@@ -65,6 +65,30 @@ export const findPaymentsByRoomId = async (
 		};
 	});
 };
+export const deletePayment = async (
+	db: D1Database,
+	paymentId: PaymentId,
+	roomId: RoomId,
+): Promise<void> => {
+	const paymentRecord = await db
+		.prepare("SELECT * FROM payments WHERE id = ? AND room_id = ?;")
+		.bind(paymentId, roomId)
+		.first<PaymentTable>();
+	if (!paymentRecord) {
+		return;
+	}
+
+	await db.batch([
+		db
+			.prepare("DELETE FROM payments WHERE id = ? AND room_id = ?;")
+			.bind(paymentId, roomId),
+		db
+			.prepare(
+				"UPDATE room_users SET payments_total_amount = payments_total_amount - ? WHERE user_id = ? AND room_id = ?;",
+			)
+			.bind(paymentRecord.amount, paymentRecord.user_id, paymentRecord.room_id),
+	]);
+};
 
 export type NewPaymentError =
 	| undefined
