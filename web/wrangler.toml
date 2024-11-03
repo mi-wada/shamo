@@ -9,3 +9,6 @@ assets = { directory = "./build/client" }
 # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
 [observability]
 enabled = true
+
+[vars]
+SHAMO_API_BASE_URL = "https://shamo-api.test-20241005.workers.dev"
