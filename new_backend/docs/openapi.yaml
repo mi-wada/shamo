@@ -75,6 +75,7 @@ paths:
                           code:
                             type: string
                             enum:
+                              - UserIdRequired
                               - NameRequired
                               - NameTooLong
                               - EmojiRequired
@@ -111,6 +112,43 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/RoomUser"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+    post:
+      summary: Add a user to a room.
+      operationId: addUserToRoom
+      parameters:
+        - $ref: "#/components/parameters/RoomIdPathParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoomUserPayload"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomUser"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Error"
+                  - type: object
+                    properties:
+                      error:
+                        type: object
+                        properties:
+                          code:
+                            type: string
+                            enum:
+                              - UserIdRequired
+                              - UserIdAlreadyExists
         "404":
           $ref: "#/components/responses/NotFoundError"
   /rooms/{room_id}/payments:
@@ -284,10 +322,20 @@ components:
         - $ref: "#/components/schemas/User"
         - type: object
           properties:
+            room_id:
+              $ref: "#/components/schemas/RoomId"
             payments_total_amount:
               $ref: "#/components/schemas/PaymentAmount"
           required:
+            - room_id
             - total_payment_amount
+    CreateRoomUserPayload:
+      type: object
+      properties:
+        user_id:
+          $ref: "#/components/schemas/UserId"
+      required:
+        - user_id
     # Payment
     Payment:
       type: object

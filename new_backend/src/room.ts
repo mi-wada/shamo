@@ -44,8 +44,8 @@ export const findRoomById = async (
 
 export type NewRoomError = undefined | NewRoomNameError | NewRoomEmojiError;
 export const newRoom = (
-	name: string,
-	emoji: string,
+	name?: string,
+	emoji?: string,
 ): [Room | undefined, NewRoomError] => {
 	const [n, nErr] = newRoomName(name);
 	if (nErr) {
