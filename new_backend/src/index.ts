@@ -18,12 +18,29 @@ import {
 	insertPayment,
 	newPayment,
 } from "./payment";
+import { toSnakeCaseKeysObj } from "../utils";
+import { createMiddleware } from "hono/factory";
 
 type Bindings = {
 	DB: D1Database;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+const toSnakeCaseKeysResBodyMiddleware = createMiddleware(async (c, next) => {
+	await next();
+
+	// biome-ignore lint/suspicious/noImplicitAnyLet: .
+	let originalRes;
+	try {
+		originalRes = await c.res.json();
+	} catch (error) {
+		return;
+	}
+	const res = toSnakeCaseKeysObj(originalRes);
+	c.res = new Response(JSON.stringify(res), c.res);
+});
+app.use(toSnakeCaseKeysResBodyMiddleware);
 
 app.get("/", (c) => {
 	return c.text("🔥");
