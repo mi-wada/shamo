@@ -123,43 +123,45 @@ export default function Page() {
 					</LinkButton>
 				</div>
 			</div>
-			<table>
-				<thead>
-					<tr>
-						<th>
-							<User alt="User's name" className="size-5" />
-						</th>
-						<th>
-							<Money alt="Amount" className="size-5" />
-						</th>
-						<th>
-							<Note alt="Note" className="size-5" />
-						</th>
-						<th>
-							<Time alt="Payment registered time" className="size-5" />
-						</th>
-						<th />
-					</tr>
-				</thead>
-				<tbody>
-					{payments.map((payment) => (
-						<tr key={payment.id}>
-							<td>{payment.userName}</td>
-							<td>{payment.amount}</td>
-							<td>{payment.note}</td>
-							<td>{payment.createdAt}</td>
-							<td>
-								<Form method="post">
-									<input type="hidden" name="paymentId" value={payment.id} />
-									<button type="submit">
-										<Trash alt="Delete" className="size-5 text-danger" />
-									</button>
-								</Form>
-							</td>
+			<div className="overflow-x-auto">
+				<table className="table">
+					<thead>
+						<tr>
+							<th>
+								<User alt="User's name" className="size-5" />
+							</th>
+							<th>
+								<Money alt="Amount" className="size-5" />
+							</th>
+							<th>
+								<Note alt="Note" className="size-5" />
+							</th>
+							<th>
+								<Time alt="Payment registered time" className="size-5" />
+							</th>
+							<th />
 						</tr>
-					))}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{payments.map((payment) => (
+							<tr key={payment.id}>
+								<td>{payment.userName}</td>
+								<td>{payment.amount}</td>
+								<td>{payment.note}</td>
+								<td>{payment.createdAt}</td>
+								<td>
+									<Form method="post">
+										<input type="hidden" name="paymentId" value={payment.id} />
+										<button type="submit">
+											<Trash alt="Delete" className="size-5 text-danger" />
+										</button>
+									</Form>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</>
 	);
 }
