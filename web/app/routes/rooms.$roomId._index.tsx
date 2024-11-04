@@ -109,7 +109,7 @@ export default function Page() {
 						</label>
 						<div className="flex justify-end">
 							<button
-								className="btn btn-primary"
+								className="btn btn-primary btn-sm lg:btn-md"
 								type="submit"
 								disabled={submitting}
 							>
