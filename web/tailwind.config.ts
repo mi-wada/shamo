@@ -8,18 +8,6 @@ export default {
 			colors: {
 				danger: "#f56565",
 			},
-			fontFamily: {
-				sans: [
-					'"Inter"',
-					"ui-sans-serif",
-					"system-ui",
-					"sans-serif",
-					'"Apple Color Emoji"',
-					'"Segoe UI Emoji"',
-					'"Segoe UI Symbol"',
-					'"Noto Color Emoji"',
-				],
-			},
 			fontSize: {
 				h1: "2rem",
 			},

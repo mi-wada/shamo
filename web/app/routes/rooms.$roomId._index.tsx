@@ -73,39 +73,57 @@ export default function Page() {
 
 	return (
 		<>
-			<h3>Add a payment</h3>
-			{actionData?.error && <p className="text-danger">{actionData.error}</p>}
-			<Form method="post">
-				<select name="userId" className="select w-full">
-					<option disabled selected>
-						<User className="h-4 w-4 opacity-70" alt="User" /> Select a paid
-						user
-					</option>
-					{rUsers.map((rUser) => (
-						<option key={rUser.userId} value={rUser.userId}>
-							{rUser.name}
-						</option>
-					))}
-				</select>
-
-				<label className="input flex items-center gap-2">
-					<Money className="h-4 w-4 opacity-70" alt="Amount" />
-					<input
-						type="number"
-						name="amount"
-						required
-						placeholder="Amount"
-						className="grow"
-					/>
-				</label>
-				<label className="input flex items-center gap-2">
-					<Note className="h-4 w-4 opacity-70" alt="Note" />
-					<input type="text" name="note" placeholder="Note" className="grow" />
-				</label>
-				<button className="btn btn-primary" type="submit" disabled={submitting}>
-					Add
-				</button>
-			</Form>
+			<div className="card card-compact bg-base-300 shadow-xl my-4">
+				<div className="card-body">
+					<h2 className="card-title">Add a payment</h2>
+					{actionData?.error && (
+						<p className="text-danger">{actionData.error}</p>
+					)}
+					<Form method="post">
+						<label className="input flex items-center my-4">
+							<User className="h-4 w-4 opacity-70" alt="User" />
+							<select name="userId" className="select w-full">
+								<option disabled selected>
+									Select a paid user
+								</option>
+								{rUsers.map((rUser) => (
+									<option key={rUser.userId} value={rUser.userId}>
+										{rUser.name}
+									</option>
+								))}
+							</select>
+						</label>
+						<label className="input flex items-center gap-2 my-4">
+							<Money className="h-4 w-4 opacity-70" alt="Amount" />
+							<input
+								type="number"
+								name="amount"
+								required
+								placeholder="Amount"
+								className="grow"
+							/>
+						</label>
+						<label className="input flex items-center gap-2 my-4">
+							<Note className="h-4 w-4 opacity-70" alt="Note" />
+							<input
+								type="text"
+								name="note"
+								placeholder="Note"
+								className="grow"
+							/>
+						</label>
+						<div className="flex justify-end">
+							<button
+								className="btn btn-primary"
+								type="submit"
+								disabled={submitting}
+							>
+								Add
+							</button>
+						</div>
+					</Form>
+				</div>
+			</div>
 			<h3>Users</h3>
 			<ul>
 				{rUsers.map((rUser) => (

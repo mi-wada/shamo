@@ -14,6 +14,8 @@ export const LinkButton = ({ href, disabled, children }: Props) => {
 			href={disabled ? undefined : href}
 			className={commonClasses}
 			aria-disabled={disabled}
+			// biome-ignore lint/a11y/useSemanticElements: .
+			role="button"
 		>
 			{children}
 		</a>

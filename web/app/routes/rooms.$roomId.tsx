@@ -67,7 +67,9 @@ export default function Layout() {
 					<Time alt="History" className="size-6" />
 				</a>
 			</nav>
-			<Outlet />
+			<div className="m-4">
+				<Outlet />
+			</div>
 		</>
 	);
 }
