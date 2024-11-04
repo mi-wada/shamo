@@ -2,7 +2,7 @@ import type {
 	LoaderFunctionArgs,
 	ActionFunctionArgs,
 } from "@remix-run/cloudflare";
-import { json, useLoaderData, redirect } from "@remix-run/react";
+import { json, useLoaderData, redirect, useNavigation } from "@remix-run/react";
 import { Form, useActionData } from "@remix-run/react";
 import { Money } from "~/component/icon/money";
 import { Note } from "~/component/icon/note";
@@ -68,30 +68,41 @@ export default function Page() {
 	const rUsers = useLoaderData<typeof loader>();
 	const actionData = useActionData<typeof action>();
 
+	const navigation = useNavigation();
+	const submitting = navigation.state === "submitting";
+
 	return (
 		<>
 			<h3>Add a payment</h3>
 			{actionData?.error && <p className="text-danger">{actionData.error}</p>}
 			<Form method="post">
-				<label>
-					<User className="size-5" alt="User" />
-					<select name="userId">
-						{rUsers.map((rUser) => (
-							<option key={rUser.userId} value={rUser.userId}>
-								{rUser.name}
-							</option>
-						))}
-					</select>
+				<select name="userId" className="select w-full">
+					<option disabled selected>
+						<User className="h-4 w-4 opacity-70" alt="User" /> Select a paid
+						user
+					</option>
+					{rUsers.map((rUser) => (
+						<option key={rUser.userId} value={rUser.userId}>
+							{rUser.name}
+						</option>
+					))}
+				</select>
+
+				<label className="input flex items-center gap-2">
+					<Money className="h-4 w-4 opacity-70" alt="Amount" />
+					<input
+						type="number"
+						name="amount"
+						required
+						placeholder="Amount"
+						className="grow"
+					/>
 				</label>
-				<label>
-					<Money className="size-5" alt="Amount" />
-					<input type="number" name="amount" required />
+				<label className="input flex items-center gap-2">
+					<Note className="h-4 w-4 opacity-70" alt="Note" />
+					<input type="text" name="note" placeholder="Note" className="grow" />
 				</label>
-				<label>
-					<Note className="size-5" alt="Note" />
-					<input type="text" name="note" />
-				</label>
-				<button className="btn btn-primary" type="submit">
+				<button className="btn btn-primary" type="submit" disabled={submitting}>
 					Add
 				</button>
 			</Form>

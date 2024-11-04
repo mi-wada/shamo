@@ -1,7 +1,7 @@
 // Layout under /rooms/:roomId
 
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import { json, Outlet, useLoaderData } from "@remix-run/react";
+import { json, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { Home } from "~/component/icon/home";
 import { Time } from "~/component/icon/time";
 
@@ -45,23 +45,27 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
 export default function Layout() {
 	const room = useLoaderData<typeof loader>();
+	const { pathname } = useLocation();
+	const activeTab = pathname.endsWith("history") ? "history" : "home";
 
 	return (
 		<>
 			<h1 className="text-h1">Shamo / {`${room.emoji} ${room.name}`}</h1>
-			<nav>
-				<ul>
-					<li>
-						<a href={`/rooms/${room.id}`}>
-							<Home alt="Home" className="size-6" />
-						</a>
-					</li>
-					<li>
-						<a href={`/rooms/${room.id}/history`}>
-							<Time alt="History" className="size-6" />
-						</a>
-					</li>
-				</ul>
+			<nav role="tablist" className="tabs tabs-bordered">
+				<a
+					href={`/rooms/${room.id}`}
+					role="tab"
+					className={`tab ${activeTab === "home" ? "tab-active" : ""}`}
+				>
+					<Home alt="Home" className="size-6" />
+				</a>
+				<a
+					href={`/rooms/${room.id}/history`}
+					role="tab"
+					className={`tab ${activeTab === "history" && "tab-active"}`}
+				>
+					<Time alt="History" className="size-6" />
+				</a>
 			</nav>
 			<Outlet />
 		</>
