@@ -75,7 +75,7 @@ export default function Page() {
 		<>
 			<div className="card card-compact bg-base-300 shadow-xl my-4">
 				<div className="card-body">
-					<h2 className="card-title">Add a payment</h2>
+					<h2 className="card-title text-h2 font-bold">Add a payment</h2>
 					{actionData?.error && (
 						<p className="text-danger">{actionData.error}</p>
 					)}

@@ -50,7 +50,9 @@ export default function Layout() {
 
 	return (
 		<>
-			<h1 className="text-h1">Shamo / {`${room.emoji} ${room.name}`}</h1>
+			<h1 className="text-h1 font-bold">
+				Shamo / {`${room.emoji} ${room.name}`}
+			</h1>
 			<nav role="tablist" className="tabs tabs-bordered">
 				<a
 					href={`/rooms/${room.id}`}

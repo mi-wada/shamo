@@ -10,6 +10,7 @@ export default {
 			},
 			fontSize: {
 				h1: "2rem",
+				h2: "1.5rem",
 			},
 		},
 	},
