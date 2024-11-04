@@ -1,5 +1,11 @@
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import { useLoaderData, redirect, Await, defer } from "@remix-run/react";
+import {
+	useLoaderData,
+	redirect,
+	Await,
+	defer,
+	useLocation,
+} from "@remix-run/react";
 import { Form } from "@remix-run/react";
 import { Suspense } from "react";
 import { Money } from "~/component/icon/money";
@@ -9,6 +15,7 @@ import { Previous } from "~/component/icon/previous";
 import { Time } from "~/component/icon/time";
 import { Trash } from "~/component/icon/trash";
 import { User } from "~/component/icon/user";
+import { LinkButton } from "~/component/link_button";
 import { getRoomPayments, getRoomUsers } from "~/shamo_api/client";
 import { rfc3339ToSimpleFormat } from "~/utils";
 
@@ -89,16 +96,33 @@ export async function action({ request, params, context }: LoaderFunctionArgs) {
 export default function Page() {
 	const { payments } = useLoaderData<typeof loader>();
 
-	const currentPage =
-		typeof window !== "undefined"
-			? Number.parseInt(
-					new URL(window.location.href).searchParams.get("page") || "1",
-					10,
-				)
-			: 1;
+	const { search } = useLocation();
+	const currentPage = Number.parseInt(
+		new URLSearchParams(search).get("page") ?? "1",
+		10,
+	);
 
 	return (
 		<>
+			<div className="join grid grid-cols-2">
+				<div className="join-item m-2">
+					<LinkButton
+						href={`?page=${currentPage - 1}`}
+						disabled={currentPage <= 1}
+					>
+						<Previous alt="Previous page" className="size-5" />
+					</LinkButton>
+				</div>
+				<div className="join-item m-2">
+					<LinkButton
+						href={`?page=${currentPage + 1}`}
+						// TODO: implement this
+						disabled={false}
+					>
+						<Next alt="Next page" className="size-5" />
+					</LinkButton>
+				</div>
+			</div>
 			<table>
 				<thead>
 					<tr>
@@ -136,16 +160,6 @@ export default function Page() {
 					))}
 				</tbody>
 			</table>
-			<div className="pagination">
-				{currentPage > 1 && (
-					<a href={`?page=${currentPage - 1}`} className="button">
-						<Previous alt="Previous page" className="size-5" />
-					</a>
-				)}
-				<a href={`?page=${currentPage + 1}`} className="button">
-					<Next alt="Next page" className="size-5" />
-				</a>
-			</div>
 		</>
 	);
 }
