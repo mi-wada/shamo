@@ -8,6 +8,7 @@ import { Money } from "~/component/icon/money";
 import { Note } from "~/component/icon/note";
 import { User } from "~/component/icon/user";
 import { type ErrorResponseBody, getRoomUsers } from "~/shamo_api/client";
+import { toFriendyCurrency } from "~/utils";
 
 type RoomUser = {
 	userId: string;
@@ -73,16 +74,15 @@ export default function Page() {
 
 	return (
 		<>
-			<div className="card card-compact bg-base-300 shadow-xl my-4">
+			<div className="card card-compact shadow-xl my-4">
 				<div className="card-body">
-					<h2 className="card-title text-h2 font-bold">Add a payment</h2>
 					{actionData?.error && (
 						<p className="text-danger">{actionData.error}</p>
 					)}
 					<Form method="post">
-						<label className="input flex items-center my-4">
+						<label className="input input-bordered flex items-center my-4">
 							<User className="h-4 w-4 opacity-70" alt="User" />
-							<select name="userId" className="select w-full">
+							<select name="userId" className="select grow">
 								<option disabled selected>
 									Select a paid user
 								</option>
@@ -93,7 +93,7 @@ export default function Page() {
 								))}
 							</select>
 						</label>
-						<label className="input flex items-center gap-2 my-4">
+						<label className="input input-bordered flex items-center gap-2 my-4">
 							<Money className="h-4 w-4 opacity-70" alt="Amount" />
 							<input
 								type="number"
@@ -103,14 +103,9 @@ export default function Page() {
 								className="grow"
 							/>
 						</label>
-						<label className="input flex items-center gap-2 my-4">
+						<label className="input input-bordered flex items-center gap-2 my-4">
 							<Note className="h-4 w-4 opacity-70" alt="Note" />
-							<input
-								type="text"
-								name="note"
-								placeholder="Note"
-								className="grow"
-							/>
+							<input type="text" name="note" placeholder="Note" />
 						</label>
 						<div className="flex justify-end">
 							<button
@@ -124,22 +119,25 @@ export default function Page() {
 					</Form>
 				</div>
 			</div>
-			<h3>Users</h3>
-			<ul>
+			<div className="flex justify-center space-x-4 my-4">
 				{rUsers.map((rUser) => (
-					<li key={rUser.userId}>
-						<img
-							src={rUser.iconUrl}
-							alt={rUser.name}
-							className="w-12 h-12 rounded-full"
-						/>
-						<div>
+					<div key={rUser.userId} className="card p-2 w-36 shadow-xl">
+						<div className="flex items-center space-x-2 mb-4">
+							<img
+								src={rUser.iconUrl}
+								alt={rUser.name}
+								className="w-6 h-6 rounded-full"
+							/>
 							<p className="font-bold">{rUser.name}</p>
-							<p>Total: {rUser.paymentsTotalAmount}</p>
 						</div>
-					</li>
+						<div className="text-center">
+							<p className="font-bold">
+								{toFriendyCurrency(rUser.paymentsTotalAmount)}
+							</p>
+						</div>
+					</div>
 				))}
-			</ul>
+			</div>
 		</>
 	);
 }

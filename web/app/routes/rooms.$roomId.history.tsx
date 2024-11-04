@@ -17,7 +17,7 @@ import { Trash } from "~/component/icon/trash";
 import { User } from "~/component/icon/user";
 import { LinkButton } from "~/component/link_button";
 import { getRoomPayments, getRoomUsers } from "~/shamo_api/client";
-import { rfc3339ToSimpleFormat } from "~/utils";
+import { rfc3339ToSimpleFormat, toFriendyCurrency } from "~/utils";
 
 type Payment = {
 	id: string;
@@ -124,7 +124,7 @@ export default function Page() {
 				</div>
 			</div>
 			<div className="overflow-x-auto">
-				<table className="table">
+				<table className="table table-xs lg:table-lg">
 					<thead>
 						<tr>
 							<th>
@@ -146,7 +146,7 @@ export default function Page() {
 						{payments.map((payment) => (
 							<tr key={payment.id}>
 								<td>{payment.userName}</td>
-								<td>{payment.amount}</td>
+								<td>{toFriendyCurrency(payment.amount)}</td>
 								<td>{payment.note}</td>
 								<td>{payment.createdAt}</td>
 								<td>
