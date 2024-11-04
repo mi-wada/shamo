@@ -80,7 +80,7 @@ export default function Page() {
 						<p className="text-danger">{actionData.error}</p>
 					)}
 					<Form method="post">
-						<label className="input input-bordered flex items-center my-4">
+						<label className="input flex items-center my-4">
 							<User className="h-4 w-4 opacity-70" alt="User" />
 							<select name="userId" className="select grow">
 								<option disabled selected>
@@ -93,7 +93,7 @@ export default function Page() {
 								))}
 							</select>
 						</label>
-						<label className="input input-bordered flex items-center gap-2 my-4">
+						<label className="input flex items-center gap-2 my-4">
 							<Money className="h-4 w-4 opacity-70" alt="Amount" />
 							<input
 								type="number"
@@ -103,7 +103,7 @@ export default function Page() {
 								className="grow"
 							/>
 						</label>
-						<label className="input input-bordered flex items-center gap-2 my-4">
+						<label className="input flex items-center gap-2 my-4">
 							<Note className="h-4 w-4 opacity-70" alt="Note" />
 							<input type="text" name="note" placeholder="Note" />
 						</label>
