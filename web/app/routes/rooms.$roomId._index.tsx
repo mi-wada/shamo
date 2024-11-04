@@ -91,7 +91,9 @@ export default function Page() {
 					<Note className="size-5" alt="Note" />
 					<input type="text" name="note" />
 				</label>
-				<button type="submit">Add</button>
+				<button className="btn btn-primary" type="submit">
+					Add
+				</button>
 			</Form>
 			<h3>Users</h3>
 			<ul>
