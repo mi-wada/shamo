@@ -25,4 +25,4 @@ jobs:
         with:
           node-version-file: ./web/.node-version
       - uses: ./.github/actions/web-install-node-packages
-      - run: npm run tsc
+      - run: npm run typecheck
