@@ -1,7 +1,5 @@
-// Layout under /rooms/:roomId
-
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import { json, Outlet, useLoaderData, useLocation } from "@remix-run/react";
+import { Outlet, json, useLoaderData, useLocation } from "@remix-run/react";
 import { Home } from "~/component/icon/home";
 import { Time } from "~/component/icon/time";
 

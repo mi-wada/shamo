@@ -1,13 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
-import {
-	useLoaderData,
-	redirect,
-	Await,
-	defer,
-	useLocation,
-} from "@remix-run/react";
+import { redirect, useLoaderData, useLocation } from "@remix-run/react";
 import { Form } from "@remix-run/react";
-import { Suspense } from "react";
 import { Money } from "~/component/icon/money";
 import { Next } from "~/component/icon/next";
 import { Note } from "~/component/icon/note";
