@@ -20,7 +20,8 @@ jobs:
   openapi_lint:
     runs-on: ubuntu-latest
     env:
-      SPECTRAL_CLI_VERSION: "6.11.0"
+      # latest: https://www.npmjs.com/package/@stoplight/spectral-cli
+      SPECTRAL_CLI_VERSION: "6.13.1"
     steps:
       - uses: actions/checkout@v4
       - name: Cache spectral-cli
