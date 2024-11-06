@@ -1,16 +1,29 @@
 openapi: 3.1.0
 info:
   title: Shamo API.
+  description: Shamo API.
   version: 1.0.0
   contact:
     name: Mitsuaki Wada
+tags:
+  - name: User
+    description: User resource operations.
+  - name: Room
+    description: Room resource operations.
+  - name: RoomUser
+    description: RoomUser resource operations.
+  - name: Payment
+    description: Payment resource operations.
 servers:
   - url: http://localhost:8888
 paths:
   /users:
     post:
       summary: Create a user.
+      description: Create a user.
       operationId: createUser
+      tags:
+        - User
       requestBody:
         required: true
         content:
@@ -46,7 +59,10 @@ paths:
   /rooms:
     post:
       summary: Create a room.
+      description: Create a room.
       operationId: createRoom
+      tags:
+        - Room
       requestBody:
         required: true
         content:
@@ -85,7 +101,10 @@ paths:
   /rooms/{room_id}:
     get:
       summary: Get a room by ID.
+      description: Get a room by ID.
       operationId: getRoom
+      tags:
+        - Room
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
       responses:
@@ -100,7 +119,10 @@ paths:
   /rooms/{room_id}/users:
     get:
       summary: Get users in a room.
+      description: Get users in a room.
       operationId: getRoomUsers
+      tags:
+        - RoomUser
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
       responses:
@@ -116,7 +138,10 @@ paths:
           $ref: "#/components/responses/NotFoundError"
     post:
       summary: Add a user to a room.
+      description: Add a user to a room.
       operationId: addUserToRoom
+      tags:
+        - RoomUser
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
       requestBody:
@@ -158,6 +183,8 @@ paths:
         Returns a list of payments in a room.
         The list is paginated. Following the `Link` header for pagination.
       operationId: getRoomPayments
+      tags:
+        - Payment
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
         - $ref: "#/components/parameters/PageQueryParam"
@@ -188,7 +215,10 @@ paths:
           $ref: "#/components/responses/NotFoundError"
     post:
       summary: Create a payment in a room.
+      description: Create a payment in a room.
       operationId: createPayment
+      tags:
+        - Payment
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
       requestBody:
@@ -227,7 +257,10 @@ paths:
   /rooms/{room_id}/payments/{payment_id}:
     delete:
       summary: Delete a payment in a room.
+      description: Delete a payment in a room.
       operationId: deletePayment
+      tags:
+        - Payment
       parameters:
         - $ref: "#/components/parameters/RoomIdPathParam"
         - $ref: "#/components/parameters/PaymentIdPathParam"
