@@ -6,9 +6,13 @@ assets = { directory = "./build/client" }
 services = [
   { binding = "API", service = "shamo-api" }
 ]
+workers_dev = false
+routes = [
+  { pattern = "shamo.mtak.app", custom_domain = true }
+]
 
 [vars]
-SHAMO_API_BASE_URL = "https://shamo-api.test-20241005.workers.dev"
+SHAMO_API_BASE_URL = "https://shamo-api.mtak.app"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
