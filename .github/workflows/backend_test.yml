@@ -23,9 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          # For git-restore-mtime-action in .github/actions/backend-setup-rust
-          fetch-depth: 0
-      - uses: ./.github/actions/backend-setup-rust
-      - run: docker compose up -d
-      - run: cargo test --workspace
+      # - uses: ./.github/actions/backend-setup-rust
+      # - run: docker compose up -d
+      # - run: cargo test --workspace

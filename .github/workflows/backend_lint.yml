@@ -34,14 +34,12 @@ jobs:
       - if: steps.cache-spectral-cli.outputs.cache-hit != 'true'
         name: Install spectral-cli
         run: npm install -g @stoplight/spectral-cli@${{ env.SPECTRAL_CLI_VERSION }}
-      - run: spectral lint ./openapi/index.yml
-  cargo_fmt:
+      - run: spectral lint ./docs/openapi.yaml
+  biome:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: biomejs/setup-biome@v2
         with:
-          # For git-restore-mtime-action in .github/actions/backend-setup-rust
-          fetch-depth: 0
-      - uses: ./.github/actions/backend-setup-rust
-      - run: cargo fmt --all -- --check
-      - run: cargo clippy --all
+          version: latest
+      - run: biome ci .
