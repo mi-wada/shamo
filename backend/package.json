@@ -9,12 +9,12 @@
     "db:migrate:prod": "wrangler d1 execute shamo-api-db --remote --file=./schema.sql"
   },
   "dependencies": {
-    "hono": "4.6.9",
-    "uuid": "11.0.2"
+    "hono": "4.6.10",
+    "uuid": "11.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@cloudflare/workers-types": "4.20241022.0",
-    "wrangler": "3.84.1"
+    "@cloudflare/workers-types": "4.20241112.0",
+    "wrangler": "3.87.0"
   }
 }
