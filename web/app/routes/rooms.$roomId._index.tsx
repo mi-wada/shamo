@@ -55,7 +55,7 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 	);
 
 	if (!response.ok) {
-		const errorResponseBody = (await response.json()) as ErrorResponseBody;
+		const errorResponseBody: ErrorResponseBody = await response.json();
 		return {
 			error: `Error: ${errorResponseBody.error.code}`,
 		};
