@@ -2,9 +2,10 @@ import type {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
 } from "@remix-run/cloudflare";
-import { redirectDocument } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
 import { useLoaderData, useNavigation } from "@remix-run/react";
 import { Form, useActionData } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { Money } from "~/component/icon/money";
 import { Note } from "~/component/icon/note";
 import { User } from "~/component/icon/user";
@@ -61,24 +62,32 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 		};
 	}
 
-	return redirectDocument(`/rooms/${params.roomId}`);
+	return redirect(`/rooms/${params.roomId}`);
 }
 
 export default function Page() {
 	const rUsers = useLoaderData<typeof loader>();
-	const actionData = useActionData<typeof action>();
+
+	const submitError = useActionData<typeof action>()?.error;
 
 	const navigation = useNavigation();
 	const submitting = navigation.state === "submitting";
+
+	// Reset the form after submitting
+	// https://ahmadrosid.com/cheatsheet/remix/remix-reset-form-submit
+	const formRef = useRef<HTMLFormElement>(null);
+	useEffect(() => {
+		if (!submitting) {
+			formRef.current?.reset();
+		}
+	}, [submitting]);
 
 	return (
 		<>
 			<div className="card card-compact shadow-xl my-4">
 				<div className="card-body">
-					{actionData?.error && (
-						<p className="text-danger">{actionData.error}</p>
-					)}
-					<Form method="post">
+					{submitError && <p className="text-danger">{submitError}</p>}
+					<Form method="post" ref={formRef}>
 						<label className="input flex items-center my-2">
 							<User className="h-4 w-4 opacity-70" alt="User" />
 							<select name="userId" className="select grow">
