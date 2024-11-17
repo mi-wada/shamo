@@ -70,9 +70,11 @@ export const insertRoomUser = async (
 ): Promise<[RoomUser | undefined, InsertRoomUserError]> => {
 	try {
 		await db
-			.prepare(
-				"INSERT INTO room_users (room_id, user_id, payments_total_amount, created_at) VALUES (?, ?, ?, ?);",
-			)
+			.prepare(`
+INSERT INTO
+	room_users (room_id, user_id, payments_total_amount, created_at)
+	VALUES (?, ?, ?, ?);
+`)
 			.bind(
 				roomUser.roomId,
 				roomUser.userId,

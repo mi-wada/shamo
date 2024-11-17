@@ -11,15 +11,16 @@ export type RoomTable = {
 	id: string;
 	name: string;
 	emoji: string;
-	// TODO: UTCかつTZ保存されてないのしんどい。直す。
 	created_at: string;
 };
 
 export const insertRoom = async (db: D1Database, room: Room): Promise<Room> => {
 	await db
-		.prepare(
-			"INSERT INTO rooms (id, name, emoji, created_at) VALUES (?, ?, ?, ?);",
-		)
+		.prepare(`
+INSERT INTO
+	rooms (id, name, emoji, created_at)
+	VALUES (?, ?, ?, ?);
+`)
 		.bind(room.id, room.name, room.emoji, currentRFC3339())
 		.run();
 

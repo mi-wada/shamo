@@ -45,12 +45,18 @@ export const findUserById = async (
 export const insertUser = async (db: D1Database, user: User): Promise<User> => {
 	await db.batch([
 		db
-			.prepare("INSERT INTO users (id, created_at) VALUES (?, ?);")
+			.prepare(`
+INSERT INTO
+	users (id, created_at)
+	VALUES (?, ?);
+`)
 			.bind(user.id, currentRFC3339()),
 		db
-			.prepare(
-				"INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?);",
-			)
+			.prepare(`
+INSERT INTO
+	user_profiles (user_id, name, icon_url)
+	VALUES (?, ?, ?);
+`)
 			.bind(user.id, user.name, user.iconUrl),
 	]);
 

@@ -27,9 +27,11 @@ export const insertPayment = async (
 ): Promise<Payment> => {
 	await db.batch([
 		db
-			.prepare(
-				"INSERT INTO payments (id, user_id, room_id, amount, note, created_at) VALUES (?, ?, ?, ?, ?, ?);",
-			)
+			.prepare(`
+INSERT INTO
+	payments (id, user_id, room_id, amount, note, created_at)
+	VALUES (?, ?, ?, ?, ?, ?);
+`)
 			.bind(
 				payment.id,
 				payment.userId,
