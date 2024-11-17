@@ -3,7 +3,7 @@ import type {
 	LoaderFunctionArgs,
 } from "@remix-run/cloudflare";
 import { redirectDocument } from "@remix-run/cloudflare";
-import { json, useLoaderData, useNavigation } from "@remix-run/react";
+import { useLoaderData, useNavigation } from "@remix-run/react";
 import { Form, useActionData } from "@remix-run/react";
 import { Money } from "~/component/icon/money";
 import { Note } from "~/component/icon/note";
@@ -33,7 +33,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		iconUrl: ru.icon_url,
 	}));
 
-	return json(roomUsers);
+	return roomUsers;
 }
 
 export async function action({ request, params, context }: ActionFunctionArgs) {
@@ -55,12 +55,10 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 	);
 
 	if (!response.ok) {
-		return json(
-			{
-				error: `Error: ${((await response.json()) as ErrorResponseBody).error.code}`,
-			},
-			{ status: 500 },
-		);
+		const errorResponseBody = (await response.json()) as ErrorResponseBody;
+		return {
+			error: `Error: ${errorResponseBody.error.code}`,
+		};
 	}
 
 	return redirectDocument(`/rooms/${params.roomId}`);

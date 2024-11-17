@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import { Outlet, json, useLoaderData, useLocation } from "@remix-run/react";
+import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { Home } from "~/component/icon/home";
 import { Time } from "~/component/icon/time";
 
@@ -25,11 +25,11 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		`${baseUrl}/rooms/${params.roomId}`,
 	);
 	if (roomResponse.status === 404) {
-		throw json("Room not found", { status: 404 });
+		throw Response.json("Room not found", { status: 404 });
 	}
 	if (!roomResponse.ok) {
 		console.log(roomResponse);
-		throw new Error("Failed to fetch room data");
+		throw Response.json("Failed to fetch room data", { status: 500 });
 	}
 	const roomResponseBody: RoomResponseBody = await roomResponse.json();
 
@@ -38,7 +38,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 		name: roomResponseBody.name,
 		emoji: roomResponseBody.emoji,
 	};
-	return json(room);
+	return room;
 }
 
 export default function Layout() {
