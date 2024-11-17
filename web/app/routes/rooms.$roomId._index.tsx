@@ -2,7 +2,8 @@ import type {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
 } from "@remix-run/cloudflare";
-import { json, redirect, useLoaderData, useNavigation } from "@remix-run/react";
+import { redirectDocument } from "@remix-run/cloudflare";
+import { json, useLoaderData, useNavigation } from "@remix-run/react";
 import { Form, useActionData } from "@remix-run/react";
 import { Money } from "~/component/icon/money";
 import { Note } from "~/component/icon/note";
@@ -62,7 +63,7 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 		);
 	}
 
-	return redirect(`/rooms/${params.roomId}`);
+	return redirectDocument(`/rooms/${params.roomId}`);
 }
 
 export default function Page() {
