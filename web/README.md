@@ -20,3 +20,9 @@ npm run dev
 ncu -u
 npm i
 ```
+
+### Deploy
+
+```shell
+npm run deploy
+```

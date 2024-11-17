@@ -25,3 +25,9 @@ npm run db:migrate:local
 ncu -u
 npm i
 ```
+
+## Deploy
+
+```shell
+npm run deploy
+```
