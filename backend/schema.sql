@@ -1,10 +1,8 @@
-DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   created_at TEXT NOT NULL
 );
 
-DROP TABLE IF EXISTS user_profiles;
 CREATE TABLE IF NOT EXISTS user_profiles (
   user_id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -12,7 +10,6 @@ CREATE TABLE IF NOT EXISTS user_profiles (
   FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-DROP TABLE IF EXISTS rooms;
 CREATE TABLE IF NOT EXISTS rooms (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -20,7 +17,6 @@ CREATE TABLE IF NOT EXISTS rooms (
   created_at TEXT NOT NULL
 );
 
-DROP TABLE IF EXISTS room_users;
 CREATE TABLE IF NOT EXISTS room_users (
   room_id TEXT NOT NULL,
   user_id TEXT NOT NULL,
@@ -31,7 +27,6 @@ CREATE TABLE IF NOT EXISTS room_users (
   FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-DROP TABLE IF EXISTS payments;
 CREATE TABLE IF NOT EXISTS payments (
   id TEXT PRIMARY KEY,
   room_id TEXT NOT NULL,
