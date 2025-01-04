@@ -18,7 +18,7 @@ import {
 	insertPayment,
 	newPayment,
 } from "./payment";
-import { toSnakeCaseKeysObj } from "../utils";
+import { toSnakeCaseKeysObj } from "./utils";
 import { createMiddleware } from "hono/factory";
 
 type Bindings = {

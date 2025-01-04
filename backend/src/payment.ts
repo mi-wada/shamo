@@ -1,4 +1,4 @@
-import { currentRFC3339 } from "../utils";
+import { currentRFC3339 } from "./utils";
 import { NewId, type Id } from "./id";
 import type { RoomId } from "./room";
 import type { UserId } from "./user";
