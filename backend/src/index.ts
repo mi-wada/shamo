@@ -33,7 +33,8 @@ const toSnakeCaseKeysResBodyMiddleware = createMiddleware(async (c, next) => {
 	// biome-ignore lint/suspicious/noImplicitAnyLet: .
 	let originalRes;
 	try {
-		originalRes = await c.res.json();
+		const clonedRes = c.res.clone();
+		originalRes = await clonedRes.json();
 	} catch (error) {
 		return;
 	}
