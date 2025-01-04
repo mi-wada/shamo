@@ -96,9 +96,6 @@ export default function Page() {
 								className="select grow"
 								required
 							>
-								<option disabled selected>
-									Select a paid user
-								</option>
 								{rUsers.map((rUser) => (
 									<option key={rUser.userId} value={rUser.userId}>
 										{rUser.name}
