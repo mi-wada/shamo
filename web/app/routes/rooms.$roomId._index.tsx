@@ -90,7 +90,12 @@ export default function Page() {
 					<Form method="post" ref={formRef}>
 						<label className="input flex items-center my-2">
 							<User className="h-4 w-4 opacity-70" alt="User" />
-							<select name="userId" className="select grow">
+							<select
+								name="userId"
+								defaultValue={rUsers[0].userId}
+								className="select grow"
+								required
+							>
 								<option disabled selected>
 									Select a paid user
 								</option>
