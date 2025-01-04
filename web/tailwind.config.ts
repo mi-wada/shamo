@@ -9,7 +9,7 @@ export default {
 				danger: "#f56565",
 			},
 			fontSize: {
-				h1: "2rem",
+				h1: "1.75rem",
 				h2: "1.5rem",
 			},
 		},

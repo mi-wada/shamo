@@ -48,7 +48,7 @@ export default function Layout() {
 
 	return (
 		<>
-			<h1 className="text-h1 font-bold">
+			<h1 className="text-h1 font-bold ml-2">
 				Shamo / {`${room.emoji} ${room.name}`}
 			</h1>
 			<nav role="tablist" className="tabs tabs-bordered">
