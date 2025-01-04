@@ -217,7 +217,8 @@ app.delete("/rooms/:roomId/payments/:paymentId", async (c) => {
 
 	await deletePayment(c.env.DB, paymentId, roomId);
 
-	return c.status(204);
+	c.status(204);
+	return c.body(null);
 });
 
 // TODO: どっかのレイヤでfieldをcamelCase -> snake_caseに変換する。ミドルウェア使うのかな。req.body, res.body両方でやりたい。
