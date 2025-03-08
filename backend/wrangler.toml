@@ -3,7 +3,7 @@ main = "src/index.ts"
 compatibility_date = "2024-11-01"
 workers_dev = false
 routes = [
-  { pattern = "shamo-api.mtak.app", custom_domain = true }
+  { pattern = "shamo-api.mi-wada.com", custom_domain = true }
 ]
 
 [[d1_databases]]

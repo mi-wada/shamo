@@ -8,11 +8,11 @@ services = [
 ]
 workers_dev = false
 routes = [
-  { pattern = "shamo.mtak.app", custom_domain = true }
+  { pattern = "shamo.mi-wada.com", custom_domain = true }
 ]
 
 [vars]
-SHAMO_API_BASE_URL = "https://shamo-api.mtak.app"
+SHAMO_API_BASE_URL = "https://shamo-api.mi-wada.com"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
