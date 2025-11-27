@@ -11,12 +11,13 @@ jobs:
   markdownlint:
     runs-on: ubuntu-latest
     env:
-      MARKDOWNLINT_CLI_VERSION: 0.36.0
+      # latest version: https://github.com/igorshubovych/markdownlint-cli/releases
+      MARKDOWNLINT_CLI_VERSION: 0.46.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Cache markdown-lint-cli
         id: cache-markdownlint-cli
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             /usr/local/bin/markdownlint

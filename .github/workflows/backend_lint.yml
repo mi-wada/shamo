@@ -23,10 +23,10 @@ jobs:
       # latest: https://www.npmjs.com/package/@stoplight/spectral-cli
       SPECTRAL_CLI_VERSION: "6.15.0"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Cache spectral-cli
         id: cache-spectral-cli
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             /usr/local/bin/spectral
