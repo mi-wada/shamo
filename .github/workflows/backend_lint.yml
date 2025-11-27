@@ -17,11 +17,11 @@ permissions:
   contents: read
   pull-requests: write
 jobs:
-  openapi_lint:
-    runs-on: ubuntu-latest
+  openapi:
+    runs-on: ubuntu-slim
     env:
       # latest: https://www.npmjs.com/package/@stoplight/spectral-cli
-      SPECTRAL_CLI_VERSION: "6.13.1"
+      SPECTRAL_CLI_VERSION: "6.15.0"
     steps:
       - uses: actions/checkout@v4
       - name: Cache spectral-cli
@@ -37,10 +37,8 @@ jobs:
         run: npm install -g @stoplight/spectral-cli@${{ env.SPECTRAL_CLI_VERSION }}
       - run: spectral lint ./docs/openapi.yaml
   biome:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@v4
       - uses: biomejs/setup-biome@v2
-        with:
-          version: latest
-      - run: biome ci .
+      - run: biome ci
