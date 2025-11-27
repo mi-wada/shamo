@@ -23,10 +23,10 @@ jobs:
       # latest: https://www.npmjs.com/package/@stoplight/spectral-cli
       SPECTRAL_CLI_VERSION: "6.15.0"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - name: Cache spectral-cli
         id: cache-spectral-cli
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: |
             /usr/local/bin/spectral
@@ -39,6 +39,6 @@ jobs:
   biome:
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@v4
-      - uses: biomejs/setup-biome@v2
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: biomejs/setup-biome@454fa0d884737805f48d7dc236c1761a0ac3cc13 # v2.6.0
       - run: biome ci
