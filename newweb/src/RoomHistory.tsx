@@ -1,5 +1,5 @@
-import { type FormEvent, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { type FormEvent, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { Money } from "./component/icon/Money";
 import { Next } from "./component/icon/Next";
 import { Note } from "./component/icon/Note";
@@ -8,52 +8,58 @@ import { Time } from "./component/icon/Time";
 import { Trash } from "./component/icon/Trash";
 import { User } from "./component/icon/User";
 import { LinkButton } from "./component/LinkButton";
+import { deletePayment, getPayments } from "./shamoapi";
+import type { Payment } from "./type";
 import { friendyCurrency } from "./utils";
 
 export default function RoomHistory() {
-	// const { roomId } = useParams();
-	type Payment = {
-		id: string;
-		userName: string;
-		roomId: string;
-		amount: number;
-		note: string;
-		createdAt: string;
-	};
-	const payments: Payment[] = [
-		{
-			id: "p-1",
-			userName: "Mitsuaki",
-			roomId: "r",
-			amount: 100,
-			note: "hoge",
-			createdAt: "2025-11-27 22:08:14",
-		},
-		{
-			id: "p-2",
-			userName: "Kahori",
-			roomId: "r",
-			amount: 100,
-			note: "hoge",
-			createdAt: "2025-11-27 22:08:14",
-		},
-	];
-
 	const { search } = useLocation();
 	const currentPage = Number.parseInt(
 		new URLSearchParams(search).get("page") ?? "1",
 		10,
 	);
 
-	const [submitting, SetSubmitting] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 	const navigate = useNavigate();
 
 	const handleDeletePayment = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		SetSubmitting(true);
-		// TODO: implement
-		navigate(0);
+		if (!roomId) return;
+
+		const formData = new FormData(e.currentTarget);
+		const paymentId = formData.get("paymentId")?.toString();
+
+		if (!paymentId) return;
+
+		setSubmitting(true);
+
+		try {
+			await deletePayment(roomId, paymentId);
+			navigate(0);
+		} finally {
+			setSubmitting(false);
+		}
 	};
+
+	const { roomId } = useParams();
+	const [payments, setPayments] = useState<Payment[] | undefined>(undefined);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		if (!roomId) {
+			return;
+		}
+
+		getPayments(roomId, currentPage)
+			.then(setPayments)
+			.catch((error) => {
+				console.error("Failed to load payments", error);
+			})
+			.finally(() => setLoading(false));
+	}, [roomId, currentPage]);
+
+	if (loading) return <>Loading...</>;
+	if (!payments) return <>404</>;
 
 	return (
 		<>
@@ -103,11 +109,12 @@ export default function RoomHistory() {
 								<td>
 									<form onSubmit={handleDeletePayment}>
 										<input type="hidden" name="paymentId" value={payment.id} />
-										<button type="submit" disabled={submitting}>
-											<Trash
-												alt="Delete a payment"
-												className="size-5 text-danger"
-											/>
+										<button
+											type="submit"
+											disabled={submitting}
+											className="btn btn-ghost btn-error"
+										>
+											<Trash alt="Delete a payment" className="size-5" />
 										</button>
 									</form>
 								</td>

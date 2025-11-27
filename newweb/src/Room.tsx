@@ -1,44 +1,59 @@
-import { type FormEvent, useState } from "react";
-import { useNavigate } from "react-router";
+import { type FormEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { Money } from "./component/icon/Money";
 import { Note } from "./component/icon/Note";
 import { User } from "./component/icon/User";
+import { getRoomUsers, postPayment } from "./shamoapi";
+import type { RoomUser } from "./type";
 import { friendyCurrency } from "./utils";
 
 export default function Room() {
-	// const { roomId } = useParams();
-	type RoomUser = {
-		userId: string;
-		name: string;
-		paymentsTotalAmount: number;
-		iconUrl: string;
-	};
-	const roomUsers: RoomUser[] = [
-		{
-			userId: "u-kahori",
-			name: "Kahori",
-			paymentsTotalAmount: 1000,
-			iconUrl:
-				"https://lh3.googleusercontent.com/a-/ALV-UjWjcjWgV7GpAO8x9mh4B2ryGRsmCxRGVlVvmvHgofq6Hpk=s128-p-k-rw-no",
-		},
-		{
-			userId: "u-mitsuaki",
-			name: "Mitsuaki",
-			paymentsTotalAmount: 2000,
-			iconUrl:
-				"https://lh3.googleusercontent.com/a/ACg8ocLPV3xr7Eyo-hVtDdsCAaSMj37x_LOWAF-9dy5eyhT2EA=s80-p",
-		},
-	];
-
 	const [submitting, SetSubmitting] = useState(false);
 	const navigate = useNavigate();
-
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		if (!roomId) return;
+
+		const formData = new FormData(e.currentTarget);
+		const userId = formData.get("userId")?.toString();
+		const amount = Number(formData.get("amount"));
+		const note = formData.get("note")?.toString();
+		if (!userId) {
+			return;
+		}
+		if (!amount) {
+			return;
+		}
+
 		SetSubmitting(true);
-		// TODO: implement
-		navigate(0);
+
+		try {
+			await postPayment(roomId, userId, amount, note);
+			navigate(0);
+		} finally {
+			SetSubmitting(false);
+		}
 	};
+
+	const { roomId } = useParams();
+	const [roomUsers, setRoomUsers] = useState<RoomUser[] | undefined>(undefined);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		if (!roomId) {
+			return;
+		}
+
+		getRoomUsers(roomId)
+			.then(setRoomUsers)
+			.catch((error) => {
+				console.error("Failed to load room", error);
+			})
+			.finally(() => setLoading(false));
+	}, [roomId]);
+
+	if (loading) return <>Loading...</>;
+	if (!roomUsers) return <>404</>;
 
 	return (
 		<>
