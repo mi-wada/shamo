@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --text-h1: 1.75rem;
+  --text-h2: 1.5rem;
+}
