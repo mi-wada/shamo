@@ -1,5 +1,5 @@
+import { type Id, NewId } from "./id";
 import { currentRFC3339 } from "./utils";
-import { NewId, type Id } from "./id";
 
 export type User = {
 	id: UserId;
@@ -129,7 +129,7 @@ const isValidUrl = (url: string): boolean => {
 	try {
 		new URL(url);
 		return true;
-	} catch (e) {
+	} catch (_e) {
 		return false;
 	}
 };

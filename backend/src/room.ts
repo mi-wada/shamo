@@ -1,5 +1,5 @@
-import { currentRFC3339 } from "./utils";
 import { NewId } from "./id";
+import { currentRFC3339 } from "./utils";
 
 export type Room = {
 	id: string;

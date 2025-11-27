@@ -1,6 +1,6 @@
-import { currentRFC3339 } from "./utils";
 import type { RoomId } from "./room";
 import type { User, UserId, UserProfileTable } from "./user";
+import { currentRFC3339 } from "./utils";
 
 export type RoomUser = Omit<User, "id"> & {
 	roomId: RoomId;

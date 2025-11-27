@@ -1,7 +1,7 @@
-import { currentRFC3339 } from "./utils";
-import { NewId, type Id } from "./id";
+import { type Id, NewId } from "./id";
 import type { RoomId } from "./room";
 import type { UserId } from "./user";
+import { currentRFC3339 } from "./utils";
 
 export type Payment = {
 	id: PaymentId;

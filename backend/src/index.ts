@@ -1,25 +1,25 @@
 import { Hono } from "hono";
-import { findRoomById, insertRoom, newRoom } from "./room";
+import { createMiddleware } from "hono/factory";
 import {
 	badRequestError,
 	INTERNAL_SERVER_ERROR,
 	NOT_FOUND_ERROR,
 } from "./error";
-import { findUserById, insertUser, newUser } from "./user";
-import {
-	findRoomUserByRoomIdAndUserId,
-	findRoomUsersByRoomId,
-	insertRoomUser,
-	NewRoomUser,
-} from "./room_user";
 import {
 	deletePayment,
 	findPaymentsByRoomId,
 	insertPayment,
 	newPayment,
 } from "./payment";
+import { findRoomById, insertRoom, newRoom } from "./room";
+import {
+	findRoomUserByRoomIdAndUserId,
+	findRoomUsersByRoomId,
+	insertRoomUser,
+	NewRoomUser,
+} from "./room_user";
+import { findUserById, insertUser, newUser } from "./user";
 import { toSnakeCaseKeysObj } from "./utils";
-import { createMiddleware } from "hono/factory";
 
 type Bindings = {
 	DB: D1Database;
@@ -35,7 +35,7 @@ const toSnakeCaseKeysResBodyMiddleware = createMiddleware(async (c, next) => {
 	try {
 		const clonedRes = c.res.clone();
 		originalRes = await clonedRes.json();
-	} catch (error) {
+	} catch (_error) {
 		return;
 	}
 	const res = toSnakeCaseKeysObj(originalRes);
