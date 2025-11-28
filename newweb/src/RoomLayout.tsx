@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, useParams } from "react-router";
 import { Home } from "./component/icon/Home";
 import { Time } from "./component/icon/Time";
-import { Loading } from "./component/Loading";
 import { getRoom } from "./shamoapi";
 import type { Room } from "./type";
 
 export default function RoomLayout() {
 	const { roomId } = useParams();
 	const [room, setRoom] = useState<Room | undefined>(undefined);
-	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		if (!roomId) {
@@ -20,17 +18,13 @@ export default function RoomLayout() {
 			.then(setRoom)
 			.catch((error) => {
 				console.error("Failed to load room", error);
-			})
-			.finally(() => setLoading(false));
+			});
 	}, [roomId]);
-
-	if (loading) return <Loading message="Loading room..." />;
-	if (!room) return <>404</>;
 
 	return (
 		<>
 			<h1 className="text-h1 font-bold ml-2">
-				Shamo / {`${room.emoji} ${room.name}`}
+				Shamo / {room === undefined ? "" : `${room?.emoji} ${room?.name}`}
 			</h1>
 			<nav className="tabs tabs-border w-full">
 				<NavLink
