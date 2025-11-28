@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { createMiddleware } from "hono/factory";
 import {
 	badRequestError,
@@ -20,7 +21,6 @@ import {
 } from "./room_user";
 import { findUserById, insertUser, newUser } from "./user";
 import { toSnakeCaseKeysObj } from "./utils";
-import { cors } from "hono/cors";
 
 type Bindings = {
 	DB: D1Database;
