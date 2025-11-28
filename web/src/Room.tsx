@@ -80,6 +80,7 @@ export default function Room() {
 							<Money className="h-4 w-4 opacity-70" alt="Amount" />
 							<input
 								type="number"
+								inputMode="numeric"
 								name="amount"
 								required
 								placeholder="Amount"
