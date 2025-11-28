@@ -89,7 +89,7 @@ export default function Room() {
 						</label>
 						<label className="input input-ghost flex items-center gap-2 my-2 w-full">
 							<Note className="h-4 w-4 opacity-70" alt="Note" />
-							<input type="text" name="note" placeholder="Note" />
+							<input type="text" name="note" placeholder="Note (Optional)" />
 						</label>
 						<div className="flex justify-end">
 							<button
