@@ -1,8 +1,7 @@
 import type { Payment, Room, RoomUser } from "./type";
 import { friendlyRFC3339 } from "./utils";
 
-// TODO: Use env later
-const baseURL = "https://shamo-api.mi-wada.com";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 type RoomResponseBody = {
 	id: string;
