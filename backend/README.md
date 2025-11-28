@@ -8,7 +8,6 @@ The backend for Shamo.
 
 ```shell
 npm i
-
 npm run dev
 # Run at http://localhost:8787
 ```
