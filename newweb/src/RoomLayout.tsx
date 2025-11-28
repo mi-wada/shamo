@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, useParams } from "react-router";
 import { Home } from "./component/icon/Home";
 import { Time } from "./component/icon/Time";
+import { Loading } from "./component/Loading";
 import { getRoom } from "./shamoapi";
 import type { Room } from "./type";
 
@@ -23,7 +24,7 @@ export default function RoomLayout() {
 			.finally(() => setLoading(false));
 	}, [roomId]);
 
-	if (loading) return <>Loading...</>;
+	if (loading) return <Loading message="Loading room..." />;
 	if (!room) return <>404</>;
 
 	return (

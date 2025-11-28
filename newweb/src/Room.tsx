@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { Money } from "./component/icon/Money";
 import { Note } from "./component/icon/Note";
 import { User } from "./component/icon/User";
+import { Loading } from "./component/Loading";
 import { getRoomUsers, postPayment } from "./shamoapi";
 import type { RoomUser } from "./type";
 import { friendyCurrency } from "./utils";
@@ -52,7 +53,7 @@ export default function Room() {
 			.finally(() => setLoading(false));
 	}, [roomId]);
 
-	if (loading) return <>Loading...</>;
+	if (loading) return <Loading message="Loading room users..." />;
 	if (!roomUsers) return <>404</>;
 
 	return (

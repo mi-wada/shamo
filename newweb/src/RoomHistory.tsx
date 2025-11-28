@@ -8,6 +8,7 @@ import { Time } from "./component/icon/Time";
 import { Trash } from "./component/icon/Trash";
 import { User } from "./component/icon/User";
 import { LinkButton } from "./component/LinkButton";
+import { Loading } from "./component/Loading";
 import { deletePayment, getPayments } from "./shamoapi";
 import type { Payment } from "./type";
 import { friendyCurrency } from "./utils";
@@ -58,7 +59,7 @@ export default function RoomHistory() {
 			.finally(() => setLoading(false));
 	}, [roomId, currentPage]);
 
-	if (loading) return <>Loading...</>;
+	if (loading) return <Loading message="Loading payments..." />;
 	if (!payments) return <>404</>;
 
 	return (
