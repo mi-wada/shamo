@@ -1,6 +1,6 @@
-# Shamo / Website
+# Shamo / Web frontend
 
-The website for Shamo.
+The web frontend for Shamo.
 
 ## Development
 
