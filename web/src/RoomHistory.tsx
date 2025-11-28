@@ -81,8 +81,8 @@ export default function RoomHistory() {
 					<Next alt="Next page" className="size-5" />
 				</LinkButton>
 			</div>
-			<div className="w-full">
-				<table className="table table-xs lg:table-lg w-full">
+			<div className="overflow-x-auto">
+				<table className="table table-xs lg:table-lg">
 					<thead>
 						<tr>
 							<th>
@@ -105,9 +105,7 @@ export default function RoomHistory() {
 							<tr key={payment.id}>
 								<td>{payment.userName}</td>
 								<td>{friendyCurrency(payment.amount)}</td>
-								<td className="wrap-break-word whitespace-normal">
-									{payment.note}
-								</td>
+								<td>{payment.note}</td>
 								<td>{payment.createdAt}</td>
 								<td>
 									<form onSubmit={handleDeletePayment}>
