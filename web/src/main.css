@@ -22,11 +22,6 @@ body {
 
 #root {
 	min-height: 100vh;
-	background-color: rgba(
-		7,
-		12,
-		20,
-		0.78
-	); /* translucent mask keeps text legible over the photo */
+	background-color: rgba(7, 12, 20, 0.78); /* translucent mask keeps text legible over the photo */
 	backdrop-filter: blur(2px);
 }
