@@ -5,3 +5,23 @@
 	--text-h1: 1.75rem;
 	--text-h2: 1.5rem;
 }
+
+html,
+body {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+	background-image: url("/bg-ibuki.jpeg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center;
+}
+
+#root {
+	min-height: 100vh;
+	background-color: rgba(7, 12, 20, 0.78); /* translucent mask keeps text legible over the photo */
+	backdrop-filter: blur(2px);
+}
