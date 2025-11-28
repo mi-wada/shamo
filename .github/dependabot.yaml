@@ -7,7 +7,6 @@ updates:
   - package-ecosystem: npm
     directories:
       - /backend
-      # TODO: Replace /newweb to /web
-      - /newweb
+      - /web
     schedule:
       interval: weekly

@@ -1,13 +1,13 @@
 {
-	// Supress the `Unknown at rule @tailwind` warning at `app/tailwind.css`
-	// https://tailwindcss.com/docs/editor-setup#syntax-support
-	// https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
 	"[json][javascript][javascriptreact][typescript][typescriptreact]": {
 		"editor.defaultFormatter": "biomejs.biome",
 		"editor.formatOnSave": true,
-		"editor.formatOnPaste": true
+		"editor.formatOnPaste": true,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": "explicit"
+		}
 	}
 }

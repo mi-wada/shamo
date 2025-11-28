@@ -1,28 +1,9 @@
-import {
-	vitePlugin as remix,
-	cloudflareDevProxyVitePlugin as remixCloudflareDevProxy,
-} from "@remix-run/dev";
+import { cloudflare } from "@cloudflare/vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
-declare module "@remix-run/cloudflare" {
-	interface Future {
-		v3_singleFetch: true;
-	}
-}
-
+// https://vite.dev/config/
 export default defineConfig({
-	plugins: [
-		remixCloudflareDevProxy(),
-		remix({
-			future: {
-				v3_fetcherPersist: true,
-				v3_relativeSplatPath: true,
-				v3_throwAbortReason: true,
-				v3_singleFetch: true,
-				v3_lazyRouteDiscovery: true,
-			},
-		}),
-		tsconfigPaths(),
-	],
+	plugins: [react(), cloudflare(), tailwindcss()],
 });

@@ -20,12 +20,19 @@ import {
 } from "./room_user";
 import { findUserById, insertUser, newUser } from "./user";
 import { toSnakeCaseKeysObj } from "./utils";
+import { cors } from "hono/cors";
 
 type Bindings = {
 	DB: D1Database;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+app.use(
+	cors({
+		origin: ["http://localhost:5175", "https://shamo.mi-wada.com"],
+	}),
+);
 
 const toSnakeCaseKeysResBodyMiddleware = createMiddleware(async (c, next) => {
 	await next();

@@ -1,19 +1,18 @@
-# TODO: replace newweb to web later
 name: web / Lint
 on:
   push:
     branches:
       - main
     paths:
-      - 'newweb/**'
+      - 'web/**'
       - '.github/**'
   pull_request:
     paths:
-      - 'newweb/**'
+      - 'web/**'
       - '.github/**'
 defaults:
   run:
-    working-directory: ./newweb
+    working-directory: ./web
 permissions:
   contents: read
   pull-requests: write
