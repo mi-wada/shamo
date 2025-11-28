@@ -5,11 +5,7 @@ on:
       - main
     paths:
       - 'backend/**'
-      - '.github/**'
-  pull_request:
-    paths:
-      - 'backend/**'
-      - '.github/**'
+      - '.github/workflows/backend_deploy.yml'
 defaults:
   run:
     shell: bash

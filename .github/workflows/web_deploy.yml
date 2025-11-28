@@ -5,11 +5,7 @@ on:
       - main
     paths:
       - 'web/**'
-      - '.github/**'
-  pull_request:
-    paths:
-      - 'web/**'
-      - '.github/**'
+      - '.github/workflows/web_deploy.yml'
 defaults:
   run:
     shell: bash
