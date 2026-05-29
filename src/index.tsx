@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { jsx } from 'hono/jsx'
 import type { FC, PropsWithChildren } from 'hono/jsx'
 
 // --- UUID v7 Helper ---
@@ -71,6 +72,29 @@ const Avatar: FC<{ url: string; name: string }> = ({ url, name }) => {
   )
 }
 
+// 支払い項目コンポーネント（ダッシュボードと全件表示ページで共通化・削除ボタン付 💡）
+const PaymentItem: FC<{ p: Payment; roomId: string }> = ({ p, roomId }) => (
+  <div class="bg-white p-3.5 rounded-xl border border-slate-200/50 shadow-sm flex items-center justify-between gap-3">
+    <div class="flex items-center gap-3 min-w-0">
+      <Avatar url={p.icon_url} name={p.name} />
+      <div class="min-w-0">
+        <div class="font-bold text-slate-800 text-sm truncate">{p.name}</div>
+        <div class="text-xs text-slate-500 truncate">{p.note || '支出の記録'}</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2.5 shrink-0">
+      <div class="font-mono font-black text-slate-900 text-base">
+        ¥{p.amount.toLocaleString()}
+      </div>
+      <form method="post" action={`/rooms/${roomId}/payments/${p.id}/delete`} class="m-0">
+        <button type="submit" class="text-xs text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-1.5 rounded-lg transition font-bold" onclick="return confirm('この支払いを削除してよろしいですか？')">
+          ✕
+        </button>
+      </form>
+    </div>
+  </div>
+)
+
 // --- Routes ---
 
 // 1. Landing / Room Creation
@@ -122,7 +146,7 @@ app.post('/rooms', async (c) => {
   return c.redirect(`/rooms/${roomId}`)
 })
 
-// 3. Room Dashboard (Mobile Optimized)
+// 3. Room Dashboard (直近20件のみ表示 💡)
 app.get('/rooms/:id', async (c) => {
   const roomId = c.req.param('id')
   const room = await c.env.DB.prepare("SELECT * FROM rooms WHERE id = ?").bind(roomId).first<Room>()
@@ -142,18 +166,31 @@ app.get('/rooms/:id', async (c) => {
     GROUP BY p.user_id
   `).bind(roomId).all<UserWithBalance>()
 
+  // 直近20件のみ取得 💡
   const payments = await c.env.DB.prepare(`
     SELECT pay.*, prof.name, prof.icon_url FROM payments pay
     JOIN user_profiles prof ON pay.user_id = prof.user_id
     WHERE pay.room_id = ?
     ORDER BY pay.created_at DESC
+    LIMIT 20
   `).bind(roomId).all<Payment>()
 
-  const totalAmount = payments.results.reduce((sum, p) => sum + p.amount, 0)
+  // 誘導判定用に総件数をカウント 💡
+  const countResult = await c.env.DB.prepare(`
+    SELECT COUNT(*) as count FROM payments WHERE room_id = ?
+  `).bind(roomId).first<{ count: number }>()
+
+  const totalCount = countResult?.count || 0
+
+  // 支出合計は全件合計を出すために別途SUM 💡
+  const sumResult = await c.env.DB.prepare(`
+    SELECT SUM(amount) as total FROM payments WHERE room_id = ?
+  `).bind(roomId).first<{ total: number | null }>()
+
+  const totalAmount = sumResult?.total || 0
 
   return c.html(
     <Layout roomId={roomId}>
-      {/* 部屋情報 ＆ 総合支出（縦並びベース） */}
       <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col gap-3">
         <div class="flex items-center gap-2">
           <span class="text-2xl">{room.emoji}</span>
@@ -165,7 +202,6 @@ app.get('/rooms/:id', async (c) => {
         </div>
       </div>
 
-      {/* メンバーごとの支払い合計（スライダー・横並びではなく1カラム縦積みでスマホ最適化） */}
       <section class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm space-y-3">
         <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">👥 メンバーの支払総額</h2>
         <div class="divide-y divide-slate-100">
@@ -183,7 +219,6 @@ app.get('/rooms/:id', async (c) => {
         </div>
       </section>
 
-      {/* 支払いの簡易記録フォーム（優先度高いため上部配置） */}
       <section class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm space-y-3">
         <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">💸 支払いを記録</h2>
         <form method="post" action={`/rooms/${roomId}/payments`} class="space-y-3">
@@ -209,29 +244,34 @@ app.get('/rooms/:id', async (c) => {
         </form>
       </section>
 
-      {/* 支払い履歴（横長テーブルを廃止し、スマホ向けにタイムライン化） */}
+      {/* 支払い履歴（直近20件 💡） */}
       <section class="space-y-3">
-        <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">📋 支払い履歴</h2>
+        <div class="flex justify-between items-center">
+          <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">📋 最近の履歴 (20件まで)</h2>
+          {totalCount > 20 && (
+            <a href={`/rooms/${roomId}/payments`} class="text-xs font-bold text-indigo-600 hover:underline">
+              全件見る ({totalCount}件) →
+            </a>
+          )}
+        </div>
         <div class="space-y-2">
           {payments.results.length === 0 ? (
             <div class="bg-white rounded-2xl border p-8 text-center text-sm text-slate-400 border-dashed">
               まだ支払いの記録はありません
             </div>
           ) : (
-            payments.results.map(p => (
-              <div class="bg-white p-3.5 rounded-xl border border-slate-200/50 shadow-sm flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 min-w-0">
-                  <Avatar url={p.icon_url} name={p.name} />
-                  <div class="min-w-0">
-                    <div class="font-bold text-slate-800 text-sm truncate">{p.name}</div>
-                    <div class="text-xs text-slate-500 truncate">{p.note || '支出の記録'}</div>
-                  </div>
+            <>
+              {payments.results.map(p => (
+                <PaymentItem p={p} roomId={roomId} />
+              ))}
+              {totalCount > 20 && (
+                <div class="pt-2 text-center">
+                  <a href={`/rooms/${roomId}/payments`} class="inline-block bg-slate-200 hover:bg-slate-300 transition text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl">
+                    すべての履歴を表示 ({totalCount}件)
+                  </a>
                 </div>
-                <div class="font-mono font-black text-slate-900 shrink-0 text-base">
-                  ¥{p.amount.toLocaleString()}
-                </div>
-              </div>
-            ))
+              )}
+            </>
           )}
         </div>
       </section>
@@ -239,7 +279,44 @@ app.get('/rooms/:id', async (c) => {
   )
 })
 
-// 4. 別ページ化したメンバー追加・招待ページ
+// 4. 全件履歴表示ページ (新規追加 💡)
+app.get('/rooms/:id/payments', async (c) => {
+  const roomId = c.req.param('id')
+  const room = await c.env.DB.prepare("SELECT * FROM rooms WHERE id = ?").bind(roomId).first<Room>()
+  if (!room) return c.text("Room Not Found", 404)
+
+  // 制限なしで全件取得 💡
+  const payments = await c.env.DB.prepare(`
+    SELECT pay.*, prof.name, prof.icon_url FROM payments pay
+    JOIN user_profiles prof ON pay.user_id = prof.user_id
+    WHERE pay.room_id = ?
+    ORDER BY pay.created_at DESC
+  `).bind(roomId).all<Payment>()
+
+  return Sandy = c.html(
+    <Layout>
+      <div class="space-y-2">
+        <a href={`/rooms/${roomId}`} class="text-xs font-bold text-indigo-600 flex items-center gap-1">← ルームに戻る</a>
+        <h1 class="text-xl font-bold text-slate-800">📋 すべての支払い履歴</h1>
+        <p class="text-xs text-slate-500">{room.emoji} {room.name} の全精算データ ({payments.results.length}件)</p>
+      </div>
+
+      <div class="space-y-2">
+        {payments.results.length === 0 ? (
+          <div class="bg-white rounded-2xl border p-8 text-center text-sm text-slate-400 border-dashed">
+            まだ支払いの記録はありません
+          </div>
+        ) : (
+          payments.results.map(p => (
+            <PaymentItem p={p} roomId={roomId} />
+          ))
+        )}
+      </div>
+    </Layout>
+  )
+})
+
+// 5. 別ページ化したメンバー追加・招待ページ
 app.get('/rooms/:id/users', async (c) => {
   const roomId = c.req.param('id')
   const room = await c.env.DB.prepare("SELECT * FROM rooms WHERE id = ?").bind(roomId).first<Room>()
@@ -258,7 +335,6 @@ app.get('/rooms/:id/users', async (c) => {
         <h1 class="text-xl font-bold text-slate-800">メンバーの追加・招待</h1>
       </div>
 
-      {/* 招待リンクコピー（スマホで突き破らないようブレイクを指定） */}
       <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 space-y-2">
         <div class="text-xs font-bold text-indigo-800">🔗 メンバー招待URL</div>
         <div class="text-xs bg-white p-2.5 rounded-lg border border-indigo-200 font-mono text-slate-600 break-all select-all">
@@ -267,7 +343,6 @@ app.get('/rooms/:id/users', async (c) => {
         <p class="text-[11px] text-indigo-500">このURLをLINEやメッセージで送ると、他の人も同じルームに参加できます。</p>
       </div>
 
-      {/* メンバー追加フォーム */}
       <form method="post" action={`/rooms/${roomId}/users`} class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm space-y-4">
         <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">➕ メンバーを追加する</h2>
         <div>
@@ -283,7 +358,6 @@ app.get('/rooms/:id/users', async (c) => {
         </button>
       </form>
 
-      {/* 現在の参加メンバー一覧 */}
       <section class="space-y-2">
         <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">👥 現在のメンバー ({users.results.length}人)</h2>
         <div class="bg-white rounded-2xl border border-slate-200/60 p-3 divide-y divide-slate-100">
@@ -299,7 +373,7 @@ app.get('/rooms/:id/users', async (c) => {
   )
 })
 
-// 5. ユーザー登録ロジック
+// 6. ユーザー登録ロジック
 app.post('/rooms/:id/users', async (c) => {
   const roomId = c.req.param('id')
   const body = await c.req.parseBody()
@@ -313,11 +387,10 @@ app.post('/rooms/:id/users', async (c) => {
     c.env.DB.prepare("INSERT INTO room_users (room_id, user_id, payments_total_amount, created_at) VALUES (?, ?, ?, ?)").bind(roomId, userId, 0, now)
   ])
 
-  // 追加後はダッシュボードではなく元のメンバー管理画面に戻す
   return c.redirect(`/rooms/${roomId}/users`)
 })
 
-// 6. 決済登録ロジック
+// 7. 決済登録ロジック
 app.post('/rooms/:id/payments', async (c) => {
   const roomId = c.req.param('id')
   const body = await c.req.parseBody()
@@ -329,6 +402,24 @@ app.post('/rooms/:id/payments', async (c) => {
     VALUES (?, ?, ?, ?, ?, ?)
   `).bind(paymentId, roomId, body.user_id, Number(body.amount), body.note, now).run()
 
+  return c.redirect(`/rooms/${roomId}`)
+})
+
+// 8. 決済削除ロジック (新規追加 💡)
+app.post('/rooms/:id/payments/:payment_id/delete', async (c) => {
+  const roomId = c.req.param('id')
+  const paymentId = c.req.param('payment_id')
+
+  await c.env.DB.prepare(`
+    DELETE FROM payments
+    WHERE id = ? AND room_id = ?
+  `).bind(paymentId, roomId).run()
+
+  // 元いた場所を特定して、適切にリダイレクトさせるためにリファラを確認（全件ページからの削除に対応）
+  const referer = c.req.header('referer')
+  if (referer && referer.endsWith('/payments')) {
+    return c.redirect(`/rooms/${roomId}/payments`)
+  }
   return c.redirect(`/rooms/${roomId}`)
 })
 
