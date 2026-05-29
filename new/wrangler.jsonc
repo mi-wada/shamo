@@ -1,12 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "new",
+  "name": "shamo",
   "main": "src/index.tsx",
   "compatibility_date": "2026-05-29",
   "workers_dev": false,
   "routes": [
     {
-      "pattern": "shamo-new.mi-wada.com",
+      "pattern": "shamo.mi-wada.com",
       "custom_domain": true
     }
   ],

@@ -1,5 +1,5 @@
 {
-  "name": "new",
+  "name": "shamo",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev src/index.tsx",
