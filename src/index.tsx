@@ -293,7 +293,7 @@ app.get('/rooms/:id/payments', async (c) => {
     ORDER BY pay.created_at DESC
   `).bind(roomId).all<Payment>()
 
-  return Sandy = c.html(
+  return c.html(
     <Layout>
       <div class="space-y-2">
         <a href={`/rooms/${roomId}`} class="text-xs font-bold text-indigo-600 flex items-center gap-1">← ルームに戻る</a>
