@@ -1,15 +1,11 @@
-name: web / Deploy
+name: Deploy
 on:
   push:
     branches:
       - main
-    paths:
-      - 'web/**'
-      - '.github/workflows/web_deploy.yml'
 defaults:
   run:
     shell: bash
-    working-directory: ./web
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
