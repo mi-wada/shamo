@@ -1,11 +1,21 @@
-# Shamo 🐔
+```txt
+npm install
+npm run dev
+```
 
-**Sha**re **mo**ney management.
+```txt
+npm run deploy
+```
 
-## /backend
+[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
 
-The backend for Shamo.
+```txt
+npm run cf-typegen
+```
 
-## /web
+Pass the `CloudflareBindings` as generics when instantiating `Hono`:
 
-The website for Shamo.
+```ts
+// src/index.ts
+const app = new Hono<{ Bindings: CloudflareBindings }>()
+```
