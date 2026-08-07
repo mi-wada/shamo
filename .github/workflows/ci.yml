@@ -1,0 +1,24 @@
+name: CI
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'wrangler.jsonc'
+      - '.github/workflows/*.yml'
+defaults:
+  run:
+    shell: bash
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup
+        run: npm ci
+      - name: Dry-run deploy (build check)
+        run: npx wrangler deploy src/index.tsx --minify --dry-run

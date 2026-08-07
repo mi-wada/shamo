@@ -3,18 +3,18 @@ import { jsx } from 'hono/jsx'
 import type { FC, PropsWithChildren } from 'hono/jsx'
 
 // --- UUID v7 Helper ---
+// 48-bit unix timestamp (big-endian) + version/variant bits + random bytes.
 function uuidv7(): string {
-  const now = Date.now();
-  const bytes = new Uint8Array(16);
-  crypto.getRandomValues(bytes);
-  bytes[0] = (now / 0x10000000000) & 0xff;
-  bytes[1] = (now / 0x1000000) & 0xff;
-  bytes[2] = (now / 0x10000) & 0xff;
-  bytes[3] = (now / 0x100) & 0xff;
-  bytes[4] = now & 0xff;
-  bytes[5] = now & 0xff;
-  bytes[6] = (bytes[6] & 0x0f) | 0x70;
-  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const now = BigInt(Date.now());
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  // write 48-bit timestamp into bytes[0..5]
+  let t = now;
+  for (let i = 5; i >= 0; i--) {
+    bytes[i] = Number(t & 0xffn);
+    t >>= 8n;
+  }
+  bytes[6] = (bytes[6] & 0x0f) | 0x70; // version 7
+  bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 10
   const hex = [...bytes].map(b => b.toString(16).padStart(2, '0')).join('');
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
@@ -128,18 +128,29 @@ app.get('/', (c) => {
   )
 })
 
+// --- Validation Helpers ---
+const str = (v: unknown): string => (typeof v === 'string' ? v.trim() : '')
+const isPositiveInt = (v: string): boolean => /^[1-9]\d*$/.test(v)
+
 // 2. Room Creation Logic
 app.post('/rooms', async (c) => {
   const body = await c.req.parseBody()
+  const roomName = str(body.room_name)
+  const userName = str(body.user_name)
+  const iconUrl = str(body.icon_url)
+
+  if (!roomName || !userName) {
+    return c.text('ルーム名と名前は必須です。', 400)
+  }
+
   const roomId = uuidv7()
   const userId = crypto.randomUUID()
   const now = new Date().toISOString()
-  const iconUrl = (body.icon_url as string) || '👤'
 
   await c.env.DB.batch([
     c.env.DB.prepare("INSERT INTO users (id, created_at) VALUES (?, ?)").bind(userId, now),
-    c.env.DB.prepare("INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?)").bind(userId, body.user_name, iconUrl),
-    c.env.DB.prepare("INSERT INTO rooms (id, name, emoji, created_at) VALUES (?, ?, ?, ?)").bind(roomId, body.room_name, '💰', now),
+    c.env.DB.prepare("INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?)").bind(userId, userName, iconUrl || '👤'),
+    c.env.DB.prepare("INSERT INTO rooms (id, name, emoji, created_at) VALUES (?, ?, ?, ?)").bind(roomId, roomName, '💰', now),
     c.env.DB.prepare("INSERT INTO room_users (room_id, user_id, payments_total_amount, created_at) VALUES (?, ?, ?, ?)").bind(roomId, userId, 0, now)
   ])
 
@@ -377,13 +388,19 @@ app.get('/rooms/:id/users', async (c) => {
 app.post('/rooms/:id/users', async (c) => {
   const roomId = c.req.param('id')
   const body = await c.req.parseBody()
+  const userName = str(body.user_name)
+  const iconUrl = str(body.icon_url)
+
+  const room = await c.env.DB.prepare("SELECT id FROM rooms WHERE id = ?").bind(roomId).first<Room>()
+  if (!room) return c.text("Room Not Found", 404)
+  if (!userName) return c.text('名前は必須です。', 400)
+
   const userId = crypto.randomUUID()
   const now = new Date().toISOString()
-  const iconUrl = (body.icon_url as string) || '👤'
 
   await c.env.DB.batch([
     c.env.DB.prepare("INSERT INTO users (id, created_at) VALUES (?, ?)").bind(userId, now),
-    c.env.DB.prepare("INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?)").bind(userId, body.user_name, iconUrl),
+    c.env.DB.prepare("INSERT INTO user_profiles (user_id, name, icon_url) VALUES (?, ?, ?)").bind(userId, userName, iconUrl || '👤'),
     c.env.DB.prepare("INSERT INTO room_users (room_id, user_id, payments_total_amount, created_at) VALUES (?, ?, ?, ?)").bind(roomId, userId, 0, now)
   ])
 
@@ -394,13 +411,21 @@ app.post('/rooms/:id/users', async (c) => {
 app.post('/rooms/:id/payments', async (c) => {
   const roomId = c.req.param('id')
   const body = await c.req.parseBody()
+  const amountStr = str(body.amount)
+  const userInRoom = await c.env.DB.prepare(`
+    SELECT 1 FROM room_users WHERE room_id = ? AND user_id = ?
+  `).bind(roomId, str(body.user_id)).first()
+
+  if (!userInRoom) return c.text("Room or User Not Found", 404)
+  if (!isPositiveInt(amountStr)) return c.text('金額は1以上の整数で入力してください。', 400)
+
   const paymentId = crypto.randomUUID()
   const now = new Date().toISOString()
 
   await c.env.DB.prepare(`
     INSERT INTO payments (id, room_id, user_id, amount, note, created_at)
     VALUES (?, ?, ?, ?, ?, ?)
-  `).bind(paymentId, roomId, body.user_id, Number(body.amount), body.note, now).run()
+  `).bind(paymentId, roomId, str(body.user_id), Number(amountStr), str(body.note), now).run()
 
   return c.redirect(`/rooms/${roomId}`)
 })
